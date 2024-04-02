@@ -9,6 +9,9 @@
      <a href="https://central.sonatype.com/artifact/io.github.jidcoo/leetcode-java-debug-enhancer">
       <img src="https://img.shields.io/maven-central/v/io.github.jidcoo/leetcode-java-debug-enhancer" alt="Maven Central Version">
      </a>
+     <a href="https://github.com/Jidcoo/LeetcodeJavaDebugEnhancer/actions/workflows/maven.yml">
+      <img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/Jidcoo/LeetcodeJavaDebugEnhancer/maven.yml">
+     </a> 
      <a href="https://github.com/Jidcoo/LeetcodeJavaDebugEnhancer/releases/tag/">
       <img alt="GitHub Release" src="https://img.shields.io/github/v/release/Jidcoo/LeetcodeJavaDebugEnhancer">
      </a>
