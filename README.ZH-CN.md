@@ -4,19 +4,22 @@
   <p align="center">🚀 一个用于Java的Leetcode算法题的本地调试增强器 🚀</p>
   <p align="center">
      <a href="LICENSE">
-      <img src="https://img.shields.io/hexpm/l/plug.svg" alt="License">
+      <img alt="License" src="https://img.shields.io/github/license/Jidcoo/LeetcodeJavaDebugEnhancer?label=License">
+     </a>
+     <a href="https://github.com/Jidcoo/LeetcodeJavaDebugEnhancer/actions/workflows/maven-build.yml">
+      <img alt="Maven Build Status" src="https://github.com/Jidcoo/LeetcodeJavaDebugEnhancer/actions/workflows/maven-build.yml/badge.svg">
+     </a> 
+     <a href="https://github.com/Jidcoo/LeetcodeJavaDebugEnhancer/actions/workflows/maven-release.yml">
+      <img alt="Maven Release Status" src="https://github.com/Jidcoo/LeetcodeJavaDebugEnhancer/actions/workflows/maven-release.yml/badge.svg">
+     </a>
+     <a href="https://github.com/Jidcoo/LeetcodeJavaDebugEnhancer/releases">
+      <img alt="GitHub Release" src="https://img.shields.io/github/v/release/Jidcoo/LeetcodeJavaDebugEnhancer?label=Release">
      </a>
      <a href="https://central.sonatype.com/artifact/io.github.jidcoo/leetcode-java-debug-enhancer">
-      <img src="https://img.shields.io/maven-central/v/io.github.jidcoo/leetcode-java-debug-enhancer" alt="Maven Central Version">
-     </a>
-     <a href="https://github.com/Jidcoo/LeetcodeJavaDebugEnhancer/actions/workflows/maven.yml">
-      <img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/Jidcoo/LeetcodeJavaDebugEnhancer/maven.yml">
-     </a> 
-     <a href="https://github.com/Jidcoo/LeetcodeJavaDebugEnhancer/releases/tag/">
-      <img alt="GitHub Release" src="https://img.shields.io/github/v/release/Jidcoo/LeetcodeJavaDebugEnhancer">
+      <img alt="Maven Central Version" src="https://img.shields.io/maven-central/v/io.github.jidcoo/leetcode-java-debug-enhancer?label=Maven%20Central"> 
      </a>
      <a href="https://github.com/Jidcoo/LeetcodeJavaDebugEnhancer/issues?query=is%3Aissue&label=issue">
-      <img alt="GitHub Issue" src="https://img.shields.io/github/issues-search/Jidcoo/LeetcodeJavaDebugEnhancer?query=is%3Aissue&label=issue">
+      <img alt="GitHub Issues" src="https://img.shields.io/github/issues/Jidcoo/LeetcodeJavaDebugEnhancer?label=Issue">
      </a>
   </p>
   <p align="center"> [<a href="README.ZH-CN.md">中文</a>] [<a href="README.md">English</a>] </p>
