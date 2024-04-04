@@ -8,7 +8,7 @@
     <artifactId>leetcode-java-debug-enhancer</artifactId>
     <packaging>jar</packaging>
 
-    <description>Leetcode local debug enhancer for Java.</description>
+    <description>A local debugging enhancer for Leetcode algorithm problems in Java.</description>
     <url>https://github.com/Jidcoo/LeetcodeJavaDebugEnhancer</url>
     <name>LeetcodeJavaDebugEnhancer</name>
     <version>1.0.0</version>
