@@ -59,8 +59,6 @@ public interface LeetcodeInvoker {
      */
     Class<?> getReturnType();
 
-
-
     /**
      * Invoke this invoker with args by invoker holder.
      *

@@ -46,7 +46,6 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
         this.constructor = constructor;
     }
 
-
     /**
      * Get parameter count of this invoker.
      *

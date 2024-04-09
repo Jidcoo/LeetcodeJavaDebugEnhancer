@@ -46,7 +46,6 @@ final class MethodLeetcodeInvoker implements LeetcodeInvoker {
         this.method = method;
     }
 
-
     /**
      * Get parameter count of this invoker.
      *
