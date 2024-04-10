@@ -21,7 +21,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
 /**
  * <p>LeetcodeInvoker is an invoker used to
  * execute the Leetcode algorithm.</p>
- * <p>The goal of LeetcodeInvoker is to help
+ * <p>The purpose of LeetcodeInvoker is to help
  * {@link LeetcodeJavaDebugEnhancer}
  * better match, select and execute
  * Leetcode algorithms.</p>
