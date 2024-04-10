@@ -18,6 +18,8 @@ package io.github.jidcoo.opto.lcdb.enhancer.base;
 
 import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
 
+import java.lang.reflect.Parameter;
+
 /**
  * <p>LeetcodeInvoker is an invoker used to
  * execute the Leetcode algorithm.</p>
@@ -39,18 +41,25 @@ public interface LeetcodeInvoker {
     int getParameterCount();
 
     /**
-     * Get name of this invoker.
-     *
-     * @return the invoker name.
-     */
-    String getInvokerName();
-
-    /**
      * Get parameter types array of this invoker.
      *
      * @return the parameter types array.
      */
     Class<?>[] getParameterTypes();
+
+    /**
+     * Get parameters of this invoker.
+     *
+     * @return the parameters array.
+     */
+    Parameter[] getParameters();
+
+    /**
+     * Get name of this invoker.
+     *
+     * @return the invoker name.
+     */
+    String getInvokerName();
 
     /**
      * Get return type of this invoker.
