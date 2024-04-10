@@ -20,6 +20,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Parameter;
 
 /**
  * <p>ConstructorLeetcodeInvoker is an invoker
@@ -74,6 +75,16 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
     @Override
     public Class<?>[] getParameterTypes() {
         return this.constructor.getParameterTypes();
+    }
+
+    /**
+     * Get parameters of this invoker.
+     *
+     * @return the parameters array.
+     */
+    @Override
+    public Parameter[] getParameters() {
+        return this.constructor.getParameters();
     }
 
     /**
