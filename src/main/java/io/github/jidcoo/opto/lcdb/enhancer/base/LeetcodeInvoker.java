@@ -34,6 +34,13 @@ import java.lang.reflect.Parameter;
 public interface LeetcodeInvoker {
 
     /**
+     * Get id of this invoker.
+     *
+     * @return the id.
+     */
+    Integer getId();
+
+    /**
      * Get parameter count of this invoker.
      *
      * @return parameter count of this invoker.

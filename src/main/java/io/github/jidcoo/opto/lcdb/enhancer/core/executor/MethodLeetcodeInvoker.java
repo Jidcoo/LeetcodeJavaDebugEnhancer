@@ -38,13 +38,30 @@ final class MethodLeetcodeInvoker implements LeetcodeInvoker {
     private final Method method;
 
     /**
+     * The invoker id.
+     */
+    private final Integer id;
+
+    /**
      * Create a MethodLeetcodeInvoker instance.
      *
      * @param method the base method.
+     * @param id     the invoker id.
      */
-    MethodLeetcodeInvoker(Method method) {
+    MethodLeetcodeInvoker(Method method, Integer id) {
         AssertUtil.nonNull(method, "The method cannot be null.");
         this.method = method;
+        this.id = id;
+    }
+
+    /**
+     * Get id of this invoker.
+     *
+     * @return the id.
+     */
+    @Override
+    public Integer getId() {
+        return this.id;
     }
 
     /**
