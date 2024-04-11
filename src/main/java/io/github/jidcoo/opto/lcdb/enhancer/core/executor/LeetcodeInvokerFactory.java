@@ -20,6 +20,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <p>LeetcodeInvokerFactory is a factory class
@@ -32,6 +33,11 @@ import java.lang.reflect.Method;
 public final class LeetcodeInvokerFactory {
 
     /**
+     * LeetcodeInvoke id generator.
+     */
+    private static final AtomicInteger INVOKER_ID_GENERATOR = new AtomicInteger(1);
+
+    /**
      * Product a LeetcodeInvoker instance by
      * {@link Method} instance.
      *
@@ -40,7 +46,7 @@ public final class LeetcodeInvokerFactory {
      */
     public static LeetcodeInvoker getLeetcodeInvoker(Method method) {
         // We don't need to perform non-null check here.
-        return new MethodLeetcodeInvoker(method);
+        return new MethodLeetcodeInvoker(method, INVOKER_ID_GENERATOR.getAndIncrement());
     }
 
     /**
@@ -52,6 +58,6 @@ public final class LeetcodeInvokerFactory {
      */
     public static LeetcodeInvoker getLeetcodeInvoker(Constructor<?> constructor) {
         // We don't need to perform non-null check here.
-        return new ConstructorLeetcodeInvoker(constructor);
+        return new ConstructorLeetcodeInvoker(constructor, INVOKER_ID_GENERATOR.getAndIncrement());
     }
 }

@@ -38,13 +38,30 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
     private final Constructor<?> constructor;
 
     /**
+     * The invoker id.
+     */
+    private final Integer id;
+
+    /**
      * Create a ConstructorLeetcodeInvoker instance.
      *
      * @param constructor the base constructor.
+     * @param id          the invoker id.
      */
-    ConstructorLeetcodeInvoker(Constructor<?> constructor) {
+    ConstructorLeetcodeInvoker(Constructor<?> constructor, Integer id) {
         AssertUtil.nonNull(constructor, "The constructor cannot be null.");
         this.constructor = constructor;
+        this.id = id;
+    }
+
+    /**
+     * Get id of this invoker.
+     *
+     * @return the id.
+     */
+    @Override
+    public Integer getId() {
+        return this.id;
     }
 
     /**
