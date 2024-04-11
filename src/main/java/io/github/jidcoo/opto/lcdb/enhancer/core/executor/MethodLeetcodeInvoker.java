@@ -51,6 +51,8 @@ final class MethodLeetcodeInvoker implements LeetcodeInvoker {
     MethodLeetcodeInvoker(Method method, Integer id) {
         AssertUtil.nonNull(method, "The method cannot be null.");
         this.method = method;
+        // Make accessible.
+        this.method.setAccessible(true);
         this.id = id;
     }
 
