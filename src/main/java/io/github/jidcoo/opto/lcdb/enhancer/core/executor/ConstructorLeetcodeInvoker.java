@@ -51,6 +51,8 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
     ConstructorLeetcodeInvoker(Constructor<?> constructor, Integer id) {
         AssertUtil.nonNull(constructor, "The constructor cannot be null.");
         this.constructor = constructor;
+        // Make accessible.
+        this.constructor.setAccessible(true);
         this.id = id;
     }
 
