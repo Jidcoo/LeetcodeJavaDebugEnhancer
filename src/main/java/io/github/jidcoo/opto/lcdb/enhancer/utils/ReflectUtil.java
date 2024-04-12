@@ -50,6 +50,17 @@ public class ReflectUtil {
     }
 
     /**
+     * Resolve all inner-class from the given class.
+     *
+     * @param clazz the given class object.
+     * @return the inner-class array in the given class.
+     */
+    public static Class<?>[] resolveInnerClasses(Class<?> clazz) {
+        AssertUtil.nonNull(clazz, "The clazz cannot be null.");
+        return clazz.getDeclaredClasses();
+    }
+
+    /**
      * Resolve the inner class Solution and instantiate
      * it from the <tt>AT</tt> object.
      *
@@ -61,7 +72,7 @@ public class ReflectUtil {
         AssertUtil.isTrue((object instanceof LeetcodeJavaDebugEnhancer), "The object is not an inherited object from "
                 + "LeetcodeJavaDebugEnhancer");
         Class<?> __AT__class = object.getClass();
-        Class<?>[] declaredClasses = __AT__class.getDeclaredClasses();
+        Class<?>[] declaredClasses = resolveInnerClasses(__AT__class);
         for (Class<?> declaredClass : declaredClasses) {
             // Match the simple name of the class.
             if ("Solution".equals(declaredClass.getSimpleName())) {

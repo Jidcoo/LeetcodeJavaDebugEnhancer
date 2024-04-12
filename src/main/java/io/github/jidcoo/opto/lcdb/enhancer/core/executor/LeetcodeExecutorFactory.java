@@ -16,12 +16,8 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.executor;
 
-import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
+import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
-
-import java.lang.reflect.Method;
-import java.util.Objects;
 
 /**
  * <p>LeetcodeExecutorFactory is a factory class
@@ -34,22 +30,15 @@ import java.util.Objects;
 public final class LeetcodeExecutorFactory {
 
     /**
-     * Product a LeetcodeExecutor instance by
-     * {@link LeetcodeJavaDebugEnhancer} instance.
+     * Product a LeetcodeExecutor instance by leetcode instance.
      *
-     * @param enhancer the LeetcodeJavaDebugEnhancer instance.
+     * @param instance        the leetcode instance.
+     * @param leetcodeInvoker the leetcode invoker.
      * @return the LeetcodeExecutor instance.
+     * @since 1.0.1
      */
-    public static LeetcodeExecutor getLeetcodeExecutor(LeetcodeJavaDebugEnhancer enhancer) {
-        // Hate the npe.
-        AssertUtil.nonNull(enhancer, "The enhancer cannot be null.");
-        Method enhancementPoint = enhancer.getEnhancementPoint();
-        Object target = enhancer;
-        // Try to look for the inner class Solution in AT if the enhancementPoint is null.
-        if (Objects.isNull(enhancementPoint)) {
-            target = ReflectUtil.resolveSolutionInstance(enhancer);
-            AssertUtil.nonNull(target, "Cannot resolve the inner class Solution from the AT enhancer instance.");
-        }
-        return new LeetcodeExecutor(target, enhancementPoint);
+    public static LeetcodeExecutor getLeetcodeExecutor(Object instance, LeetcodeInvoker leetcodeInvoker) {
+        AssertUtil.nonNull(instance, "The instance cannot be null.");
+        return new LeetcodeExecutor(instance, leetcodeInvoker);
     }
 }
