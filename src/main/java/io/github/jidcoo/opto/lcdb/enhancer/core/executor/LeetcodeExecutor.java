@@ -17,10 +17,13 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.executor;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.EnhancerException;
+import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>LeetcodeExecutor is an executor used to
@@ -45,30 +48,38 @@ final class LeetcodeExecutor {
 
     /**
      * The leetcode executor.
+     *
+     * @since 1.0.1
      */
-    private final Method executor;
+    private LeetcodeInvoker executor;
 
     /**
-     * The leetcode invoker.
+     * The candidate leetcode invokers.
+     *
+     * @since 1.0.1
      */
-    private Method invoker;
+    private final List<LeetcodeInvoker> candidateInvokers;
 
     /**
      * The leetcode invoker response type.
      */
-    private Class invokerResponseType;
+    private Class<?> invokerResponseType;
 
     /**
      * Create a LeetcodeExecutor instance.
      *
      * @param instance the leetcode instance.
      * @param executor the leetcode executor.
+     * @since 1.0.1
      */
-    LeetcodeExecutor(Object instance, Method executor) {
+    LeetcodeExecutor(Object instance, LeetcodeInvoker executor) {
         this.instance = instance;
         this.executor = executor;
-        // Set executor as default leetcode invoker.
-        this.invoker = executor;
+        this.candidateInvokers = new ArrayList<>();
+        if (Objects.nonNull(executor)) {
+            // Add executor to candidate leetcode invokers list.
+            this.candidateInvokers.add(executor);
+        }
     }
 
     /**
@@ -81,10 +92,9 @@ final class LeetcodeExecutor {
      *                           or invoker error.
      */
     Object execute(Object input) {
-        AssertUtil.nonNull(invoker, "The leetcode execute invoker cannot be null.");
+        AssertUtil.nonNull(executor, "The leetcode executor cannot be null.");
         try {
-            invoker.setAccessible(true);
-            return invoker.invoke(instance, (Object[]) input);
+            return executor.invoke(instance, (Object[]) input);
         } catch (InvocationTargetException exception) {
             throw new EnhancerException(exception.getCause());
         } catch (Throwable exception) {
@@ -106,16 +116,27 @@ final class LeetcodeExecutor {
      *
      * @return the leetcode executor.
      */
-    Method getExecutor() {
+    LeetcodeInvoker getExecutor() {
         return executor;
     }
 
     /**
-     * Get the leetcode invoker.
+     * Set the leetcode executor.
      *
-     * @return the leetcode invoker.
+     * @param executor the leetcode executor.
+     * @since 1.0.1
      */
-    Method getInvoker() {
-        return invoker;
+    void setExecutor(LeetcodeInvoker executor) {
+        this.executor = executor;
+    }
+
+    /**
+     * Get the candidate leetcode invokers list.
+     *
+     * @return the candidate leetcode invokers list.
+     * @since 1.0.1
+     */
+    List<LeetcodeInvoker> getCandidateInvokers() {
+        return this.candidateInvokers;
     }
 }
