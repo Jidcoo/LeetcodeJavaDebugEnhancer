@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2024-2026 Jidcoo(https://github.com/jidcoo).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.github.jidcoo.opto.lcdb.enhancer.core.pipeline;
 
 import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
@@ -19,6 +35,16 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * <p>LeetcodeJavaDebugEnhancerPipeline is a pipeline
+ * used to run enhanced pipeline processes.</p>
+ * <p>In order to adapt to complex scenarios, 
+ * LeetcodeJavaDebugEnhancerPipeline takes on 
+ * more proactive enhancement work here.</p>
+ * 
+ * @author Jidcoo
+ * @since 1.0.1
+ */
 final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
 
     /**
@@ -93,6 +119,7 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
         this.inputParser = inputParser;
 
         // Build up runner map and invokers list.
+
         pipelineRunnerMap = new HashMap<>();
         pipelineRunnerInvokers = new ArrayList<>();
         // Collect all builtin pipeline runner instance.
@@ -101,13 +128,19 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
                 klass -> klass.isAnnotationPresent(Resource.class) && ReflectUtil.isExtendsClass(klass,
                         PipelineRunner.class) && !Modifier.isAbstract(klass.getModifiers()),
                 ReflectUtil::createInstance).stream().filter(Objects::nonNull).collect(Collectors.toList());
+        // Dispatch each builtinPipelineRunner into the pipelineRunnerMap.
         for (PipelineRunner builtinPipelineRunner : builtinPipelineRunners) {
+            // Get all candidate methods from the builtinPipelineRunner.
             for (Method candidateMethod : builtinPipelineRunner.getClass().getDeclaredMethods()) {
+                // Filter out methods without @Resource annotation.
                 if (!candidateMethod.isAnnotationPresent(Resource.class)) {
                     continue;
                 }
+                // Create a LeetcodeInvoker instance by the candidateMethod.
                 LeetcodeInvoker leetcodeInvoker = LeetcodeInvokerFactory.getLeetcodeInvoker(candidateMethod);
+                // Add leetcodeInvoker to pipelineRunnerInvokers list.
                 pipelineRunnerInvokers.add(leetcodeInvoker);
+                // Map leetcodeInvoker's id -> pipelineRunner owner.
                 pipelineRunnerMap.put(leetcodeInvoker.getId(), builtinPipelineRunner);
             }
         }
@@ -117,41 +150,50 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
      * Run this pipeline.
      */
     void run() {
-        try {
-
-            // Now we can happily run the io loop to perform leetcode debugging enhancements.
-            while (true) {
-                // Provide the next string input from the InputProvider.
-                String input = inputProvider.provideNextInput();
-                // We need to break this loop when the input indicates end.
-                if (inputProvider.isEnd(input)) {
-                    break;
-                }
-                Object bossLeetcodeExecutor = leetcodeExecutor;
-                // Parse the string input to input object.
-                Object inputObject = InputParserProcessor.process(inputParser, bossLeetcodeExecutor, input);
-                // Do some enhancement after input parsing.
-                bossLeetcodeExecutor = doEnhanceAfterInputParseProcess(bossLeetcodeExecutor);
-                // Execute leetcode target and get the output object.
-                Object outputObject = LeetcodeExecutorProcessor.process(bossLeetcodeExecutor, inputObject);
-                // Print the output object.
-                String output = OutputPrinterProcessor.process(outputPrinter, bossLeetcodeExecutor, outputObject);
-                // Consume the next output string to the OutputConsumer.
-                outputConsumer.consumeNextOutput(output);
+        // Now we can happily run the io loop to perform leetcode debugging enhancements.
+        while (true) {
+            // Provide the next string input from the InputProvider.
+            String input = inputProvider.provideNextInput();
+            // We need to break this loop when the input indicates end.
+            if (inputProvider.isEnd(input)) {
+                break;
             }
-
-        } finally {
-            // Close the input resource finally.
-            try {
-                inputProvider.close();
-            } catch (Exception ignored) {
-            }
-            // Close the output resource finally.
-            try {
-                outputConsumer.close();
-            } catch (Exception ignored) {
-            }
+            Object bossLeetcodeExecutor = leetcodeExecutor;
+            // Do some enhancement before input parsing.
+            bossLeetcodeExecutor = doEnhanceBeforeInputParseProcess(bossLeetcodeExecutor);
+            // Parse the string input to input object.
+            Object inputObject = InputParserProcessor.process(inputParser, bossLeetcodeExecutor, input);
+            // Do some enhancement after input parsing.
+            bossLeetcodeExecutor = doEnhanceAfterInputParseProcess(bossLeetcodeExecutor);
+            // Execute leetcode target and get the output object.
+            Object outputObject = LeetcodeExecutorProcessor.process(bossLeetcodeExecutor, inputObject);
+            // Print the output object.
+            String output = OutputPrinterProcessor.process(outputPrinter, bossLeetcodeExecutor, outputObject);
+            // Consume the next output string to the OutputConsumer.
+            outputConsumer.consumeNextOutput(output);
         }
+    }
+
+    /**
+     * Do enhance before input parse process.
+     * In this function, we will add all pipeline runner
+     * invokers as additional candidate invokers to 
+     * leetcodeExecutor.
+     *
+     * @param bossLeetcodeExecutor the leetcode executor instance.
+     * @return the final leetcode executor.
+     */
+    private Object doEnhanceBeforeInputParseProcess(Object bossLeetcodeExecutor) {
+        // Aware candidate leetcode invoker list from the bossLeetcodeExecutor.
+        List<LeetcodeInvoker> candidateInvokers = ReflectUtil.getFieldValue("candidateInvokers", List.class,
+                bossLeetcodeExecutor);
+
+        // Add all builtin pipeline runner invokers as additional candidate invokers.
+        if (Objects.nonNull(candidateInvokers)) {
+            candidateInvokers.addAll(pipelineRunnerInvokers);
+        }
+        // Just return the origin bossLeetcodeExecutor.
+        return bossLeetcodeExecutor;
     }
 
     /**
