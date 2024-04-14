@@ -94,7 +94,7 @@ final class InputParser {
         // Execute parsing chain and return the chain output.
         Object inputObject = parserChain.parse(inputParserContext);
         // Set the final leetcode invoker from inputParserContext to the inputParseTask.
-        inputParseTask.setTargetMethod(inputParserContext.getTargetMethod());
+        inputParseTask.setTargetInvoker(inputParserContext.getTargetInvoker());
         return inputObject;
     }
 
@@ -108,8 +108,6 @@ final class InputParser {
         AssertUtil.nonNull(inputParseTask, "The inputParseTask cannot be null");
         AssertUtil.nonNull(inputParseTask.getTargetInstance(), "The target cannot be null");
         AssertUtil.nonNull(inputParseTask.getInput(), "The input cannot be null");
-        AssertUtil.isTrue(!inputParseTask.getInput().isEmpty(), "The input cannot be empty.");
-        return new InputParserContext(inputParseTask.getTargetInstance(), inputParseTask.getInput(),
-                inputParseTask.getTargetMethod());
+        return new InputParserContext(inputParseTask.getTargetInstance(), inputParseTask.getInput(), inputParseTask.getCandidateInvokers());
     }
 }
