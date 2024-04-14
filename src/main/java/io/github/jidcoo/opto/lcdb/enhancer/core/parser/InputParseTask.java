@@ -16,7 +16,9 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
-import java.lang.reflect.Method;
+import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
+
+import java.util.List;
 
 /**
  * <p>InputParseTask is an input parse task holder.</p>
@@ -37,14 +39,14 @@ final class InputParseTask {
 
     /**
      * The target invoker used for debug.
-     * 
+     *
      * @since 1.0.1
      */
     private LeetcodeInvoker targetInvoker;
 
     /**
      * The candidate leetcode invokers list for input parsing.
-     * 
+     *
      * @since 1.0.1
      */
     private List<LeetcodeInvoker> candidateInvokers;
@@ -80,7 +82,7 @@ final class InputParseTask {
 
     /**
      * Get the target invoker used for debug.
-     * 
+     *
      * @return the target invoker.
      * @since 1.0.1
      */
@@ -90,7 +92,7 @@ final class InputParseTask {
 
     /**
      * Set the target invoker used for debug.
-     * 
+     *
      * @param targetInvoker the target invoker.
      * @since 1.0.1
      */
