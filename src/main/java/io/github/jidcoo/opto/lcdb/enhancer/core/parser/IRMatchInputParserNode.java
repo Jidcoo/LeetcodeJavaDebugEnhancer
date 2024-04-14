@@ -18,6 +18,7 @@ package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeExecutorFactory;
+import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeInvokerFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.EnhancerLogUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.GsonUtil;
@@ -73,10 +74,10 @@ final class IRMatchInputParserNode extends InputParserNode {
      * @param context the instance parser context.
      * @return the parsed result object.
      * @apiNote You can call the {@link InputParserContext#peekInput()} method
-     *          of the context to view the output of the previous node.
-     *          But the prerequisite is that the
-     *          {@link InputParserContext#getInputStackSize()} method of
-     *          the context returns an int greater than 0.
+     * of the context to view the output of the previous node.
+     * But the prerequisite is that the
+     * {@link InputParserContext#getInputStackSize()} method of
+     * the context returns an int greater than 0.
      */
     @Override
     Object parse(InputParserContext context) {
@@ -148,15 +149,16 @@ final class IRMatchInputParserNode extends InputParserNode {
      * @param matchTracer the match tracer.
      * @since 1.0.1
      */
-    private void logDetailAfterIRMatching(LeetcodeInvoker bossInvoker, List<LeetcodeInvoker> invokers, List<Object> input,
-            Map<LeetcodeInvoker, Map<Integer, Stack<ParameterAcceptStrategyTracer>>> matchTracer) {
+    private void logDetailAfterIRMatching(LeetcodeInvoker bossInvoker, List<LeetcodeInvoker> invokers,
+                                          List<Object> input, Map<LeetcodeInvoker, Map<Integer,
+            Stack<ParameterAcceptStrategyTracer>>> matchTracer) {
         if (Objects.isNull(bossInvoker)) {
             if (ContainerCheckUtil.isListEmpty(invokers)) {
                 throw new RuntimeException("Cannot find any possible leetcode invoker.");
             }
             StringBuilder logBuffer = new StringBuilder();
             logBuffer.append("[IR-Matching Tracer Error Report Detail Start]\n");
-            logBuffer.append("LeetcodeInvokers: " + invokers.length + ",  IRInputs: " + input.size());
+            logBuffer.append("LeetcodeInvokers: " + invokers.size() + ",  IRInputs: " + input.size());
             logBuffer.append("\n<TracersDetail>\n");
             int invokerIdx = 0;
             for (Map.Entry<LeetcodeInvoker, Map<Integer, Stack<ParameterAcceptStrategyTracer>>> methodListEntry :
@@ -179,10 +181,11 @@ final class IRMatchInputParserNode extends InputParserNode {
                         logBuffer.append(tracer.toString());
                     }
                 }
-                if (invokerIdx < invokers.length) logBuffer.append("\n");
+                if (invokerIdx < invokers.size()) logBuffer.append("\n");
             }
             logBuffer.append("[IR-Matching Tracer Error Report Detail END]\n");
-            EnhancerLogUtil.logE("Cannot match any leetcode invoker for IR-Input: %s\n\n%s", input, logBuffer.toString());
+            EnhancerLogUtil.logE("Cannot match any leetcode invoker for IR-Input: %s\n\n%s", input,
+                    logBuffer.toString());
             throw new RuntimeException("Cannot match any leetcode invoker for IR-Input.");
         }
     }
@@ -238,24 +241,27 @@ final class IRMatchInputParserNode extends InputParserNode {
         // Here are the new features for version 1.0.0 and later.
 
         List<LeetcodeInvoker> leetcodeInvokers = new ArrayList<>();
-        
+
         // At first, we fetch the candidate invokers list from the context.
-        if (!ContainerCheckUtil.isListEmpty(context.getCandidateInvokers)) {
+        if (!ContainerCheckUtil.isListEmpty(context.getCandidateInvokers())) {
             leetcodeInvokers.addAll(context.getCandidateInvokers());
         }
 
-        // Aware target class from context's target instance.
-        Class<?> targetClass = Objects.nonNull(context.getTargetInstance()) ? ((context.getTargetInstance instanceof Class) ? context.getTargetInstance() : context.getTargetInstance().getClass()) : null;
+        // Then, aware target class from context's target instance.
+        Class<?> targetClass = Objects.nonNull(context.getTargetInstance()) ?
+                ((context.getTargetInstance() instanceof Class) ? (Class<?>) context.getTargetInstance() :
+                        context.getTargetInstance().getClass()) : null;
         if (Objects.nonNull(targetClass)) {
             // Get all public methods from the targetClass as invokers.
-            List<LeetcodeInvoker> publicLeetcodeInvokers = Arrays.stream(targetClass.getDeclaredMethods())
-                  .filter(m -> Modifier.isPublic(m.getModifiers()))
-                  .filter(m -> !m.isDefault())
-                  .filter(m -> m.getParameterCount() == invokerParameterSize)
-                  .map(LeetcodeExecutorFactory::getLeetcodeExecutor)
-                  .collect(Collectors::toList);
+            List<LeetcodeInvoker> publicLeetcodeInvokers =
+                    Arrays.stream(targetClass.getDeclaredMethods())
+                            .filter(m -> Modifier.isPublic(m.getModifiers()))
+                            .filter(m -> !m.isDefault())
+                            .filter(m -> m.getParameterCount() == invokerParameterSize)
+                            .map(LeetcodeInvokerFactory::getLeetcodeInvoker)
+                            .collect(Collectors.toList());
             // Add public leetcode invokers list to leetcodeInvokers.
-            leetcodeInvokers.addAll(publicLeetcodeInvokers);    
+            leetcodeInvokers.addAll(publicLeetcodeInvokers);
         }
 
         return leetcodeInvokers;

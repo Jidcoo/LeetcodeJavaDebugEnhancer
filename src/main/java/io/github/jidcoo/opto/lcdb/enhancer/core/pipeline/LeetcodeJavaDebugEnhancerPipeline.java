@@ -222,7 +222,7 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
         // Set up the pipelineRunner.
         setupPipelineRunner(pipelineRunner);
         // Create a new leetcode executor as the final leetcode executor.
-        Object finalLeetcodeExecutor = LeetcodeExecutorFactory.getLeetcodeExecutor(pipelineRunner, leetcodeInvoker);
+        Object finalLeetcodeExecutor = LeetcodeExecutorFactory.getLeetcodeExecutorByInvoker(pipelineRunner, leetcodeInvoker);
         // Set the bossLeetcodeExecutor's invoker to null.
         ReflectUtil.setFieldValue("executor", LeetcodeInvoker.class, null, bossLeetcodeExecutor);
         // Return the final leetcode executor.

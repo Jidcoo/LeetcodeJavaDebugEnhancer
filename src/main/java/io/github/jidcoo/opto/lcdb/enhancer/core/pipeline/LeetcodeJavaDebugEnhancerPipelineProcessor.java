@@ -25,7 +25,6 @@ import io.github.jidcoo.opto.lcdb.enhancer.core.io.IOFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.parser.InputParserFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.printer.OutputPrinterFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.EnhancerLogUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
 
 import java.util.Objects;
@@ -92,7 +91,7 @@ public final class LeetcodeJavaDebugEnhancerPipelineProcessor {
         // At first, if the enhancement point from the enhancer is not null,
         // we will prioritize using it.
         if (Objects.nonNull(enhancer.getEnhancementPoint())) {
-            return LeetcodeExecutorFactory.getLeetcodeExecutor(enhancer,
+            return LeetcodeExecutorFactory.getLeetcodeExecutorByInvoker(enhancer,
                     LeetcodeInvokerFactory.getLeetcodeInvoker(enhancer.getEnhancementPoint()));
         }
 
@@ -106,10 +105,13 @@ public final class LeetcodeJavaDebugEnhancerPipelineProcessor {
                 "one inner class in AT.");
         // Use this only inner class as an instance of leetcode executor.
         Class<?> bossInnerClassInstance = innerClasses[0];
+        // If the name of bossInnerClassInstance is "Solution",
+        // then we only need to instantiate the class.
         if ("Solution".equals(bossInnerClassInstance.getSimpleName())) {
-            return LeetcodeExecutorFactory.getLeetcodeExecutor(ReflectUtil.createInstance(bossInnerClassInstance,
+            return LeetcodeExecutorFactory.getLeetcodeExecutorByInvoker(ReflectUtil.createInstance(bossInnerClassInstance,
                     new Class[]{enhancer.getClass()}, enhancer), null);
         }
-        return null;
+        // Create a leetcode executor by bossInnerClassInstance and return it.
+        return LeetcodeExecutorFactory.getLeetcodeExecutorByInvoker(bossInnerClassInstance, null);
     }
 }

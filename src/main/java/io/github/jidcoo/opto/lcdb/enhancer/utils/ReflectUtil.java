@@ -104,14 +104,19 @@ public class ReflectUtil {
         AssertUtil.isTrue(!StringUtil.isBlank(fieldName), "The fieldName cannot be blank.");
         AssertUtil.nonNull(fieldType, "The fieldType cannot be null.");
         AssertUtil.nonNull(obj, "The obj cannot be null.");
-        try {
-            Field declaredField = obj.getClass().getDeclaredField(fieldName);
-            AssertUtil.isTrue(Objects.equals(declaredField.getType(), fieldType),
-                    "The type of the field " + fieldName + " in object " + obj + " is " + declaredField.getType().getSimpleName() + ", not " + fieldType.getSimpleName() + ".");
-            return declaredField;
-        } catch (Exception | Error e) {
-            throw new RuntimeException(e);
+        Field field = null;
+        Class<?> classFinder = obj.getClass();
+        while (Objects.isNull(field) && Objects.nonNull(classFinder)) {
+            try {
+                field = classFinder.getDeclaredField(fieldName);
+            } catch (Exception | Error e) {
+                classFinder = classFinder.getSuperclass();
+            }
         }
+        AssertUtil.nonNull(field, "Cannot match any field by field name [" + fieldName + "] in object: " + obj);
+        AssertUtil.isTrue(Objects.equals(field.getType(), fieldType),
+                "The type of the field " + fieldName + " in " + "object " + obj + " is " + field.getType().getSimpleName() + ", not " + fieldType.getSimpleName() + ".");
+        return field;
     }
 
     /**

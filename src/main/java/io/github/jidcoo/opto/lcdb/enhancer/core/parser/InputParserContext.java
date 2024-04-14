@@ -16,8 +16,10 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
-import java.lang.reflect.Method;
+import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
+
 import java.util.EmptyStackException;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -38,14 +40,14 @@ final class InputParserContext {
 
     /**
      * The target invoker used for debug.
-     * 
+     *
      * @since 1.0.1
      */
     private LeetcodeInvoker targetInvoker;
 
     /**
      * The candidate leetcode invokers list for input parsing.
-     * 
+     *
      * @since 1.0.1
      */
     private List<LeetcodeInvoker> candidateInvokers;
@@ -126,7 +128,7 @@ final class InputParserContext {
 
     /**
      * Get the target invoker used for debug.
-     * 
+     *
      * @return the target invoker.
      * @since 1.0.1
      */
@@ -136,7 +138,7 @@ final class InputParserContext {
 
     /**
      * Set the target invoker used for debug.
-     * 
+     *
      * @param targetInvoker the target invoker.
      * @since 1.0.1
      */

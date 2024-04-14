@@ -19,6 +19,8 @@ package io.github.jidcoo.opto.lcdb.enhancer.core.executor;
 import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 
+import java.util.List;
+
 /**
  * <p>LeetcodeExecutorFactory is a factory class
  * to product the {@link LeetcodeExecutor}
@@ -37,8 +39,25 @@ public final class LeetcodeExecutorFactory {
      * @return the LeetcodeExecutor instance.
      * @since 1.0.1
      */
-    public static LeetcodeExecutor getLeetcodeExecutor(Object instance, LeetcodeInvoker leetcodeInvoker) {
+    public static LeetcodeExecutor getLeetcodeExecutorByInvoker(Object instance, LeetcodeInvoker leetcodeInvoker) {
         AssertUtil.nonNull(instance, "The instance cannot be null.");
         return new LeetcodeExecutor(instance, leetcodeInvoker);
+    }
+
+    /**
+     * Product a LeetcodeExecutor instance by leetcode instance and leetcode invokers.
+     *
+     * @param instance         the leetcode instance.
+     * @param leetcodeInvokers the leetcode invokers.
+     * @return the LeetcodeExecutor instance.
+     * @since 1.0.1
+     */
+    public static LeetcodeExecutor getLeetcodeExecutorByInvokers(Object instance,
+                                                                 List<LeetcodeInvoker> leetcodeInvokers) {
+        AssertUtil.nonNull(instance, "The instance cannot be null.");
+        AssertUtil.nonNull(leetcodeInvokers, "The leetcodeInvokers cannot be null.");
+        LeetcodeExecutor leetcodeExecutor = new LeetcodeExecutor(instance, null);
+        leetcodeExecutor.getCandidateInvokers().addAll(leetcodeInvokers);
+        return leetcodeExecutor;
     }
 }
