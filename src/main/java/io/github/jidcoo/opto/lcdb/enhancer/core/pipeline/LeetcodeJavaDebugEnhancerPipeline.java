@@ -38,10 +38,10 @@ import java.util.stream.Collectors;
 /**
  * <p>LeetcodeJavaDebugEnhancerPipeline is a pipeline
  * used to run enhanced pipeline processes.</p>
- * <p>In order to adapt to complex scenarios, 
- * LeetcodeJavaDebugEnhancerPipeline takes on 
+ * <p>In order to adapt to complex scenarios,
+ * LeetcodeJavaDebugEnhancerPipeline takes on
  * more proactive enhancement work here.</p>
- * 
+ *
  * @author Jidcoo
  * @since 1.0.1
  */
@@ -177,7 +177,7 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
     /**
      * Do enhance before input parse process.
      * In this function, we will add all pipeline runner
-     * invokers as additional candidate invokers to 
+     * invokers as additional candidate invokers to
      * leetcodeExecutor.
      *
      * @param bossLeetcodeExecutor the leetcode executor instance.

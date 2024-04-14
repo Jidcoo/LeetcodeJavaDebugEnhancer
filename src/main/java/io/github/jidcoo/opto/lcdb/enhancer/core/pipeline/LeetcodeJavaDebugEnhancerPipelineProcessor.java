@@ -17,18 +17,27 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.pipeline;
 
 import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
+import io.github.jidcoo.opto.lcdb.enhancer.base.InputProvider;
+import io.github.jidcoo.opto.lcdb.enhancer.base.OutputConsumer;
+import io.github.jidcoo.opto.lcdb.enhancer.core.io.IOFactory;
+import io.github.jidcoo.opto.lcdb.enhancer.core.parser.InputParserFactory;
+import io.github.jidcoo.opto.lcdb.enhancer.core.printer.OutputPrinterFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 
 /**
- * <p>LeetcodeJavaDebugEnhancerPipelineProcessor is a publicly 
- * available LeetcodeJavaDebugEnhancerPipeline processor. 
+ * <p>LeetcodeJavaDebugEnhancerPipelineProcessor is a publicly
+ * available LeetcodeJavaDebugEnhancerPipeline processor.
  * It has used a proxy to access {@link LeetcodeJavaDebugEnhancerPipeline}.
  * </p>
  *
- * <p>The main {@link #process(Object)} method
- * of LeetcodeJavaDebugEnhancerPipelineProcessor is to proxy 
+ * <p>The main {@link #process(LeetcodeJavaDebugEnhancer)} method
+ * of LeetcodeJavaDebugEnhancerPipelineProcessor is to proxy
  * external callers to execute {@link LeetcodeJavaDebugEnhancerPipeline}.
  * </p>
+ *
+ * <p>All features of the {@link LeetcodeJavaDebugEnhancer} will
+ * be controlled and dominated by this processor in version
+ * <tt>1.0.1</tt> and later. </p>
  *
  * @author Jidcoo
  * @since 1.0.1
@@ -36,14 +45,14 @@ import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 public final class LeetcodeJavaDebugEnhancerPipelineProcessor {
 
     /**
-     * Do starting real enhancement pipeline with 
+     * Do starting real enhancement pipeline with
      * LeetcodeJavaDebugEnhancer instance.
-     * 
+     *
      * @param enhancer the LeetcodeJavaDebugEnhancer instance.
      */
-    public static void process(LeetcodeJavaDebugEnhancer enhancer) {
+    public static void process(LeetcodeJavaDebugEnhancer enhancer) throws Exception, Error {
         // Check NPE.
-        AssertUtil.nonNull(enhancer,"The enhancer cannot be null.");
+        AssertUtil.nonNull(enhancer, "The enhancer cannot be null.");
         // Create a LeetcodeExecutor from the enhancer.
         Object leetcodeExecutor = createBootstrapLeetcodeExecutor(enhancer);
         // Create an OutputPrinter from the enhancer.
@@ -59,7 +68,8 @@ public final class LeetcodeJavaDebugEnhancerPipelineProcessor {
 
         ) {
             // Create a pipeline instance by enhancer's components.
-            LeetcodeJavaDebugEnhancerPipeline pipeline = new LeetcodeJavaDebugEnhancerPipeline(enhancer, inputProvider, outputConsumer, outputPrinter, leetcodeExecutor, inputParser);
+            LeetcodeJavaDebugEnhancerPipeline pipeline = new LeetcodeJavaDebugEnhancerPipeline(enhancer,
+                    inputProvider, outputConsumer, outputPrinter, leetcodeExecutor, inputParser);
             // Run pipeline.
             pipeline.run();
         }
@@ -68,7 +78,7 @@ public final class LeetcodeJavaDebugEnhancerPipelineProcessor {
 
     /**
      * Create a bootstrap leetcode executor instance by enhancer.
-     * 
+     *
      * @param enhancer the LeetcodeJavaDebugEnhancer instance.
      * @return the leetcode executor instance.
      */
