@@ -19,10 +19,16 @@ package io.github.jidcoo.opto.lcdb.enhancer.core.pipeline;
 import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
 import io.github.jidcoo.opto.lcdb.enhancer.base.InputProvider;
 import io.github.jidcoo.opto.lcdb.enhancer.base.OutputConsumer;
+import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeExecutorFactory;
+import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeInvokerFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.io.IOFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.parser.InputParserFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.printer.OutputPrinterFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.EnhancerLogUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
+
+import java.util.Objects;
 
 /**
  * <p>LeetcodeJavaDebugEnhancerPipelineProcessor is a publicly
@@ -83,7 +89,27 @@ public final class LeetcodeJavaDebugEnhancerPipelineProcessor {
      * @return the leetcode executor instance.
      */
     private static Object createBootstrapLeetcodeExecutor(LeetcodeJavaDebugEnhancer enhancer) {
+        // At first, if the enhancement point from the enhancer is not null,
+        // we will prioritize using it.
+        if (Objects.nonNull(enhancer.getEnhancementPoint())) {
+            return LeetcodeExecutorFactory.getLeetcodeExecutor(enhancer,
+                    LeetcodeInvokerFactory.getLeetcodeInvoker(enhancer.getEnhancementPoint()));
+        }
 
+        // Secondly, we will try to resolve all first level INNER-CLASS in AT.
+        Class<?>[] innerClasses = ReflectUtil.resolveInnerClasses(enhancer.getClass());
+        // The innerClasses length must be greater than zero.
+        AssertUtil.isTrue(innerClasses.length > 0, "Cannot resolve any inner class from the AT enhancer instance.");
+        // Unfortunately, we are currently unable to handle situations where
+        // there are multiple INNER-CLASS in AT.
+        AssertUtil.isTrue(innerClasses.length < 2, "Multiple inner classes were found in AT. There can only be " +
+                "one inner class in AT.");
+        // Use this only inner class as an instance of leetcode executor.
+        Class<?> bossInnerClassInstance = innerClasses[0];
+        if ("Solution".equals(bossInnerClassInstance.getSimpleName())) {
+            return LeetcodeExecutorFactory.getLeetcodeExecutor(ReflectUtil.createInstance(bossInnerClassInstance,
+                    new Class[]{enhancer.getClass()}, enhancer), null);
+        }
         return null;
     }
 }

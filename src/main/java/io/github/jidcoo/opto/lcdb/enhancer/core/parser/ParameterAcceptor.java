@@ -63,7 +63,8 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
     /**
      * Built-in  parameter acceptance strategy set package location.
      */
-    private static final String BUILT_IN_PARAMETER_ACCEPTANCE_STRATEGY_PACKAGE = "io.github.jidcoo.opto.lcdb.enhancer.core.parser.builtin";
+    private static final String BUILT_IN_PARAMETER_ACCEPTANCE_STRATEGY_PACKAGE = "io.github.jidcoo.opto.lcdb" +
+            ".enhancer" + ".core.parser.builtin";
 
     /**
      * Create a ParameterAcceptor instance.
@@ -75,7 +76,7 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
                 BUILT_IN_PARAMETER_ACCEPTANCE_STRATEGY_PACKAGE,
                 (Class type) -> type.isAnnotationPresent(Resource.class) && ReflectUtil.isExtendsClass(type,
                         BaseParameterAcceptStrategy.class) && !Modifier.isAbstract(type.getModifiers()), (Class<?
-                        extends BaseParameterAcceptStrategy> beanType) -> ReflectUtil.createInstance(beanType)).stream().filter(Objects::nonNull).collect(Collectors.toList());
+                        extends BaseParameterAcceptStrategy> beanType) -> ReflectUtil.createInstance(beanType, null)).stream().filter(Objects::nonNull).collect(Collectors.toList());
         if (!ContainerCheckUtil.isListEmpty(strategies)) {
             // Add all strategies to the builtinAcceptStrategyMap.
             for (BaseParameterAcceptStrategy<?> strategy : strategies) {
