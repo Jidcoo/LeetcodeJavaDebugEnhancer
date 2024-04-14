@@ -35,15 +35,21 @@ public class ReflectUtil {
     /**
      * Create an instance from the class by default class constructor.
      *
-     * @param clazz clazz object.
-     * @return the instance created by the input class.
+     * @param clazz                     clazz object.
+     * @param constructorParameterTypes the parameter type array used to find constructor.
+     * @param constructorParameters     the parameters used to initialize object.
+     * @return the instance created by the class.
      */
-    public static <T> T createInstance(Class<T> clazz) {
+    public static <T> T createInstance(Class<T> clazz, Class<?>[] constructorParameterTypes,
+                                       Object... constructorParameters) {
         AssertUtil.nonNull(clazz, "The class cannot be null.");
+        if (Objects.isNull(constructorParameterTypes)) {
+            constructorParameterTypes = new Class[0];
+        }
         try {
-            Constructor<T> declaredConstructor = clazz.getDeclaredConstructor();
+            Constructor<T> declaredConstructor = clazz.getDeclaredConstructor(constructorParameterTypes);
             declaredConstructor.setAccessible(true);
-            return declaredConstructor.newInstance();
+            return declaredConstructor.newInstance(constructorParameters);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -58,36 +64,6 @@ public class ReflectUtil {
     public static Class<?>[] resolveInnerClasses(Class<?> clazz) {
         AssertUtil.nonNull(clazz, "The clazz cannot be null.");
         return clazz.getDeclaredClasses();
-    }
-
-    /**
-     * Resolve the inner class Solution and instantiate
-     * it from the <tt>AT</tt> object.
-     *
-     * @param object the <tt>AT</tt> object.
-     * @return the Solution instance.
-     */
-    public static Object resolveSolutionInstance(Object object) {
-        AssertUtil.nonNull(object, "The object cannot be null.");
-        AssertUtil.isTrue((object instanceof LeetcodeJavaDebugEnhancer), "The object is not an inherited object from "
-                + "LeetcodeJavaDebugEnhancer");
-        Class<?> __AT__class = object.getClass();
-        Class<?>[] declaredClasses = resolveInnerClasses(__AT__class);
-        for (Class<?> declaredClass : declaredClasses) {
-            // Match the simple name of the class.
-            if ("Solution".equals(declaredClass.getSimpleName())) {
-                try {
-                    Constructor<?> declaredConstructor = declaredClass.getDeclaredConstructor(__AT__class);
-                    declaredConstructor.setAccessible(true);
-                    return declaredConstructor.newInstance(object);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
-
-        // Sorry, we cannot find any inner class named "Solution".
-        throw new RuntimeException("No inner class Solution found in class: " + object.getClass());
     }
 
     /**

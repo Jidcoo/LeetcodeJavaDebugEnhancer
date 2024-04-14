@@ -127,7 +127,7 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
                 BUILT_IN_PIPELINE_RUNNER_PACKAGE,
                 klass -> klass.isAnnotationPresent(Resource.class) && ReflectUtil.isExtendsClass(klass,
                         PipelineRunner.class) && !Modifier.isAbstract(klass.getModifiers()),
-                ReflectUtil::createInstance).stream().filter(Objects::nonNull).collect(Collectors.toList());
+                klass -> ReflectUtil.createInstance(klass, null)).stream().filter(Objects::nonNull).collect(Collectors.toList());
         // Dispatch each builtinPipelineRunner into the pipelineRunnerMap.
         for (PipelineRunner builtinPipelineRunner : builtinPipelineRunners) {
             // Get all candidate methods from the builtinPipelineRunner.

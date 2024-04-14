@@ -58,7 +58,7 @@ public final class OutputPrinterFactory {
                 (Class type) -> type.isAnnotationPresent(Resource.class)
                         && ReflectUtil.isExtendsClass(type, BasePrintingStrategy.class)
                         && !Modifier.isAbstract(type.getModifiers()),
-                (Class<? extends BasePrintingStrategy> beanType) -> ReflectUtil.createInstance(beanType))
+                (Class<? extends BasePrintingStrategy> beanType) -> ReflectUtil.createInstance(beanType,null))
                 .stream().filter(Objects::nonNull).collect(Collectors.toList());
         // Add all enhancer's printStrategies to the list.
         if (!ContainerCheckUtil.isListEmpty(enhancer.getOutputPrintStrategies())) {
