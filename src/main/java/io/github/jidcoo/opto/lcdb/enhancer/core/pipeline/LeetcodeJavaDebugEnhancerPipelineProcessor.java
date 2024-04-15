@@ -91,8 +91,7 @@ public final class LeetcodeJavaDebugEnhancerPipelineProcessor {
         // At first, if the enhancement point from the enhancer is not null,
         // we will prioritize using it.
         if (Objects.nonNull(enhancer.getEnhancementPoint())) {
-            return LeetcodeExecutorFactory.getLeetcodeExecutorByInvoker(enhancer,
-                    LeetcodeInvokerFactory.getLeetcodeInvoker(enhancer.getEnhancementPoint()));
+            return LeetcodeExecutorFactory.getLeetcodeExecutor(enhancer, LeetcodeInvokerFactory.getLeetcodeInvoker(enhancer.getEnhancementPoint()));
         }
 
         // Secondly, we will try to resolve all first level INNER-CLASS in AT.
@@ -108,10 +107,10 @@ public final class LeetcodeJavaDebugEnhancerPipelineProcessor {
         // If the name of bossInnerClassInstance is "Solution",
         // then we only need to instantiate the class.
         if ("Solution".equals(bossInnerClassInstance.getSimpleName())) {
-            return LeetcodeExecutorFactory.getLeetcodeExecutorByInvoker(ReflectUtil.createInstance(bossInnerClassInstance,
-                    new Class[]{enhancer.getClass()}, enhancer), null);
+            return LeetcodeExecutorFactory.getLeetcodeExecutor(ReflectUtil.createInstance(bossInnerClassInstance,
+                    new Class[]{enhancer.getClass()}, enhancer));
         }
         // Create a leetcode executor by bossInnerClassInstance and return it.
-        return LeetcodeExecutorFactory.getLeetcodeExecutorByInvoker(bossInnerClassInstance, null);
+        return LeetcodeExecutorFactory.getLeetcodeExecutor(bossInnerClassInstance);
     }
 }

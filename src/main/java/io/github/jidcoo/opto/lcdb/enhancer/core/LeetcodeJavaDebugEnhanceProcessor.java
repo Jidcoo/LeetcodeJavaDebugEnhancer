@@ -47,7 +47,7 @@ public final class LeetcodeJavaDebugEnhanceProcessor {
      */
     public static void process(Class<? extends LeetcodeJavaDebugEnhancer> AT) throws Exception, Error {
         // Create an AT instance enhancer at first.
-        LeetcodeJavaDebugEnhancer enhancer = ReflectUtil.createInstance(AT, null);
+        LeetcodeJavaDebugEnhancer enhancer = ReflectUtil.createInstance(AT);
         // Setup EnhancerLog log level.
         EnhancerLogUtil.setLogLevel(enhancer.getEnhancerLogLevel());
 

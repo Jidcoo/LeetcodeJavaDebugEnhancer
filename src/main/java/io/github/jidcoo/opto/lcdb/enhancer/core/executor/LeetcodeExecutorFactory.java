@@ -16,10 +16,10 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.executor;
 
+import java.util.Objects;
+
 import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
-
-import java.util.List;
 
 /**
  * <p>LeetcodeExecutorFactory is a factory class
@@ -34,30 +34,20 @@ public final class LeetcodeExecutorFactory {
     /**
      * Product a LeetcodeExecutor instance by leetcode instance.
      *
-     * @param instance        the leetcode instance.
-     * @param leetcodeInvoker the leetcode invoker.
-     * @return the LeetcodeExecutor instance.
-     * @since 1.0.1
-     */
-    public static LeetcodeExecutor getLeetcodeExecutorByInvoker(Object instance, LeetcodeInvoker leetcodeInvoker) {
-        AssertUtil.nonNull(instance, "The instance cannot be null.");
-        return new LeetcodeExecutor(instance, leetcodeInvoker);
-    }
-
-    /**
-     * Product a LeetcodeExecutor instance by leetcode instance and leetcode invokers.
-     *
      * @param instance         the leetcode instance.
      * @param leetcodeInvokers the leetcode invokers.
      * @return the LeetcodeExecutor instance.
      * @since 1.0.1
      */
-    public static LeetcodeExecutor getLeetcodeExecutorByInvokers(Object instance,
-                                                                 List<LeetcodeInvoker> leetcodeInvokers) {
+    public static LeetcodeExecutor getLeetcodeExecutor(Object instance, LeetcodeInvoker... leetcodeInvokers) {
         AssertUtil.nonNull(instance, "The instance cannot be null.");
-        AssertUtil.nonNull(leetcodeInvokers, "The leetcodeInvokers cannot be null.");
-        LeetcodeExecutor leetcodeExecutor = new LeetcodeExecutor(instance, null);
-        leetcodeExecutor.getCandidateInvokers().addAll(leetcodeInvokers);
-        return leetcodeExecutor;
+        LeetcodeExecutor executor = new LeetcodeExecutor(instance, null);
+        for (LeetcodeInvoker leetcodeInvoker : leetcodeInvokers) {
+            if (Objects.nonNull(leetcodeInvoker)) {
+                // Add non-null leetcode invoker.
+                executor.getCandidateInvokers().add(leetcodeInvoker);
+            }
+        }
+        return executor;
     }
 }
