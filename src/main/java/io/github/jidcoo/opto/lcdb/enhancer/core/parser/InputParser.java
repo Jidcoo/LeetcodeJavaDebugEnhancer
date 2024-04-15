@@ -69,8 +69,7 @@ final class InputParser {
                         continue;
                     }
                     // Create InputParserNode instance by class.
-                    InputParserNode inputParserNode =
-                            ReflectUtil.createInstance((Class<? extends InputParserNode>) clazz, null);
+                    InputParserNode inputParserNode = ReflectUtil.createInstance((Class<? extends InputParserNode>) clazz);
                     // Add to inputParserNodes.
                     inputParserNodes.add(inputParserNode);
                 }

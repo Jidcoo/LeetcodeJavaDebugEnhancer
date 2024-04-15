@@ -16,8 +16,6 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.utils;
 
-import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -33,7 +31,7 @@ import java.util.Objects;
 public class ReflectUtil {
 
     /**
-     * Create an instance from the class by default class constructor.
+     * Create an instance from the class by custom class constructor.
      *
      * @param clazz                     clazz object.
      * @param constructorParameterTypes the parameter type array used to find constructor.
@@ -53,6 +51,16 @@ public class ReflectUtil {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Create an instance from the class by default class constructor.
+     *
+     * @param clazz clazz object.
+     * @return the instance created by the class.
+     */
+    public static <T> T createInstance(Class<T> clazz) {
+        return createInstance(clazz, null);
     }
 
     /**

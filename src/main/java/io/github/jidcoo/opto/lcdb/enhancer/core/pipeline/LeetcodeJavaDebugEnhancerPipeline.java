@@ -127,7 +127,7 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
                 BUILT_IN_PIPELINE_RUNNER_PACKAGE,
                 klass -> klass.isAnnotationPresent(Resource.class) && ReflectUtil.isExtendsClass(klass,
                         PipelineRunner.class) && !Modifier.isAbstract(klass.getModifiers()),
-                klass -> ReflectUtil.createInstance(klass, null)).stream().filter(Objects::nonNull).collect(Collectors.toList());
+                klass -> ReflectUtil.createInstance(klass)).stream().filter(Objects::nonNull).collect(Collectors.toList());
         // Dispatch each builtinPipelineRunner into the pipelineRunnerMap.
         for (PipelineRunner builtinPipelineRunner : builtinPipelineRunners) {
             // Get all candidate methods from the builtinPipelineRunner.
@@ -222,7 +222,7 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
         // Set up the pipelineRunner.
         setupPipelineRunner(pipelineRunner);
         // Create a new leetcode executor as the final leetcode executor.
-        Object finalLeetcodeExecutor = LeetcodeExecutorFactory.getLeetcodeExecutorByInvoker(pipelineRunner, leetcodeInvoker);
+        Object finalLeetcodeExecutor = LeetcodeExecutorFactory.getLeetcodeExecutor(pipelineRunner, leetcodeInvoker);
         // Set the bossLeetcodeExecutor's invoker to null.
         ReflectUtil.setFieldValue("executor", LeetcodeInvoker.class, null, bossLeetcodeExecutor);
         // Return the final leetcode executor.
