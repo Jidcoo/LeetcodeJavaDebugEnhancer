@@ -16,9 +16,9 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.io.builtin;
 
+import io.github.jidcoo.opto.lcdb.enhancer.base.InputProvider;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.StringUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.base.InputProvider;
 
 import java.io.BufferedReader;
 import java.io.IOException;

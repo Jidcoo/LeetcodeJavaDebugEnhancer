@@ -17,10 +17,10 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.printer;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.BasePrintingStrategy;
+import io.github.jidcoo.opto.lcdb.enhancer.base.Order;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Strategizable;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.GsonUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.base.Order;
 
 import javax.lang.model.type.NullType;
 import java.util.*;

@@ -16,10 +16,10 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.executor;
 
-import java.util.Objects;
-
 import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
+
+import java.util.Objects;
 
 /**
  * <p>LeetcodeExecutorFactory is a factory class
