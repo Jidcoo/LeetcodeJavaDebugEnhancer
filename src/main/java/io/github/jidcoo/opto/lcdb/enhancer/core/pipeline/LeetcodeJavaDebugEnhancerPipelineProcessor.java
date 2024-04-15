@@ -91,7 +91,8 @@ public final class LeetcodeJavaDebugEnhancerPipelineProcessor {
         // At first, if the enhancement point from the enhancer is not null,
         // we will prioritize using it.
         if (Objects.nonNull(enhancer.getEnhancementPoint())) {
-            return LeetcodeExecutorFactory.getLeetcodeExecutor(enhancer, LeetcodeInvokerFactory.getLeetcodeInvoker(enhancer.getEnhancementPoint()));
+            return LeetcodeExecutorFactory.getLeetcodeExecutor(enhancer,
+                    LeetcodeInvokerFactory.getLeetcodeInvoker(enhancer.getEnhancementPoint()));
         }
 
         // Secondly, we will try to resolve all first level INNER-CLASS in AT.

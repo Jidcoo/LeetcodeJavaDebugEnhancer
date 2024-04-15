@@ -16,10 +16,10 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core;
 
+import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
 import io.github.jidcoo.opto.lcdb.enhancer.core.pipeline.LeetcodeJavaDebugEnhancerPipelineProcessor;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.EnhancerLogUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
 
 /**
  * <p>LeetcodeJavaDebugEnhanceProcessor is a primary enhancer.</p>

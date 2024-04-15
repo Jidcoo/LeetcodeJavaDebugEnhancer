@@ -18,7 +18,10 @@ package io.github.jidcoo.opto.lcdb.enhancer.core.io.builtin;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.OutputConsumer;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 /**
  * <p>FileOutputConsumer is a {@link OutputConsumer} and

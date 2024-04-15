@@ -16,11 +16,11 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
+import io.github.jidcoo.opto.lcdb.enhancer.base.Order;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.PackageUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.base.Order;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -69,7 +69,8 @@ final class InputParser {
                         continue;
                     }
                     // Create InputParserNode instance by class.
-                    InputParserNode inputParserNode = ReflectUtil.createInstance((Class<? extends InputParserNode>) clazz);
+                    InputParserNode inputParserNode =
+                            ReflectUtil.createInstance((Class<? extends InputParserNode>) clazz);
                     // Add to inputParserNodes.
                     inputParserNodes.add(inputParserNode);
                 }
@@ -107,6 +108,7 @@ final class InputParser {
         AssertUtil.nonNull(inputParseTask, "The inputParseTask cannot be null");
         AssertUtil.nonNull(inputParseTask.getTargetInstance(), "The target cannot be null");
         AssertUtil.nonNull(inputParseTask.getInput(), "The input cannot be null");
-        return new InputParserContext(inputParseTask.getTargetInstance(), inputParseTask.getInput(), inputParseTask.getCandidateInvokers());
+        return new InputParserContext(inputParseTask.getTargetInstance(), inputParseTask.getInput(),
+                inputParseTask.getCandidateInvokers());
     }
 }

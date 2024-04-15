@@ -17,7 +17,6 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
-import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeExecutorFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeInvokerFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.EnhancerLogUtil;
@@ -25,7 +24,6 @@ import io.github.jidcoo.opto.lcdb.enhancer.utils.GsonUtil;
 
 import javax.annotation.Resource;
 import java.io.*;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -253,8 +251,7 @@ final class IRMatchInputParserNode extends InputParserNode {
                         context.getTargetInstance().getClass()) : null;
         if (Objects.nonNull(targetClass)) {
             // Get all public methods from the targetClass as invokers.
-            List<LeetcodeInvoker> publicLeetcodeInvokers =
-                    Arrays.stream(targetClass.getDeclaredMethods())
+            List<LeetcodeInvoker> publicLeetcodeInvokers = Arrays.stream(targetClass.getDeclaredMethods())
                             .filter(m -> Modifier.isPublic(m.getModifiers()))
                             .filter(m -> !m.isDefault())
                             .filter(m -> m.getParameterCount() == invokerParameterSize)
