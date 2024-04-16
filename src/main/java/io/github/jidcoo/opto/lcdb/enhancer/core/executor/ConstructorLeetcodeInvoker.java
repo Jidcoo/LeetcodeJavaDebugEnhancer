@@ -60,7 +60,7 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
         // Make accessible.
         this.constructor.setAccessible(true);
         this.id = id;
-        // Friendly-Matching-Mode is not used by default.
+        // Friendly-Matching-Mode is closed by default.
         this.matchingFriendly = false;
     }
 
