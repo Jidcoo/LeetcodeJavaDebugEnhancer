@@ -37,6 +37,7 @@ public class ReflectUtil {
      * @param constructorParameterTypes the parameter type array used to find constructor.
      * @param constructorParameters     the parameters used to initialize object.
      * @return the instance created by the class.
+     * @since 1.0.1
      */
     public static <T> T createInstance(Class<T> clazz, Class<?>[] constructorParameterTypes,
                                        Object... constructorParameters) {
@@ -58,6 +59,7 @@ public class ReflectUtil {
      *
      * @param clazz clazz object.
      * @return the instance created by the class.
+     * @since 1.0.1
      */
     public static <T> T createInstance(Class<T> clazz) {
         return createInstance(clazz, null);
@@ -68,6 +70,7 @@ public class ReflectUtil {
      *
      * @param clazz the given class object.
      * @return the inner-class array in the given class.
+     * @since 1.0.1
      */
     public static Class<?>[] resolveInnerClasses(Class<?> clazz) {
         AssertUtil.nonNull(clazz, "The clazz cannot be null.");
@@ -107,6 +110,7 @@ public class ReflectUtil {
      * @param fieldType the field type.
      * @param obj       the object.
      * @return the field
+     * @since 1.0.1
      */
     public static Field getField(String fieldName, Class fieldType, Object obj) {
         AssertUtil.isTrue(!StringUtil.isBlank(fieldName), "The fieldName cannot be blank.");
