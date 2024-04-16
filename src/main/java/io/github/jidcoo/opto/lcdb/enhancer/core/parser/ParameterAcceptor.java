@@ -63,8 +63,7 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
     /**
      * Built-in  parameter acceptance strategy set package location.
      */
-    private static final String BUILT_IN_PARAMETER_ACCEPTANCE_STRATEGY_PACKAGE = "io.github.jidcoo.opto.lcdb" +
-            ".enhancer" + ".core.parser.builtin";
+    private static final String BUILT_IN_PARAMETER_ACCEPTANCE_STRATEGY_PACKAGE = "io.github.jidcoo.opto.lcdb.enhancer.core.parser.builtin";
 
     /**
      * Create a ParameterAcceptor instance.
