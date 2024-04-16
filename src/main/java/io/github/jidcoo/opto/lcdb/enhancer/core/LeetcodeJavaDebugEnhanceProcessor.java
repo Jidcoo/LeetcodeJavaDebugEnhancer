@@ -62,5 +62,4 @@ public final class LeetcodeJavaDebugEnhanceProcessor {
         // Good luck!!!.
         EnhancerLogUtil.logI("Stop leetcode debugging enhancer at (AT) class: %s", AT.getSimpleName());
     }
-
 }
