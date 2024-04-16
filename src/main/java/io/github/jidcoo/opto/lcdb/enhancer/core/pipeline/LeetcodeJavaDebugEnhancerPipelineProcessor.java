@@ -95,14 +95,13 @@ public final class LeetcodeJavaDebugEnhancerPipelineProcessor {
                     LeetcodeInvokerFactory.getLeetcodeInvoker(enhancer.getEnhancementPoint()));
         }
 
-        // Secondly, we will try to resolve all first level INNER-CLASS in AT.
+        // Then, we will try to resolve all first level INNER-CLASS in AT.
         Class<?>[] innerClasses = ReflectUtil.resolveInnerClasses(enhancer.getClass());
         // The innerClasses length must be greater than zero.
-        AssertUtil.isTrue(innerClasses.length > 0, "Cannot resolve any inner class from the AT enhancer instance.");
+        AssertUtil.isTrue(innerClasses.length > 0, "Cannot resolve any inner class from the AT instance.");
         // Unfortunately, we are currently unable to handle situations where
         // there are multiple INNER-CLASS in AT.
-        AssertUtil.isTrue(innerClasses.length < 2, "Multiple inner classes were found in AT. There can only be " +
-                "one inner class in AT.");
+        AssertUtil.isTrue(innerClasses.length < 2, "Multiple inner classes were found in AT instance. There can only be one inner class in AT instance.");
         // Use this only inner class as an instance of leetcode executor.
         Class<?> bossInnerClassInstance = innerClasses[0];
         // If the name of bossInnerClassInstance is "Solution",
