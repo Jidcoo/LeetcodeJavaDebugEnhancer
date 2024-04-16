@@ -48,13 +48,12 @@ public final class InputParserProcessor {
     public static Object process(Object parser, Object executor, String input) {
         AssertUtil.nonNull(parser, "The parser cannot be null.");
         AssertUtil.nonNull(executor, "The parser cannot be null.");
-
-        // In version 1.0.1 and later, the blank string "" represent no parameters
+        // In version 1.0.1 and later, the empty string "" represent no parameters
         // instead of no input. So here we only verify whether the input is null
         // rather than whether it is blank.
         AssertUtil.nonNull(input, "The input cannot be null.");
-
         AssertUtil.isTrue((parser instanceof InputParser), "The parser is not a InputParser.");
+
         // Get the leetcode target instance and target method from LeetcodeExecutor.
         Object targetInstance = ReflectUtil.getFieldValue("instance", Object.class, executor);
         List<LeetcodeInvoker> candidateInvokers = ReflectUtil.getFieldValue("candidateInvokers", List.class, executor);
