@@ -72,10 +72,10 @@ final class IRMatchInputParserNode extends InputParserNode {
      * @param context the instance parser context.
      * @return the parsed result object.
      * @apiNote You can call the {@link InputParserContext#peekInput()} method
-     * of the context to view the output of the previous node.
-     * But the prerequisite is that the
-     * {@link InputParserContext#getInputStackSize()} method of
-     * the context returns an int greater than 0.
+     *          of the context to view the output of the previous node.
+     *          But the prerequisite is that the
+     *          {@link InputParserContext#getInputStackSize()} method of
+     *          the context returns an int greater than 0.
      */
     @Override
     Object parse(InputParserContext context) {
@@ -239,7 +239,6 @@ final class IRMatchInputParserNode extends InputParserNode {
         // Here are the new features for version 1.0.0 and later.
 
         List<LeetcodeInvoker> leetcodeInvokers = new ArrayList<>();
-
         // At first, we fetch the candidate invokers list from the context.
         if (!ContainerCheckUtil.isListEmpty(context.getCandidateInvokers())) {
             leetcodeInvokers.addAll(context.getCandidateInvokers());
@@ -260,7 +259,6 @@ final class IRMatchInputParserNode extends InputParserNode {
             // Add public leetcode invokers list to leetcodeInvokers.
             leetcodeInvokers.addAll(publicLeetcodeInvokers);
         }
-
         return leetcodeInvokers;
     }
 }
