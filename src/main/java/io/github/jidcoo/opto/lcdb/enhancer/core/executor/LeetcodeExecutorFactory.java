@@ -41,8 +41,10 @@ public final class LeetcodeExecutorFactory {
      */
     public static LeetcodeExecutor getLeetcodeExecutor(Object instance, LeetcodeInvoker... leetcodeInvokers) {
         AssertUtil.nonNull(instance, "The instance cannot be null.");
-        LeetcodeExecutor executor = new LeetcodeExecutor(instance, null);
-        for (LeetcodeInvoker leetcodeInvoker : leetcodeInvokers) {
+        LeetcodeInvoker primaryInvoker = leetcodeInvokers.length > 0 ? leetcodeInvokers[0] : null;
+        LeetcodeExecutor executor = new LeetcodeExecutor(instance, primaryInvoker);
+        for (int i = 1; i < leetcodeInvokers.length; i++) {
+            LeetcodeInvoker leetcodeInvoker = leetcodeInvokers[i];
             if (Objects.nonNull(leetcodeInvoker)) {
                 // Add non-null leetcode invoker.
                 executor.getCandidateInvokers().add(leetcodeInvoker);
