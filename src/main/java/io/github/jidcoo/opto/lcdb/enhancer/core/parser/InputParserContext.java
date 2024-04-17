@@ -16,8 +16,10 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
-import java.lang.reflect.Method;
+import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
+
 import java.util.EmptyStackException;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -37,30 +39,40 @@ final class InputParserContext {
     private final Object targetInstance;
 
     /**
+     * The target invoker used for debug.
+     *
+     * @since 1.0.1
+     */
+    private LeetcodeInvoker targetInvoker;
+
+    /**
+     * The candidate leetcode invokers list for input parsing.
+     *
+     * @since 1.0.1
+     */
+    private List<LeetcodeInvoker> candidateInvokers;
+
+    /**
      * The input stack used for debug.
      */
     private final Stack<Object> inputStack;
 
     /**
-     * The target method used for debug.
-     */
-    private Method targetMethod;
-
-    /**
      * Create a InputParserContext instance.
      *
-     * @param targetInstance the target instance used for debug.
-     * @param input          the string input used for debug.
-     * @param targetMethod   the target method used for debug.
+     * @param targetInstance    the target instance used for debug.
+     * @param input             the string input used for debug.
+     * @param candidateInvokers the candidate leetcode invokers list for input
+     *                          parsing.
+     * @since 1.0.1
      */
-    InputParserContext(Object targetInstance, String input, Method targetMethod) {
+    InputParserContext(Object targetInstance, String input, List<LeetcodeInvoker> candidateInvokers) {
         this.targetInstance = targetInstance;
         this.inputStack = new Stack<>();
         // Add the first input to the inputStack
         this.inputStack.push(input);
-        this.targetMethod = targetMethod;
+        this.candidateInvokers = candidateInvokers;
     }
-
 
     /**
      * Get the target instance used for debug.
@@ -94,7 +106,6 @@ final class InputParserContext {
         return this.inputStack.peek();
     }
 
-
     /**
      * Remove the input at the top of the input stack
      * from this context and return it.
@@ -116,20 +127,32 @@ final class InputParserContext {
     }
 
     /**
-     * Get the target method used for debug.
+     * Get the target invoker used for debug.
      *
-     * @return the target method used for debug.
+     * @return the target invoker.
+     * @since 1.0.1
      */
-    Method getTargetMethod() {
-        return targetMethod;
+    LeetcodeInvoker getTargetInvoker() {
+        return targetInvoker;
     }
 
     /**
-     * Set the target method used for debug.
+     * Set the target invoker used for debug.
      *
-     * @param targetMethod the target method used for debug.
+     * @param targetInvoker the target invoker.
+     * @since 1.0.1
      */
-    void setTargetMethod(Method targetMethod) {
-        this.targetMethod = targetMethod;
+    void setTargetInvoker(LeetcodeInvoker targetInvoker) {
+        this.targetInvoker = targetInvoker;
+    }
+
+    /**
+     * Get the candidate leetcode invokers list for input parsing.
+     *
+     * @return the candidate invokers list.
+     * @since 1.0.1
+     */
+    List<LeetcodeInvoker> getCandidateInvokers() {
+        return candidateInvokers;
     }
 }

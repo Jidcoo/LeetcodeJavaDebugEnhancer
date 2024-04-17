@@ -16,8 +16,6 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.utils;
 
-import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -33,50 +31,50 @@ import java.util.Objects;
 public class ReflectUtil {
 
     /**
-     * Create an instance from the class by default class constructor.
+     * Create an instance from the class by custom class constructor.
      *
-     * @param clazz clazz object.
-     * @return the instance created by the input class.
+     * @param clazz                     clazz object.
+     * @param constructorParameterTypes the parameter type array used to find constructor.
+     * @param constructorParameters     the parameters used to initialize object.
+     * @return the instance created by the class.
+     * @since 1.0.1
      */
-    public static <T> T createInstance(Class<T> clazz) {
+    public static <T> T createInstance(Class<T> clazz, Class<?>[] constructorParameterTypes,
+                                       Object... constructorParameters) {
         AssertUtil.nonNull(clazz, "The class cannot be null.");
+        if (Objects.isNull(constructorParameterTypes)) {
+            constructorParameterTypes = new Class[0];
+        }
         try {
-            Constructor<T> declaredConstructor = clazz.getDeclaredConstructor();
+            Constructor<T> declaredConstructor = clazz.getDeclaredConstructor(constructorParameterTypes);
             declaredConstructor.setAccessible(true);
-            return declaredConstructor.newInstance();
+            return declaredConstructor.newInstance(constructorParameters);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     /**
-     * Resolve the inner class Solution and instantiate
-     * it from the <tt>AT</tt> object.
+     * Create an instance from the class by default class constructor.
      *
-     * @param object the <tt>AT</tt> object.
-     * @return the Solution instance.
+     * @param clazz clazz object.
+     * @return the instance created by the class.
+     * @since 1.0.1
      */
-    public static Object resolveSolutionInstance(Object object) {
-        AssertUtil.nonNull(object, "The object cannot be null.");
-        AssertUtil.isTrue((object instanceof LeetcodeJavaDebugEnhancer), "The object is not an inherited object from "
-                + "LeetcodeJavaDebugEnhancer");
-        Class<?> __AT__class = object.getClass();
-        Class<?>[] declaredClasses = __AT__class.getDeclaredClasses();
-        for (Class<?> declaredClass : declaredClasses) {
-            // Match the simple name of the class.
-            if ("Solution".equals(declaredClass.getSimpleName())) {
-                try {
-                    Constructor<?> declaredConstructor = declaredClass.getDeclaredConstructor(__AT__class);
-                    declaredConstructor.setAccessible(true);
-                    return declaredConstructor.newInstance(object);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
+    public static <T> T createInstance(Class<T> clazz) {
+        return createInstance(clazz, null);
+    }
 
-        // Sorry, we cannot find any inner class named "Solution".
-        throw new RuntimeException("No inner class Solution found in class: " + object.getClass());
+    /**
+     * Resolve all inner-class from the given class.
+     *
+     * @param clazz the given class object.
+     * @return the inner-class array in the given class.
+     * @since 1.0.1
+     */
+    public static Class<?>[] resolveInnerClasses(Class<?> clazz) {
+        AssertUtil.nonNull(clazz, "The clazz cannot be null.");
+        return clazz.getDeclaredClasses();
     }
 
     /**
@@ -112,19 +110,25 @@ public class ReflectUtil {
      * @param fieldType the field type.
      * @param obj       the object.
      * @return the field
+     * @since 1.0.1
      */
     public static Field getField(String fieldName, Class fieldType, Object obj) {
         AssertUtil.isTrue(!StringUtil.isBlank(fieldName), "The fieldName cannot be blank.");
         AssertUtil.nonNull(fieldType, "The fieldType cannot be null.");
         AssertUtil.nonNull(obj, "The obj cannot be null.");
-        try {
-            Field declaredField = obj.getClass().getDeclaredField(fieldName);
-            AssertUtil.isTrue(Objects.equals(declaredField.getType(), fieldType),
-                    "The type of the field " + fieldName + " in object " + obj + " is " + declaredField.getType().getSimpleName() + ", not " + fieldType.getSimpleName() + ".");
-            return declaredField;
-        } catch (Exception | Error e) {
-            throw new RuntimeException(e);
+        Field field = null;
+        Class<?> classFinder = obj.getClass();
+        while (Objects.isNull(field) && Objects.nonNull(classFinder)) {
+            try {
+                field = classFinder.getDeclaredField(fieldName);
+            } catch (Exception | Error e) {
+                classFinder = classFinder.getSuperclass();
+            }
         }
+        AssertUtil.nonNull(field, "Cannot match any field by field name [" + fieldName + "] in object: " + obj);
+        AssertUtil.isTrue(Objects.equals(field.getType(), fieldType),
+                "The type of the field " + fieldName + " in " + "object " + obj + " is " + field.getType().getSimpleName() + ", not " + fieldType.getSimpleName() + ".");
+        return field;
     }
 
     /**

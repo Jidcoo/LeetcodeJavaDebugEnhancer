@@ -16,11 +16,11 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
+import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.StringUtil;
 
-import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * <p>InputParserProcessor is a publicly available
@@ -48,20 +48,24 @@ public final class InputParserProcessor {
     public static Object process(Object parser, Object executor, String input) {
         AssertUtil.nonNull(parser, "The parser cannot be null.");
         AssertUtil.nonNull(executor, "The parser cannot be null.");
-        AssertUtil.isTrue(!StringUtil.isBlank(input), "The input cannot be blank.");
+        // In version 1.0.1 and later, the empty string "" represent no parameters
+        // instead of no input. So here we only verify whether the input is null
+        // rather than whether it is blank.
+        AssertUtil.nonNull(input, "The input cannot be null.");
         AssertUtil.isTrue((parser instanceof InputParser), "The parser is not a InputParser.");
+
         // Get the leetcode target instance and target method from LeetcodeExecutor.
         Object targetInstance = ReflectUtil.getFieldValue("instance", Object.class, executor);
-        Method targetExecutor = ReflectUtil.getFieldValue("executor", Method.class, executor);
+        List<LeetcodeInvoker> candidateInvokers = ReflectUtil.getFieldValue("candidateInvokers", List.class, executor);
         // Create an InputParseTask instance.
-        InputParseTask inputParseTask = new InputParseTask(targetInstance, targetExecutor, input);
+        InputParseTask inputParseTask = new InputParseTask(targetInstance, candidateInvokers, input);
         // Do real parse logic and return the parser output.
         Object output = ((InputParser) (parser)).parse(inputParseTask);
         // Set the final leetcode invoker from inputParseTask to the LeetcodeExecutor.
-        ReflectUtil.setFieldValue("invoker", Method.class, inputParseTask.getTargetMethod(), executor);
+        ReflectUtil.setFieldValue("executor", LeetcodeInvoker.class, inputParseTask.getTargetInvoker(), executor);
         // Set the leetcode invoker response type to the LeetcodeExecutor.
         ReflectUtil.setFieldValue("invokerResponseType", Class.class,
-                inputParseTask.getTargetMethod().getReturnType(), executor);
+                inputParseTask.getTargetInvoker().getReturnType(), executor);
         return output;
     }
 }

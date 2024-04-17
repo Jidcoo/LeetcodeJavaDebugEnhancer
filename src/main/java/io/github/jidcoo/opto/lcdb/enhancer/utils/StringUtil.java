@@ -26,7 +26,6 @@ import java.util.Objects;
  */
 public class StringUtil {
 
-
     /**
      * Check if CharSequence is empty.
      *
