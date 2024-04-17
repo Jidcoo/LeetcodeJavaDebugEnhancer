@@ -158,11 +158,11 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
                 break;
             }
             Object bossLeetcodeExecutor = leetcodeExecutor;
-            // Do some enhancement before input parsing.
+            // Do enhance before input parsing.
             bossLeetcodeExecutor = doEnhanceBeforeInputParseProcess(bossLeetcodeExecutor);
             // Parse the string input to input object.
             Object inputObject = InputParserProcessor.process(inputParser, bossLeetcodeExecutor, input);
-            // Do some enhancement after input parsing.
+            // Do enhance after input parsing.
             bossLeetcodeExecutor = doEnhanceAfterInputParseProcess(bossLeetcodeExecutor);
             // Execute leetcode target and get the output object.
             Object outputObject = LeetcodeExecutorProcessor.process(bossLeetcodeExecutor, inputObject);
