@@ -19,6 +19,7 @@ package io.github.jidcoo.opto.lcdb.enhancer.core.pipeline;
 import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
 import io.github.jidcoo.opto.lcdb.enhancer.base.InputProvider;
 import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
+import io.github.jidcoo.opto.lcdb.enhancer.base.Order;
 import io.github.jidcoo.opto.lcdb.enhancer.base.OutputConsumer;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeExecutorFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeExecutorProcessor;
@@ -121,12 +122,14 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
         // Build up runner map and invokers list.
         pipelineRunnerMap = new HashMap<>();
         pipelineRunnerInvokers = new ArrayList<>();
-        // Collect all builtin pipeline runner instance.
+        // Collect all builtin pipeline runners instance and sort it.
         List<PipelineRunner> builtinPipelineRunners = BeanUtil.collectBeans(PipelineRunner.class,
                 BUILT_IN_PIPELINE_RUNNER_PACKAGE,
                 klass -> klass.isAnnotationPresent(Resource.class) && ReflectUtil.isExtendsClass(klass,
                         PipelineRunner.class) && !Modifier.isAbstract(klass.getModifiers()),
-                klass -> ReflectUtil.createInstance(klass)).stream().filter(Objects::nonNull).collect(Collectors.toList());
+                klass -> ReflectUtil.createInstance(klass))
+                .stream().filter(Objects::nonNull).sorted(Comparator.comparingInt(Order::getOrder).reversed())
+                .collect(Collectors.toList());
         // Dispatch each builtinPipelineRunner into the pipelineRunnerMap.
         for (PipelineRunner builtinPipelineRunner : builtinPipelineRunners) {
             // Get all candidate methods from the builtinPipelineRunner.
