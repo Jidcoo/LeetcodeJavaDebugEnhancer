@@ -119,7 +119,6 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
         this.inputParser = inputParser;
 
         // Build up runner map and invokers list.
-
         pipelineRunnerMap = new HashMap<>();
         pipelineRunnerInvokers = new ArrayList<>();
         // Collect all builtin pipeline runner instance.
@@ -187,7 +186,6 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
         // Aware candidate leetcode invoker list from the bossLeetcodeExecutor.
         List<LeetcodeInvoker> candidateInvokers = ReflectUtil.getFieldValue("candidateInvokers", List.class,
                 bossLeetcodeExecutor);
-
         // Add all builtin pipeline runner invokers as additional candidate invokers.
         if (Objects.nonNull(candidateInvokers)) {
             candidateInvokers.addAll(pipelineRunnerInvokers);
@@ -209,7 +207,6 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
         // Aware leetcode invoker from the bossLeetcodeExecutor.
         LeetcodeInvoker leetcodeInvoker = ReflectUtil.getFieldValue("executor", LeetcodeInvoker.class,
                 bossLeetcodeExecutor);
-
         if (!pipelineRunnerMap.containsKey(leetcodeInvoker.getId())) {
             // If this current leetcodeInvoker is not a pipeline runner invoker,
             // then we consider the bossLeetcodeExecutor to be the final leetcode executor.
