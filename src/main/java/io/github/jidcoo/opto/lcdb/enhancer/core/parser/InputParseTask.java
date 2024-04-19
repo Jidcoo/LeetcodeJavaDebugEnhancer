@@ -52,9 +52,9 @@ final class InputParseTask {
     private List<LeetcodeInvoker> candidateInvokers;
 
     /**
-     * The string input used for debug.
+     * The input used for debug.
      */
-    private final String input;
+    private final Object input;
 
     /**
      * Create an InputParseTask instance.
@@ -62,10 +62,10 @@ final class InputParseTask {
      * @param targetInstance    the target instance used for debug.
      * @param candidateInvokers the candidate leetcode invokers list for input
      *                          parsing.
-     * @param input             the string input used for debug.
+     * @param input             the input used for debug.
      * @since 1.0.1
      */
-    InputParseTask(Object targetInstance, List<LeetcodeInvoker> candidateInvokers, String input) {
+    InputParseTask(Object targetInstance, List<LeetcodeInvoker> candidateInvokers, Object input) {
         this.targetInstance = targetInstance;
         this.candidateInvokers = candidateInvokers;
         this.input = input;
@@ -115,7 +115,7 @@ final class InputParseTask {
      *
      * @return the input.
      */
-    String getInput() {
+    Object getInput() {
         return input;
     }
 }
