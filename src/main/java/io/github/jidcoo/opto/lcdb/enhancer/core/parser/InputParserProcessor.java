@@ -42,16 +42,20 @@ public final class InputParserProcessor {
      *
      * @param parser   the InputParser instance.
      * @param executor the LeetcodeExecutor instance.
-     * @param input    the input string.
+     * @param input    the input.
      * @return the executor output object.
      */
-    public static Object process(Object parser, Object executor, String input) {
+    public static Object process(Object parser, Object executor, Object input) {
         AssertUtil.nonNull(parser, "The parser cannot be null.");
         AssertUtil.nonNull(executor, "The parser cannot be null.");
         // In version 1.0.1 and later, the empty string "" represent no parameters
         // instead of no input. So here we only verify whether the input is null
         // rather than whether it is blank.
         AssertUtil.nonNull(input, "The input cannot be null.");
+        // In version 1.0.1 and later, input changed from only supporting String type input
+        // to supporting Object type.
+        // However, the current Object type input only supports String and List.
+        AssertUtil.isTrue((input instanceof String || input instanceof List), "Unsupported input type: "+ input.getClass());
         AssertUtil.isTrue((parser instanceof InputParser), "The parser is not a InputParser.");
 
         // Get the leetcode target instance and target method from LeetcodeExecutor.
