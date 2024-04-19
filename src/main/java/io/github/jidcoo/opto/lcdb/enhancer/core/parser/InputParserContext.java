@@ -61,12 +61,12 @@ final class InputParserContext {
      * Create a InputParserContext instance.
      *
      * @param targetInstance    the target instance used for debug.
-     * @param input             the string input used for debug.
+     * @param input             the input used for debug.
      * @param candidateInvokers the candidate leetcode invokers list for input
      *                          parsing.
      * @since 1.0.1
      */
-    InputParserContext(Object targetInstance, String input, List<LeetcodeInvoker> candidateInvokers) {
+    InputParserContext(Object targetInstance, Object input, List<LeetcodeInvoker> candidateInvokers) {
         this.targetInstance = targetInstance;
         this.inputStack = new Stack<>();
         // Add the first input to the inputStack

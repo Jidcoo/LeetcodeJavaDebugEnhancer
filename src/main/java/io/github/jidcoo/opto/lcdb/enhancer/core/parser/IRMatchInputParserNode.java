@@ -152,7 +152,7 @@ final class IRMatchInputParserNode extends InputParserNode {
             Stack<ParameterAcceptStrategyTracer>>> matchTracer) {
         if (Objects.isNull(bossInvoker)) {
             if (ContainerCheckUtil.isListEmpty(invokers)) {
-                throw new RuntimeException("Cannot find any possible leetcode invoker. Because the candidate leetcode invokers is empty.");
+                throw new RuntimeException("Cannot find any possible leetcode invoker. Because the candidate leetcode invoker list is empty.");
             }
             StringBuilder logBuffer = new StringBuilder();
             logBuffer.append("[IR-Matching Tracer Error Report Detail Start]\n");

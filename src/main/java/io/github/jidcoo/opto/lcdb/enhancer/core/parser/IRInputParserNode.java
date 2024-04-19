@@ -120,8 +120,14 @@ final class IRInputParserNode extends InputParserNode {
      */
     @Override
     Object parse(InputParserContext context) {
+        // Get input object from context.
+        Object inputObject = context.peekInput();
+        // IRInputParserNode only accept String type input.
+        if (!(inputObject instanceof String)) {
+            return context.popInput();
+        }
         // Get string type input from context.
-        String input = (String) context.peekInput();
+        String input = (String) inputObject;
         // Initialize parsing index.
         int[] parseIndex = new int[1];
         // Initialize parsing result list.
