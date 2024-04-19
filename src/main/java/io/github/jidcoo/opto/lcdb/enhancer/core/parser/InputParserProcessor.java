@@ -53,8 +53,8 @@ public final class InputParserProcessor {
         // rather than whether it is blank.
         AssertUtil.nonNull(input, "The input cannot be null.");
         // In version 1.0.1 and later, input changed from only supporting String type input
-        // to supporting Object type.
-        // However, the current Object type input only supports String and List.
+        // to supporting Object type input.
+        // However, the current Object type input only supports String type and List type.
         AssertUtil.isTrue((input instanceof String || input instanceof List), "Unsupported input type: "+ input.getClass());
         AssertUtil.isTrue((parser instanceof InputParser), "The parser is not a InputParser.");
 
