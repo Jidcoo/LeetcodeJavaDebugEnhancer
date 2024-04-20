@@ -17,10 +17,10 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.printer.builtin;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.BasePrintingStrategy;
+import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Strategizable;
 import io.github.jidcoo.opto.lcdb.enhancer.base.struct.TreeNode;
 
-import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -33,7 +33,7 @@ import java.util.*;
  * @see TreeNode
  * @since 1.0
  */
-@Resource
+@Require
 public final class BinaryTreePrintingStrategy extends BasePrintingStrategy<TreeNode> {
 
     /**

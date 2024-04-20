@@ -16,7 +16,8 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
-import javax.annotation.Resource;
+import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import java.util.List;
  * @see InputParserNode
  * @since 1.0
  */
-@Resource
+@Require
 final class IRInputParserNode extends InputParserNode {
 
     /**

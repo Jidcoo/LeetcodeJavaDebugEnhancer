@@ -18,12 +18,12 @@ package io.github.jidcoo.opto.lcdb.enhancer.core.printer;
 
 import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
 import io.github.jidcoo.opto.lcdb.enhancer.base.BasePrintingStrategy;
+import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.BeanUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
 
-import javax.annotation.Resource;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Objects;
@@ -55,7 +55,7 @@ public final class OutputPrinterFactory {
         // Collect all builtin printing strategies.
         List<BasePrintingStrategy> builtinOutputPrintStrategies = BeanUtil.collectBeans(BasePrintingStrategy.class,
                 BUILT_IN_PRINTING_STRATEGY_PACKAGE,
-                (Class type) -> type.isAnnotationPresent(Resource.class)
+                (Class type) -> type.isAnnotationPresent(Require.class)
                         && ReflectUtil.isExtendsClass(type, BasePrintingStrategy.class)
                         && !Modifier.isAbstract(type.getModifiers()),
                 (Class<? extends BasePrintingStrategy> beanType) -> ReflectUtil.createInstance(beanType))

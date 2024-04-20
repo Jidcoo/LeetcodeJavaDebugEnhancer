@@ -17,12 +17,12 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
+import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeInvokerFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.EnhancerLogUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.GsonUtil;
 
-import javax.annotation.Resource;
 import java.io.*;
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  * @see InputParserNode
  * @since 1.0
  */
-@Resource
+@Require
 final class IRMatchInputParserNode extends InputParserNode {
 
     /**

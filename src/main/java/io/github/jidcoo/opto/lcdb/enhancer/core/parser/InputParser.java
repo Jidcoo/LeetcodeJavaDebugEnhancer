@@ -17,12 +17,12 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.Order;
+import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.PackageUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -64,8 +64,8 @@ final class InputParser {
         if (!ContainerCheckUtil.isListEmpty(classesByPackage)) {
             for (Class<?> clazz : classesByPackage) {
                 if (ReflectUtil.isExtendsClass(clazz, InputParserNode.class)) {
-                    // Instantiate only nodes that contain the @Resource annotation.
-                    if (!clazz.isAnnotationPresent(Resource.class)) {
+                    // Instantiate only nodes that contain the @Require annotation.
+                    if (!clazz.isAnnotationPresent(Require.class)) {
                         continue;
                     }
                     // Create InputParserNode instance by class.

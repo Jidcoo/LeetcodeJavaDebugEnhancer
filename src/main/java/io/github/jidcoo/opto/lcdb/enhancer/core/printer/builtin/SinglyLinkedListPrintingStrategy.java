@@ -17,10 +17,10 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.printer.builtin;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.BasePrintingStrategy;
+import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Strategizable;
 import io.github.jidcoo.opto.lcdb.enhancer.base.struct.ListNode;
 
-import javax.annotation.Resource;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,7 +34,7 @@ import java.util.Set;
  * @see ListNode
  * @since 1.0
  */
-@Resource
+@Require
 public final class SinglyLinkedListPrintingStrategy extends BasePrintingStrategy<ListNode> {
 
     /**

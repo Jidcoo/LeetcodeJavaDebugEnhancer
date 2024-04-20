@@ -17,10 +17,7 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.pipeline;
 
 import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
-import io.github.jidcoo.opto.lcdb.enhancer.base.InputProvider;
-import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
-import io.github.jidcoo.opto.lcdb.enhancer.base.Order;
-import io.github.jidcoo.opto.lcdb.enhancer.base.OutputConsumer;
+import io.github.jidcoo.opto.lcdb.enhancer.base.*;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeExecutorFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeExecutorProcessor;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeInvokerFactory;
@@ -30,7 +27,6 @@ import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.BeanUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
 
-import javax.annotation.Resource;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -125,7 +121,7 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
         // Collect all builtin pipeline runners instance and sort it.
         List<PipelineRunner> builtinPipelineRunners = BeanUtil.collectBeans(PipelineRunner.class,
                 BUILT_IN_PIPELINE_RUNNER_PACKAGE,
-                klass -> klass.isAnnotationPresent(Resource.class) && ReflectUtil.isExtendsClass(klass,
+                klass -> klass.isAnnotationPresent(Require.class) && ReflectUtil.isExtendsClass(klass,
                         PipelineRunner.class) && !Modifier.isAbstract(klass.getModifiers()),
                 klass -> ReflectUtil.createInstance(klass))
                 .stream().filter(Objects::nonNull).sorted(Comparator.comparingInt(Order::getOrder).reversed())
@@ -134,8 +130,8 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
         for (PipelineRunner builtinPipelineRunner : builtinPipelineRunners) {
             // Get all candidate methods from the builtinPipelineRunner.
             for (Method candidateMethod : builtinPipelineRunner.getClass().getDeclaredMethods()) {
-                // Filter out methods without @Resource annotation.
-                if (!candidateMethod.isAnnotationPresent(Resource.class)) {
+                // Filter out methods without @Require annotation.
+                if (!candidateMethod.isAnnotationPresent(Require.class)) {
                     continue;
                 }
                 // Create a LeetcodeInvoker instance by the candidateMethod.
