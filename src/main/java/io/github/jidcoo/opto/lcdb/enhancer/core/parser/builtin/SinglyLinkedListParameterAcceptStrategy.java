@@ -17,11 +17,11 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser.builtin;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.BaseParameterAcceptStrategy;
+import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Strategizable;
 import io.github.jidcoo.opto.lcdb.enhancer.base.struct.ListNode;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,7 +37,7 @@ import java.util.Set;
  * @see ListNode
  * @since 1.0
  */
-@Resource
+@Require
 public final class SinglyLinkedListParameterAcceptStrategy extends BaseParameterAcceptStrategy<ListNode> {
 
     /**

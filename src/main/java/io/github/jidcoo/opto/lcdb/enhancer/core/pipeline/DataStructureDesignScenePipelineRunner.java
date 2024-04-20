@@ -17,6 +17,7 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.pipeline;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
+import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeExecutorFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeExecutorProcessor;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeInvokerFactory;
@@ -25,7 +26,6 @@ import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
 
-import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -38,7 +38,7 @@ import java.util.stream.Stream;
  * @author Jidcoo
  * @since 1.0.1
  */
-@Resource
+@Require
 final class DataStructureDesignScenePipelineRunner extends PipelineRunner {
 
     /**
@@ -48,7 +48,7 @@ final class DataStructureDesignScenePipelineRunner extends PipelineRunner {
      * @param data data list.
      * @return question result.
      */
-    @Resource
+    @Require
     List<Object> processOnDataStructureDesignScene(List<String> operations, List<List<Object>> data) {
         AssertUtil.isTrue(!ContainerCheckUtil.isListEmpty(operations), "The operation list cannot be empty.");
         AssertUtil.isTrue(!ContainerCheckUtil.isListEmpty(data), "The data list cannot be empty.");
