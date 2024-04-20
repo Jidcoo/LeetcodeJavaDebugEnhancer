@@ -17,10 +17,10 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser.builtin;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.BaseParameterAcceptStrategy;
+import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Strategizable;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.GsonUtil;
 
-import javax.annotation.Resource;
 import javax.lang.model.type.NullType;
 import java.util.Map;
 import java.util.Set;
@@ -44,7 +44,7 @@ import java.util.Set;
  * @see GsonUtil
  * @since 1.0
  */
-@Resource
+@Require
 public final class GodParameterAcceptStrategy extends BaseParameterAcceptStrategy<Object> {
 
     /**

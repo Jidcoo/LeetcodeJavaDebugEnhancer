@@ -17,11 +17,11 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser.builtin;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.BaseParameterAcceptStrategy;
+import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Strategizable;
 import io.github.jidcoo.opto.lcdb.enhancer.base.struct.TreeNode;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 
-import javax.annotation.Resource;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  * @see TreeNode
  * @since 1.0
  */
-@Resource
+@Require
 public final class BinaryTreeParameterAcceptStrategy extends BaseParameterAcceptStrategy<TreeNode> {
 
     /**
