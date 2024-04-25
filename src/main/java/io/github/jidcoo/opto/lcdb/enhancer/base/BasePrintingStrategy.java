@@ -57,7 +57,7 @@ public abstract class BasePrintingStrategy<Output> implements Strategizable<Outp
      * @return the accepted output.
      */
     @Override
-    public final String accept(Class classType, Object object,
+    public final String accept(Object classType, Object object,
                                Map<Class<?>, Set<BasePrintingStrategy<?>>> strategiesMap) throws Throwable {
         // Do real call the printOutput() method.
         return printOutput((Output) object, strategiesMap);

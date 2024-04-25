@@ -18,6 +18,8 @@ package io.github.jidcoo.opto.lcdb.enhancer.utils;
 
 import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
+
 /**
  * A common json util based on opensource
  * project <tt>Gson</tt>.
@@ -48,6 +50,18 @@ public class GsonUtil {
      * @return the object.
      */
     public static <T> T fromJson(String str, Class<? extends T> type) {
+        return GSON.fromJson(str, type);
+    }
+
+    /**
+     * Return the object by the json string and the specified type.
+     *
+     * @param str  the json string.
+     * @param type the specified type.
+     * @return the object.
+     * @since 1.0.1
+     */
+    public static <T> T fromJson(String str, Type type) {
         return GSON.fromJson(str, type);
     }
 

@@ -52,7 +52,7 @@ public abstract class BaseParameterAcceptStrategy<Parameter> implements Strategi
      *                      </p>
      * @return the accepted parameter.
      */
-    protected abstract Parameter acceptParameter(Object object, Class type,
+    protected abstract Parameter acceptParameter(Object object, java.lang.reflect.Parameter type,
                                                  Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap) throws Throwable;
 
     /**
@@ -64,9 +64,9 @@ public abstract class BaseParameterAcceptStrategy<Parameter> implements Strategi
      * @return the accepted output.
      */
     @Override
-    public final Parameter accept(Class classType, Object object,
+    public final Parameter accept(Object classType, Object object,
                                   Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap) throws Throwable {
         // Do real call the acceptParameter() method.
-        return acceptParameter(object, classType, strategiesMap);
+        return acceptParameter(object, (java.lang.reflect.Parameter) classType, strategiesMap);
     }
 }

@@ -22,6 +22,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.base.Strategizable;
 import io.github.jidcoo.opto.lcdb.enhancer.base.struct.ListNode;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 
+import java.lang.reflect.Parameter;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -54,7 +55,7 @@ public final class SinglyLinkedListParameterAcceptStrategy extends BaseParameter
      * @return the accepted parameter.
      */
     @Override
-    protected ListNode acceptParameter(Object object, Class type,
+    protected ListNode acceptParameter(Object object, Parameter type,
                                        Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap) throws Throwable {
         AssertUtil.nonNull(object, "The object cannot be null.");
         AssertUtil.isTrue((object instanceof List), "The object is not a List.");
