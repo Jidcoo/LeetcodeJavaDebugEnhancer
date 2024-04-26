@@ -25,6 +25,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.utils.GsonUtil;
 
 import java.io.*;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -99,10 +100,10 @@ final class IRMatchInputParserNode extends InputParserNode {
                 Map<Integer, Stack<ParameterAcceptStrategyTracer>> invokerMatchTracerMap = new HashMap<>();
                 // A list used to record all accepted input object in order.
                 List<Object> acceptedInput = new ArrayList<>();
-                Class<?>[] parameterTypes = leetcodeInvoker.getParameterTypes();
+                Parameter[] parameterTypes = leetcodeInvoker.getParameters();
                 // Try to match all parameters.
                 for (int i = 0; i < parameterTypes.length; i++) {
-                    Class<?> parameterType = parameterTypes[i];
+                    Parameter parameterType = parameterTypes[i];
                     // Copy the input parameter deeply.
                     Object copiedObject = deepCopy(input.get(i));
                     // Try to accept the input parameter.
