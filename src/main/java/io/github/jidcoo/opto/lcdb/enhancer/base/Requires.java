@@ -16,7 +16,6 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.base;
 
-import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -24,32 +23,19 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * <p>Require is a powerful function
- * annotation. </p>
+ * Container annotation that aggregates several {@link Require} annotations.
  *
- * <p>You can use this annotation
- * to require anything you want during
- * the enhanced debugging runtime.</p>
+ * <p>Can be used natively, declaring several nested {@link Require} annotations.
+ * Can also be used in conjunction with Java 8's support for repeatable annotations,
+ * where {@link Require} can simply be declared several times on the same class,
+ * implicitly generating this container annotation.</p>
  *
  * @author Jidcoo
+ * @see Require
  * @since 1.0.1
  */
-@Target({TYPE, FIELD, METHOD})
+@Target(TYPE)
 @Retention(RUNTIME)
-@Repeatable(Requires.class)
-public @interface Require {
-
-    /**
-     * The requirement string values;
-     *
-     * @return requirement string values.
-     */
-    String[] values() default "";
-
-    /**
-     * The requirement types.
-     *
-     * @return requirement types.
-     */
-    Class<?>[] types() default {};
+public @interface Requires {
+    Require[] value();
 }
