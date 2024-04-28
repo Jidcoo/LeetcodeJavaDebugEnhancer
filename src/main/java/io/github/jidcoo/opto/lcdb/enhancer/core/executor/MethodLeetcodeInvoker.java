@@ -20,6 +20,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 
 /**
@@ -127,6 +128,13 @@ final class MethodLeetcodeInvoker implements LeetcodeInvoker {
      */
     @Override
     public Object invoke(Object object, Object... args) throws Throwable {
+        if (!Modifier.isStatic(this.method.getModifiers())) {
+            // Check whether the declared class of this method matches the class of the object
+            Class<?> declaringClass = this.method.getDeclaringClass();
+            AssertUtil.isTrue(declaringClass.isAssignableFrom(object.getClass()),
+                    String.format("The object(type is %s) is not the owner of this invoker(real owner is %s).",
+                            object.getClass(), declaringClass));
+        }
         return this.method.invoke(object, args);
     }
 
