@@ -20,8 +20,10 @@ import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * <p>ConstructorLeetcodeInvoker is an invoker
@@ -151,9 +153,22 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
      */
     @Override
     public Object invoke(Object object, Object... args) throws Throwable {
-        Object[] initArgsArray = new Object[args.length + 1];
-        initArgsArray[0] = object;
-        System.arraycopy(args, 0, initArgsArray, 1, args.length);
+        Object[] initArgsArray;
+        if (Modifier.isStatic(this.constructor.getDeclaringClass().getModifiers())) {
+            initArgsArray = new Object[args.length];
+            System.arraycopy(args, 0, initArgsArray, 0, args.length);
+        } else {
+            initArgsArray = new Object[args.length + 1];
+            if (Objects.nonNull(object)) {
+                Class<?> outerClass0 = this.constructor.getParameterTypes()[0];
+                // Check whether the outerClass of this constructor matches the class of the object
+                AssertUtil.isTrue(outerClass0.isAssignableFrom(object.getClass()), String.format("The object(type is "
+                        + "%s) is not the outer class instance of this invoker(real " + "outer class is %s).",
+                        object.getClass(), outerClass0));
+            }
+            initArgsArray[0] = object;
+            System.arraycopy(args, 0, initArgsArray, 1, args.length);
+        }
         return this.constructor.newInstance(initArgsArray);
     }
 
