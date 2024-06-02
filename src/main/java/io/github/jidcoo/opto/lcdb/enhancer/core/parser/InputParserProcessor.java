@@ -27,7 +27,7 @@ import java.util.List;
  * InputParser processor. It has used a proxy to
  * access {@link InputParser}.</p>
  *
- * <p>The main {@link #process(Object, Object, String)} method
+ * <p>The main {@link #process(Object, Object, Object)} method
  * of InputParserProcessor is to proxy external callers
  * to execute {@link InputParser}.
  * </p>
