@@ -37,5 +37,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)
 @Retention(RUNTIME)
 public @interface Requires {
+
+    /**
+     * You can require more things for debugging.
+     *
+     * @return the {@link Require} annotation array.
+     */
     Require[] value();
 }
