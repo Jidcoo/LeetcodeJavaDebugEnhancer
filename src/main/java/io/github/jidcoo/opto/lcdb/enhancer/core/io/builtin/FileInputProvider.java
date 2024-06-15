@@ -18,7 +18,10 @@ package io.github.jidcoo.opto.lcdb.enhancer.core.io.builtin;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.InputProvider;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 /**
  * <p>FileInputProvider is a {@link InputProvider} and

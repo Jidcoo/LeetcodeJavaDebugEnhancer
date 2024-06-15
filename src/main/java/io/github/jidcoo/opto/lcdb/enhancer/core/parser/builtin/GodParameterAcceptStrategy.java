@@ -17,11 +17,12 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser.builtin;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.BaseParameterAcceptStrategy;
+import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Strategizable;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.GsonUtil;
 
-import javax.annotation.Resource;
 import javax.lang.model.type.NullType;
+import java.lang.reflect.Parameter;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,7 +45,7 @@ import java.util.Set;
  * @see GsonUtil
  * @since 1.0
  */
-@Resource
+@Require
 public final class GodParameterAcceptStrategy extends BaseParameterAcceptStrategy<Object> {
 
     /**
@@ -61,12 +62,12 @@ public final class GodParameterAcceptStrategy extends BaseParameterAcceptStrateg
      * @return the accepted parameter.
      */
     @Override
-    protected Object acceptParameter(Object object, Class type,
+    protected Object acceptParameter(Object object, Parameter type,
                                      Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap) throws Throwable {
         // This can handle most situations!!!
         // How magical!!!
         // How beautiful the world is!!!
-        return GsonUtil.fromJson(GsonUtil.toJson(object), type);
+        return GsonUtil.fromJson(GsonUtil.toJson(object), type.getParameterizedType());
     }
 
     /**

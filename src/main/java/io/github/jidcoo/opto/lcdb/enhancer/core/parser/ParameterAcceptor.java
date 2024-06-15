@@ -16,16 +16,17 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
-import io.github.jidcoo.opto.lcdb.enhancer.utils.BeanUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.base.BaseParameterAcceptStrategy;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Order;
+import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Strategizable;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.BeanUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
 
-import javax.annotation.Resource;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,7 @@ import java.util.stream.Collectors;
  * <p>ParameterAcceptor performs appropriate acceptance
  * of input objects based on built-in parameter
  * acceptance strategies and external acceptance
- * strategies by {@link #accept(Class, Object)}.
+ * strategies by {@link #accept(Parameter, Object)}.
  * </p>
  *
  * @author Jidcoo
@@ -73,7 +74,7 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
         // Collect all builtin parameter acceptance strategies.
         List<BaseParameterAcceptStrategy> strategies = BeanUtil.collectBeans(BaseParameterAcceptStrategy.class,
                 BUILT_IN_PARAMETER_ACCEPTANCE_STRATEGY_PACKAGE,
-                (Class type) -> type.isAnnotationPresent(Resource.class) && ReflectUtil.isExtendsClass(type,
+                (Class type) -> type.isAnnotationPresent(Require.class) && ReflectUtil.isExtendsClass(type,
                         BaseParameterAcceptStrategy.class) && !Modifier.isAbstract(type.getModifiers()), (Class<?
                         extends BaseParameterAcceptStrategy> beanType) -> ReflectUtil.createInstance(beanType)).stream().filter(Objects::nonNull).collect(Collectors.toList());
         if (!ContainerCheckUtil.isListEmpty(strategies)) {
@@ -109,13 +110,13 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
      * @param object               the input object for accepting.
      * @return the parameter acceptance result.
      */
-    public ParameterAcceptResult accept(Class invokerParameterType, Object object) {
+    public ParameterAcceptResult accept(Parameter invokerParameterType, Object object) {
         // Create a tracer stack for tracking the acceptance process.
         Stack<ParameterAcceptStrategyTracer> tracerStack = new Stack<>();
 
         try {
             // Find the strategy set for the parameter acceptance.
-            Set<BaseParameterAcceptStrategy<?>> strategySet = findStrategySet(invokerParameterType,
+            Set<BaseParameterAcceptStrategy<?>> strategySet = findStrategySet(invokerParameterType.getType(),
                     builtinAcceptStrategyMap);
             for (BaseParameterAcceptStrategy<?> acceptStrategy : strategySet) {
                 try {
@@ -150,7 +151,7 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
      * @return the accepted parameter.
      */
     @Override
-    protected Object acceptParameter(Object object, Class type,
+    protected Object acceptParameter(Object object, Parameter type,
                                      Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap) throws Throwable {
         // This method is not supported in ParameterAcceptor.
         throw new RuntimeException("Unsupported!");

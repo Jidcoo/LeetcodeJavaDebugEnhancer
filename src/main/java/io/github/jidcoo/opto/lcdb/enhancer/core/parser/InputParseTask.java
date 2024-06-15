@@ -16,7 +16,9 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
-import java.lang.reflect.Method;
+import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
+
+import java.util.List;
 
 /**
  * <p>InputParseTask is an input parse task holder.</p>
@@ -36,25 +38,36 @@ final class InputParseTask {
     private final Object targetInstance;
 
     /**
-     * The target method used for debug.
+     * The target invoker used for debug.
+     *
+     * @since 1.0.1
      */
-    private Method targetMethod;
+    private LeetcodeInvoker targetInvoker;
 
     /**
-     * The string input used for debug.
+     * The candidate leetcode invokers list for input parsing.
+     *
+     * @since 1.0.1
      */
-    private final String input;
+    private List<LeetcodeInvoker> candidateInvokers;
+
+    /**
+     * The input used for debug.
+     */
+    private final Object input;
 
     /**
      * Create an InputParseTask instance.
      *
-     * @param targetInstance the target instance used for debug.
-     * @param targetMethod   the target method used for debug.
-     * @param input          the string input used for debug.
+     * @param targetInstance    the target instance used for debug.
+     * @param candidateInvokers the candidate leetcode invokers list for input
+     *                          parsing.
+     * @param input             the input used for debug.
+     * @since 1.0.1
      */
-    InputParseTask(Object targetInstance, Method targetMethod, String input) {
+    InputParseTask(Object targetInstance, List<LeetcodeInvoker> candidateInvokers, Object input) {
         this.targetInstance = targetInstance;
-        this.targetMethod = targetMethod;
+        this.candidateInvokers = candidateInvokers;
         this.input = input;
     }
 
@@ -68,21 +81,33 @@ final class InputParseTask {
     }
 
     /**
-     * Get the target method used for debug.
+     * Get the target invoker used for debug.
      *
-     * @return the target method.
+     * @return the target invoker.
+     * @since 1.0.1
      */
-    Method getTargetMethod() {
-        return targetMethod;
+    LeetcodeInvoker getTargetInvoker() {
+        return targetInvoker;
     }
 
     /**
-     * Set the target method.
+     * Set the target invoker used for debug.
      *
-     * @param targetMethod the target method.
+     * @param targetInvoker the target invoker.
+     * @since 1.0.1
      */
-    public void setTargetMethod(Method targetMethod) {
-        this.targetMethod = targetMethod;
+    void setTargetInvoker(LeetcodeInvoker targetInvoker) {
+        this.targetInvoker = targetInvoker;
+    }
+
+    /**
+     * Get the candidate leetcode invokers list for input parsing.
+     *
+     * @return the candidate invokers list.
+     * @since 1.0.1
+     */
+    List<LeetcodeInvoker> getCandidateInvokers() {
+        return candidateInvokers;
     }
 
     /**
@@ -90,7 +115,7 @@ final class InputParseTask {
      *
      * @return the input.
      */
-    String getInput() {
+    Object getInput() {
         return input;
     }
 }

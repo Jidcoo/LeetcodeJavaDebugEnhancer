@@ -113,7 +113,7 @@ public interface Strategizable<AcceptableType, Output, Strategy> extends Order {
      * @param strategiesMap the strategies map that can be used during the acceptance process.
      * @return the accepted output.
      */
-    default Output accept(Class classType, Object object, Map<Class<?>, Set<Strategy>> strategiesMap) throws Throwable {
+    default Output accept(Object classType, Object object, Map<Class<?>, Set<Strategy>> strategiesMap) throws Throwable {
         // By default, a runtime exception is thrown here.
         throw new RuntimeException("Stub!");
     }

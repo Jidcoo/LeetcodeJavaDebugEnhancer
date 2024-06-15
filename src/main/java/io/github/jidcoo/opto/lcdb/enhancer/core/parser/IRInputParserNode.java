@@ -16,7 +16,8 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
-import javax.annotation.Resource;
+import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import java.util.List;
  * @see InputParserNode
  * @since 1.0
  */
-@Resource
+@Require
 final class IRInputParserNode extends InputParserNode {
 
     /**
@@ -120,8 +121,14 @@ final class IRInputParserNode extends InputParserNode {
      */
     @Override
     Object parse(InputParserContext context) {
+        // Get input object from context.
+        Object inputObject = context.peekInput();
+        // IRInputParserNode only accept String type input.
+        if (!(inputObject instanceof String)) {
+            return context.popInput();
+        }
         // Get string type input from context.
-        String input = (String) context.peekInput();
+        String input = (String) inputObject;
         // Initialize parsing index.
         int[] parseIndex = new int[1];
         // Initialize parsing result list.
