@@ -48,23 +48,23 @@
 <dependency>
     <groupId>io.github.jidcoo</groupId>
     <artifactId>leetcode-java-debug-enhancer</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
 #### **Gradle**
 
 ```gradle
-implementation 'io.github.jidcoo:leetcode-java-debug-enhancer:1.0.0'
+implementation 'io.github.jidcoo:leetcode-java-debug-enhancer:1.0.1'
 ```
 
 #### **Jar**
 
-| 资源         | 索引                                          |
-| ------------ | --------------------------------------------- |
-| 托管仓库     | [点击这里浏览本项目的托管仓库](https://central.sonatype.com/artifact/io.github.jidcoo/leetcode-java-debug-enhancer/)                 |
-| 标准-Jar | [点击这里直接下载(标准-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.0/leetcode-java-debug-enhancer-1.0.0.jar) |
-| 全量-Jar     | [点击这里直接下载(全量-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.0/leetcode-java-debug-enhancer-1.0.0-jar-with-dependencies.jar)     |
+| 资源         | 索引                                                                                                                                                                  |
+| ------------ |---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 托管仓库     | [点击这里浏览本项目的托管仓库](https://central.sonatype.com/artifact/io.github.jidcoo/leetcode-java-debug-enhancer/)                                                              |
+| 标准-Jar | [点击这里直接下载(标准-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.1/leetcode-java-debug-enhancer-1.0.1.jar)                       |
+| 全量-Jar     | [点击这里直接下载(全量-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.1/leetcode-java-debug-enhancer-1.0.1-jar-with-dependencies.jar) |
 
 ### 安装
 
@@ -141,7 +141,7 @@ public class SimpleTest extends LeetcodeJavaDebugEnhancer {
 增强器启动后你将会看到如下输出：
 
 ```
-LeetcodeJavaDebugEnhancer[1.0.0] started.
+LeetcodeJavaDebugEnhancer[1.0.1] started.
 ```
 
 > Case输入规则：一个Case占据一行，下一个Case需要在下一行输入，一个Case输入完成的标志是遇到换行符或者EOF。
