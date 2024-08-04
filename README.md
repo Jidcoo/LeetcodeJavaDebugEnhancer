@@ -48,23 +48,23 @@
 <dependency>
     <groupId>io.github.jidcoo</groupId>
     <artifactId>leetcode-java-debug-enhancer</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
 #### **Gradle**
 
 ```gradle
-implementation 'io.github.jidcoo:leetcode-java-debug-enhancer:1.0.0'
+implementation 'io.github.jidcoo:leetcode-java-debug-enhancer:1.0.1'
 ```
 
 #### **Jar**
 
-| Resource         | Index                                          |
-| ------------ | --------------------------------------------- |
-| Repository Hosting    | [Click here to browse the repository for this project](https://central.sonatype.com/artifact/io.github.jidcoo/leetcode-java-debug-enhancer/)                 |
-| Standard-Jar | [Click here to download directly(Standard-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.0/leetcode-java-debug-enhancer-1.0.0.jar) |
-| Full-Jar     | [Click here to download directly(Full-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.0/leetcode-java-debug-enhancer-1.0.0-jar-with-dependencies.jar)     |
+| Resource         | Index                                                                                                                                                                                        |
+| ------------ |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Repository Hosting    | [Click here to browse the repository for this project](https://central.sonatype.com/artifact/io.github.jidcoo/leetcode-java-debug-enhancer/)                                                 |
+| Standard-Jar | [Click here to download directly(Standard-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.1/leetcode-java-debug-enhancer-1.0.1.jar)                   |
+| Full-Jar     | [Click here to download directly(Full-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.1/leetcode-java-debug-enhancer-1.0.1-jar-with-dependencies.jar) |
 
 ### Install
 
@@ -141,7 +141,7 @@ Click on the Run or Debug button of SimpleTest to run SimpleTest and start the d
 After the debugging enhancer starts, you will see the following output: 
 
 ```
-LeetcodeJavaDebugEnhancer[1.0.0] started.
+LeetcodeJavaDebugEnhancer[1.0.1] started.
 ```
 
 > Case input rule: One Case occupies one line, and the next Case needs to be input on the next line. The completion flag for a Case is encountering a new-line break or the EOF.
