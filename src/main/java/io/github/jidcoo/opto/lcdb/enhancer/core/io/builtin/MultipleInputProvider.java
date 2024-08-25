@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.jidcoo.opto.lcdb.enhancer.core.io.builtin;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.InputProvider;
