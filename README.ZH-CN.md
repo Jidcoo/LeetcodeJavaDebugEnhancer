@@ -48,23 +48,23 @@
 <dependency>
     <groupId>io.github.jidcoo</groupId>
     <artifactId>leetcode-java-debug-enhancer</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
 #### **Gradle**
 
 ```gradle
-implementation 'io.github.jidcoo:leetcode-java-debug-enhancer:1.0.0'
+implementation 'io.github.jidcoo:leetcode-java-debug-enhancer:1.0.1'
 ```
 
 #### **Jar**
 
-| 资源         | 索引                                          |
-| ------------ | --------------------------------------------- |
-| 托管仓库     | [点击这里浏览本项目的托管仓库](https://central.sonatype.com/artifact/io.github.jidcoo/leetcode-java-debug-enhancer/)                 |
-| 标准-Jar | [点击这里直接下载(标准-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.0/leetcode-java-debug-enhancer-1.0.0.jar) |
-| 全量-Jar     | [点击这里直接下载(全量-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.0/leetcode-java-debug-enhancer-1.0.0-jar-with-dependencies.jar)     |
+| 资源         | 索引                                                                                                                                                                  |
+| ------------ |---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 托管仓库     | [点击这里浏览本项目的托管仓库](https://central.sonatype.com/artifact/io.github.jidcoo/leetcode-java-debug-enhancer/)                                                              |
+| 标准-Jar | [点击这里直接下载(标准-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.1/leetcode-java-debug-enhancer-1.0.1.jar)                       |
+| 全量-Jar     | [点击这里直接下载(全量-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.1/leetcode-java-debug-enhancer-1.0.1-jar-with-dependencies.jar) |
 
 ### 安装
 
@@ -141,7 +141,7 @@ public class SimpleTest extends LeetcodeJavaDebugEnhancer {
 增强器启动后你将会看到如下输出：
 
 ```
-LeetcodeJavaDebugEnhancer[1.0.0] started.
+LeetcodeJavaDebugEnhancer[1.0.1] started.
 ```
 
 > Case输入规则：一个Case占据一行，下一个Case需要在下一行输入，一个Case输入完成的标志是遇到换行符或者EOF。
@@ -307,167 +307,6 @@ public class SimpleTest extends LeetcodeJavaDebugEnhancer {
 
 }
 ```
-
-
-
-### 3、支持自定义调试增强入口点
-
-#### API
-
-```java
-public Method getEnhancementPoint();
-```
-
-#### 描述
-
-众所周知，在Leetcode上有一些算法题目为[数据结构设计题](https://leetcode.cn/tag/design/)，例如[最小栈](https://leetcode.cn/problems/min-stack/)、[用队列实现栈](https://leetcode.cn/problems/implement-stack-using-queues/)等。
-
-上述这类题目对目前的调试增强器并不友好，因为这类题目并没有一个特别明确的算法入口，调试增强器很难找到一个有效的增强切入点。
-
-因此针对这类题目的调试，请 **_尽最大可能地_** 通过重写该方法为调试增强器提供一个来自**当前public类的**(例如上面[示例](#ref1)中的SimpleTest)、有效的、明确的增强切入点Method，调试增强器将会从该增强点切入执行调试增强逻辑，从而实现代码调试的目的。
-
-#### 示例
-
-假设现在有一个名为input.txt的文件，文件内容如下：
-
-```
-["MyStack","push","push","top","pop","empty"] [[],[1],[2],[],[],[]]
-```
-
-下面是一个把input.txt文件作为输入源，并自定义实现增强点 `runHere(String[] operations, int[][] numbers)` 方法进行调试的示例代码：
-
-```java
-//SimpleTest.java
-
-import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
-import io.github.jidcoo.opto.lcdb.enhancer.base.InputProvider;
-import io.github.jidcoo.opto.lcdb.enhancer.core.io.builtin.FileInputProvider;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
-
-import java.io.FileNotFoundException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-
-public class SimpleTest extends LeetcodeJavaDebugEnhancer {
-
-    class MyStack {
-        Queue<Integer> queue1;
-        Queue<Integer> queue2;
-
-        /**
-         * Initialize your data structure here.
-         */
-        public MyStack() {
-            queue1 = new LinkedList<Integer>();
-            queue2 = new LinkedList<Integer>();
-        }
-
-        /**
-         * Push element x onto stack.
-         */
-        public void push(int x) {
-            queue2.offer(x);
-            while (!queue1.isEmpty()) {
-                queue2.offer(queue1.poll());
-            }
-            Queue<Integer> temp = queue1;
-            queue1 = queue2;
-            queue2 = temp;
-        }
-
-        /**
-         * Removes the element on top of the stack and returns that element.
-         */
-        public int pop() {
-            return queue1.poll();
-        }
-
-        /**
-         * Get the top element.
-         */
-        public int top() {
-            return queue1.peek();
-        }
-
-        /**
-         * Returns whether the stack is empty.
-         */
-        public boolean empty() {
-            return queue1.isEmpty();
-        }
-    }
-
-    /**
-     * Enhancement point function.
-     *
-     * @param operations
-     * @param numbers
-     * @return
-     */
-    public List<Object> runHere(String[] operations, int[][] numbers) {
-        List<Object> ans = new ArrayList<>();
-        MyStack stack = null;
-        for (int i = 0; i < operations.length; i++) {
-            String operation = operations[i];
-            Object curReturn = null;
-            switch (operation) {
-                case "MyStack":
-                    stack = new MyStack();
-                    break;
-                case "push":
-                    stack.push(numbers[i][0]);
-                    break;
-                case "top":
-                    curReturn = stack.top();
-                    break;
-                case "pop":
-                    curReturn = stack.pop();
-                    break;
-                case "empty":
-                    curReturn = stack.empty();
-                    break;
-            }
-            ans.add(curReturn);
-        }
-        return ans;
-    }
-
-    @Override
-    public Method getEnhancementPoint() {
-        // Return the runHere() method object.
-        // By the way, you can use ReflectUtil.getMethod() to easily obtain the specified enhancement point method of a class.
-        return ReflectUtil.getMethod(SimpleTest.class, "runHere", String[].class, int[][].class);
-    }
-
-    @Override
-    public InputProvider getInputProvider() {
-        try {
-            return new FileInputProvider("input.txt");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-}
-
-```
-
-
-
-
-> 对于这种数据结构设计题目，`public Method getEnhancementPoint()`的设计思路是提供一种**迂回但有用**的方式让用户能够完成对此类题目的调试。
->
-> 但不难发现的是，这样的设计可能会给用户增加额外的、意义不大的编码任务。
->
-> 因此，在后续的版本迭代中，我们将尝试对这类数据结构设计题目场景进行抽象，把上述的“可能会给用户增加额外的、意义不大的编码任务”的过程交给调试增强器来自动完成！！！
->
-> 请持续关注该项目，敬请期待 ！！！ 🎉  🎉  🎉
-
-
-
 
 
 ## 🐛 问题与反馈

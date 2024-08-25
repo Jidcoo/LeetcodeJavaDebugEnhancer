@@ -48,23 +48,23 @@
 <dependency>
     <groupId>io.github.jidcoo</groupId>
     <artifactId>leetcode-java-debug-enhancer</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
 #### **Gradle**
 
 ```gradle
-implementation 'io.github.jidcoo:leetcode-java-debug-enhancer:1.0.0'
+implementation 'io.github.jidcoo:leetcode-java-debug-enhancer:1.0.1'
 ```
 
 #### **Jar**
 
-| Resource         | Index                                          |
-| ------------ | --------------------------------------------- |
-| Repository Hosting    | [Click here to browse the repository for this project](https://central.sonatype.com/artifact/io.github.jidcoo/leetcode-java-debug-enhancer/)                 |
-| Standard-Jar | [Click here to download directly(Standard-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.0/leetcode-java-debug-enhancer-1.0.0.jar) |
-| Full-Jar     | [Click here to download directly(Full-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.0/leetcode-java-debug-enhancer-1.0.0-jar-with-dependencies.jar)     |
+| Resource         | Index                                                                                                                                                                                        |
+| ------------ |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Repository Hosting    | [Click here to browse the repository for this project](https://central.sonatype.com/artifact/io.github.jidcoo/leetcode-java-debug-enhancer/)                                                 |
+| Standard-Jar | [Click here to download directly(Standard-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.1/leetcode-java-debug-enhancer-1.0.1.jar)                   |
+| Full-Jar     | [Click here to download directly(Full-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.1/leetcode-java-debug-enhancer-1.0.1-jar-with-dependencies.jar) |
 
 ### Install
 
@@ -141,7 +141,7 @@ Click on the Run or Debug button of SimpleTest to run SimpleTest and start the d
 After the debugging enhancer starts, you will see the following output: 
 
 ```
-LeetcodeJavaDebugEnhancer[1.0.0] started.
+LeetcodeJavaDebugEnhancer[1.0.1] started.
 ```
 
 > Case input rule: One Case occupies one line, and the next Case needs to be input on the next line. The completion flag for a Case is encountering a new-line break or the EOF.
@@ -309,164 +309,6 @@ public class SimpleTest extends LeetcodeJavaDebugEnhancer {
 
 }
 ```
-
-
-
-### 3. Support custom debugging enhancement point
-
-#### API
-
-```java
-public Method getEnhancementPoint();
-```
-
-#### Description
-
-As we all know, there are some algorithm problems in Leetcode for [data structure design problems](https://leetcode.com/tag/design/), such as [Min Stack](https://leetcode.com/problems/min-stack/), [Implement Stack using Queues](https://leetcode.com/problems/implement-stack-using-queues/) and so on.
-
-The above kinds of problems are not friendly to the current debugging enhancer, because they do not have a particularly clear algorithm entry point. It is difficult for the debugging enhancer to find an effective enhancement point.
-
-So for debugging such problems, try your best to overwrite this method to provide the debugging enhancer with a valid, explicit enhancement point method from the current public class(like SimpleTest in [the above example](#ref1)), from which the debugging enhancer will execute the debugging enhancement point method to achieve the purpose of code debugging.
-
-#### Example
-
-Assuming there is now a file named "input.txt", the file content is as follows:
-
-```
-["MyStack","push","push","top","pop","empty"] [[],[1],[2],[],[],[]]
-```
-
-The following is an example code that uses the input.txt file as the input source and customizes the implementation of the enhanced point      method `runHere(String[] operations, int[][] numbers)` for debugging:
-
-```java
-//SimpleTest.java
-
-import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
-import io.github.jidcoo.opto.lcdb.enhancer.base.InputProvider;
-import io.github.jidcoo.opto.lcdb.enhancer.core.io.builtin.FileInputProvider;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
-
-import java.io.FileNotFoundException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-
-public class SimpleTest extends LeetcodeJavaDebugEnhancer {
-
-    class MyStack {
-        Queue<Integer> queue1;
-        Queue<Integer> queue2;
-
-        /**
-         * Initialize your data structure here.
-         */
-        public MyStack() {
-            queue1 = new LinkedList<Integer>();
-            queue2 = new LinkedList<Integer>();
-        }
-
-        /**
-         * Push element x onto stack.
-         */
-        public void push(int x) {
-            queue2.offer(x);
-            while (!queue1.isEmpty()) {
-                queue2.offer(queue1.poll());
-            }
-            Queue<Integer> temp = queue1;
-            queue1 = queue2;
-            queue2 = temp;
-        }
-
-        /**
-         * Removes the element on top of the stack and returns that element.
-         */
-        public int pop() {
-            return queue1.poll();
-        }
-
-        /**
-         * Get the top element.
-         */
-        public int top() {
-            return queue1.peek();
-        }
-
-        /**
-         * Returns whether the stack is empty.
-         */
-        public boolean empty() {
-            return queue1.isEmpty();
-        }
-    }
-
-    /**
-     * Enhancement point function.
-     *
-     * @param operations
-     * @param numbers
-     * @return
-     */
-    public List<Object> runHere(String[] operations, int[][] numbers) {
-        List<Object> ans = new ArrayList<>();
-        MyStack stack = null;
-        for (int i = 0; i < operations.length; i++) {
-            String operation = operations[i];
-            Object curReturn = null;
-            switch (operation) {
-                case "MyStack":
-                    stack = new MyStack();
-                    break;
-                case "push":
-                    stack.push(numbers[i][0]);
-                    break;
-                case "top":
-                    curReturn = stack.top();
-                    break;
-                case "pop":
-                    curReturn = stack.pop();
-                    break;
-                case "empty":
-                    curReturn = stack.empty();
-                    break;
-            }
-            ans.add(curReturn);
-        }
-        return ans;
-    }
-
-    @Override
-    public Method getEnhancementPoint() {
-        // Return the runHere() method object.
-        // By the way, you can use ReflectUtil.getMethod() to easily obtain the specified enhancement point method of a class.
-        return ReflectUtil.getMethod(SimpleTest.class, "runHere", String[].class, int[][].class);
-    }
-
-    @Override
-    public InputProvider getInputProvider() {
-        try {
-            return new FileInputProvider("input.txt");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-}
-
-```
-
-
-
-> For this kind of data structure design problem, the design idea of `public Method getEnhancementPoint()` is to provide a **circuitous but useful** way for users to complete debugging for such problems.
->
-> But it is not difficult to see that such a design may add "additional, meaningless coding tasks" to users.
->
-> Therefore, in future iterations, we will try to abstract this kind of data structure design problem scene and hand over the process of "additional, meaningless coding tasks" to the debugging enhancer for automatic processing!!!
->
-> Please continue to follow this project! Stay tuned!!! 🎉  🎉  🎉
-
 
 
 
