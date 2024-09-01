@@ -85,8 +85,8 @@ public final class DebugEnhancerProxy extends LeetcodeJavaDebugEnhancer {
     public DebugEnhancerProxy(LeetcodeJavaDebugEnhancer target) {
         AssertUtil.nonNull(target, "The LeetcodeJavaDebugEnhancer target cannot be null.");
         Class<?> targetClass = target.getClass();
-        proxyPointInterceptorManager = new ProxyPointInterceptorManager();
         proxyPointInstancesMap = new HashMap<>();
+        proxyPointInterceptorManager = new ProxyPointInterceptorManager(PROXY_POINTS_MAP.keySet());
         PROXY_POINTS_MAP.forEach((proxyPointName, proxyPoint) -> proxyPointInstancesMap.put(proxyPointName,
                 proxyPoint.findPoint(targetClass)));
         this.target = target;

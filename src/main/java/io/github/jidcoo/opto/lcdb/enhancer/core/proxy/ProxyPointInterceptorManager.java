@@ -21,9 +21,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.*;
 
 import java.lang.reflect.Modifier;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -53,8 +51,11 @@ final class ProxyPointInterceptorManager {
 
     /**
      * Create a ProxyPointInterceptorManager instance.
+     *
+     * @param allowedProxyPointsSet the all allowed proxy points set.
      */
-    ProxyPointInterceptorManager() {
+    ProxyPointInterceptorManager(Set<String> allowedProxyPointsSet) {
+        AssertUtil.nonNull(allowedProxyPointsSet, "The allowed proxy points set cannot be null.");
         // init all proxy point interceptors.
         proxyPointInterceptorsMap = BeanUtil.collectBeans(ProxyPointInterceptor.class, PROXY_POINT_INTERCEPTOR_SCANNER_BASE_PACKAGE,
                 (Class type) -> {
@@ -67,8 +68,15 @@ final class ProxyPointInterceptorManager {
                     Require requireAnnotation = (Require) type.getAnnotation(Require.class);
                     return requireAnnotation.types().length > 0 && ProxyPointInterceptor.class.equals(requireAnnotation.types()[0]);
                 },
-                (Class<? extends ProxyPointInterceptor> beanType) -> ReflectUtil.createInstance(beanType)
-        ).stream().collect(
+                (Class<? extends ProxyPointInterceptor> beanType) -> {
+                    ProxyPointInterceptor interceptor = ReflectUtil.createInstance(beanType);
+                    if (allowedProxyPointsSet.contains(interceptor.interceptPoint())) {
+                        return interceptor;
+                    }
+                    EnhancerLogUtil.logW("Invalid interceptor, detected a disallowed intercept-proxy-point: " + interceptor.interceptPoint());
+                    return null;
+                }
+        ).stream().filter(Objects::nonNull).collect(
                 Collectors.groupingBy(ProxyPointInterceptor::interceptPoint,
                 Collectors.collectingAndThen(Collectors.toList(),
                 list -> {
