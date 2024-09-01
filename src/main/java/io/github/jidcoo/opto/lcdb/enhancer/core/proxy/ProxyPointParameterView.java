@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.jidcoo.opto.lcdb.enhancer.func.proxy;
+package io.github.jidcoo.opto.lcdb.enhancer.core.proxy;
 
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 

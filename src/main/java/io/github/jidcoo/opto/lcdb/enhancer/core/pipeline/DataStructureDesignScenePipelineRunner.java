@@ -22,6 +22,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeExecutorFactory
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeExecutorProcessor;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeInvokerFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.parser.InputParserProcessor;
+import io.github.jidcoo.opto.lcdb.enhancer.core.proxy.DebugEnhancerProxy;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
@@ -81,8 +82,8 @@ final class DataStructureDesignScenePipelineRunner extends PipelineRunner {
             AssertUtil.isTrue(!ContainerCheckUtil.isListEmpty(leetcodeInvokers),
                     "Cannot find any candidate leetcode invoker by operation: " + operation);
             // Create a LeetcodeExecutor instance.
-            Object leetcodeExecutor = LeetcodeExecutorFactory.getLeetcodeExecutor(idx == 0 ? getEnhancer()
-                            : dataStructureInstance,
+            Object leetcodeExecutor = LeetcodeExecutorFactory.getLeetcodeExecutor(idx == 0 ?
+                            DebugEnhancerProxy.awareSource(getEnhancer()) : dataStructureInstance,
                     leetcodeInvokers.stream().toArray(LeetcodeInvoker[]::new));
             // Parse input.
             Object inputObject = InputParserProcessor.process(getInputParser(), leetcodeExecutor, input);

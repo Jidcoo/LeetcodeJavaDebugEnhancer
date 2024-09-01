@@ -179,10 +179,17 @@ public class ReflectUtil {
     public static Method getMethod(Class<?> target, String methodName, Class<?>... parameterTypes) {
         AssertUtil.nonNull(target, "The target class cannot be null.");
         AssertUtil.isTrue(!StringUtil.isBlank(methodName), "The method name cannot be blank.");
-        try {
-            return target.getDeclaredMethod(methodName, parameterTypes);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
+        Method method = null;
+        Class<?> classFinder = target;
+        while (Objects.isNull(method) && Objects.nonNull(classFinder)) {
+            try {
+                method = classFinder.getDeclaredMethod(methodName, parameterTypes);
+            } catch (Exception | Error e) {
+                classFinder = classFinder.getSuperclass();
+            }
         }
+        AssertUtil.nonNull(method,
+                "Cannot match any method by method name [" + methodName + "] and parameters " + Arrays.toString(parameterTypes) + " in class: " + target.getName());
+        return method;
     }
 }

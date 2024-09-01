@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package io.github.jidcoo.opto.lcdb.enhancer.func.proxy;
+package io.github.jidcoo.opto.lcdb.enhancer.core.proxy;
 
 import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
 import io.github.jidcoo.opto.lcdb.enhancer.base.*;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeInvokerFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.StringUtil;
 
 import java.lang.reflect.Method;
@@ -168,9 +169,10 @@ public final class DebugEnhancerProxy extends LeetcodeJavaDebugEnhancer {
         LeetcodeInvoker findPoint(Class<?> klass) {
             AssertUtil.nonNull(klass, "The class cannot be null.");
             try {
-                return LeetcodeInvokerFactory.getLeetcodeInvoker(klass.getDeclaredMethod(this.pointName,
+                return LeetcodeInvokerFactory.getLeetcodeInvoker(ReflectUtil.getMethod(klass, this.pointName,
                         this.paramTypes));
-            } catch (NoSuchMethodException e) {
+            } catch (Exception e) {
+                e.printStackTrace();
                 throw new EnhancerException("Cannot found proxy point in class " + klass.getSimpleName() + ", point " + "name is " + this.pointName + ", param type is " + Arrays.toString(paramTypes) + ".");
             }
         }
