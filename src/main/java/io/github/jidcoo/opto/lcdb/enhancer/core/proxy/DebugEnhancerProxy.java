@@ -108,9 +108,9 @@ public final class DebugEnhancerProxy extends LeetcodeJavaDebugEnhancer {
         ProxyPointParameterView parameterView = new ProxyPointParameterView(proxyPoint.getParamTypes(), args);
         Object result;
         try {
-            proxyPointInterceptorManager.doInterceptOnBefore(pointName, parameterView);
+            proxyPointInterceptorManager.doInterceptOnBefore(this, pointName, parameterView);
             result = proxyPointInvoker.invoke(target, args);
-            return returnType.cast(proxyPointInterceptorManager.doInterceptOnAfter(pointName, result));
+            return returnType.cast(proxyPointInterceptorManager.doInterceptOnAfter(this, pointName, result));
         } catch (Throwable throwable) {
             throw new EnhancerException("proxy invoke error: " + throwable.getMessage(), throwable);
         }

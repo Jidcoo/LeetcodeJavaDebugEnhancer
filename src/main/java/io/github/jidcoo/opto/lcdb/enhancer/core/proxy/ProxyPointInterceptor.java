@@ -16,6 +16,7 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.proxy;
 
+import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Order;
 
 /**
@@ -47,16 +48,18 @@ public interface ProxyPointInterceptor<PointResult> extends Order {
      * Intercept and process parameters before
      * invoking proxy point.
      *
-     * @param parameterView the proxy point parameter view.
+     * @param leetcodeJavaDebugEnhancer the LeetcodeJavaDebugEnhancer instance.
+     * @param parameterView             the proxy point parameter view.
      */
-    void onBefore(ProxyPointParameterView parameterView);
+    void onBefore(LeetcodeJavaDebugEnhancer leetcodeJavaDebugEnhancer, ProxyPointParameterView parameterView);
 
     /**
      * Intercept and process proxy point result
      * after invoking proxy point.
      *
-     * @param pointResult the proxy point result.
+     * @param leetcodeJavaDebugEnhancer the LeetcodeJavaDebugEnhancer instance.
+     * @param pointResult               the proxy point result.
      * @return the processed proxy point result.
      */
-    PointResult onAfter(PointResult pointResult);
+    PointResult onAfter(LeetcodeJavaDebugEnhancer leetcodeJavaDebugEnhancer, PointResult pointResult);
 }

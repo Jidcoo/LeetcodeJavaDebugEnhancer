@@ -16,6 +16,7 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.proxy;
 
+import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Order;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.*;
@@ -90,11 +91,13 @@ final class ProxyPointInterceptorManager {
      * Intercept and process parameters before
      * invoking proxy point.
      *
+     * @param leetcodeJavaDebugEnhancer the LeetcodeJavaDebugEnhancer instance.
      * @param pointName     the proxy point name.
      * @param parameterView the proxy point parameter view.
      */
     @SuppressWarnings("unchecked")
-    public void doInterceptOnBefore(String pointName, ProxyPointParameterView parameterView) {
+    public void doInterceptOnBefore(LeetcodeJavaDebugEnhancer leetcodeJavaDebugEnhancer,
+                                    String pointName, ProxyPointParameterView parameterView) {
         AssertUtil.isTrue(!StringUtil.isBlank(pointName), "The proxy point name cannot be blank.");
         AssertUtil.nonNull(parameterView, "The proxy point parameter view cannot be null.");
         List<ProxyPointInterceptor> interceptors = proxyPointInterceptorsMap.getOrDefault(pointName, null);
@@ -102,7 +105,7 @@ final class ProxyPointInterceptorManager {
             return;
         }
         for (ProxyPointInterceptor interceptor : interceptors) {
-            interceptor.onBefore(parameterView);
+            interceptor.onBefore(leetcodeJavaDebugEnhancer, parameterView);
         }
     }
 
@@ -110,17 +113,19 @@ final class ProxyPointInterceptorManager {
      * Intercept and process proxy point result
      * after invoking proxy point.
      *
+     * @param leetcodeJavaDebugEnhancer the LeetcodeJavaDebugEnhancer instance.
      * @param pointName the proxy point name.
      * @param o         the proxy point result.
      * @return the processed proxy point result.
      */
     @SuppressWarnings("unchecked")
-    public Object doInterceptOnAfter(String pointName, Object o) {
+    public Object doInterceptOnAfter(LeetcodeJavaDebugEnhancer leetcodeJavaDebugEnhancer,
+                                     String pointName, Object o) {
         AssertUtil.isTrue(!StringUtil.isBlank(pointName), "The proxy point name cannot be blank.");
         List<ProxyPointInterceptor> interceptors = proxyPointInterceptorsMap.getOrDefault(pointName, null);
         if (!ContainerCheckUtil.isListEmpty(interceptors)) {
             for (ProxyPointInterceptor interceptor : interceptors) {
-                o = interceptor.onAfter(o);
+                o = interceptor.onAfter(leetcodeJavaDebugEnhancer, o);
             }
         }
         return o;
