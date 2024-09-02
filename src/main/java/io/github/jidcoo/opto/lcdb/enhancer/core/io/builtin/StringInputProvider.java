@@ -16,7 +16,6 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.io.builtin;
 
-import com.sun.istack.internal.NotNull;
 import io.github.jidcoo.opto.lcdb.enhancer.base.InputProvider;
 
 import java.io.ByteArrayInputStream;
@@ -45,7 +44,7 @@ public class StringInputProvider extends FileInputProvider {
      * @param string  the input string.
      * @param charset the charset.
      */
-    public StringInputProvider(@NotNull String string, Charset charset) {
+    public StringInputProvider(String string, Charset charset) {
         super(new ByteArrayInputStream(string.getBytes(charset)));
     }
 
@@ -54,7 +53,7 @@ public class StringInputProvider extends FileInputProvider {
      *
      * @param string the input string.
      */
-    public StringInputProvider(@NotNull String string) {
+    public StringInputProvider(String string) {
         this(string, StandardCharsets.UTF_8);
     }
 }

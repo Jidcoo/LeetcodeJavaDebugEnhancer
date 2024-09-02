@@ -81,7 +81,7 @@ final class ProxyPointInterceptorManager {
                 Collectors.groupingBy(ProxyPointInterceptor::interceptPoint,
                 Collectors.collectingAndThen(Collectors.toList(),
                 list -> {
-                    list.sort(Comparator.comparingInt(Order::getOrder));
+                    list.sort(Comparator.comparingInt(Order::getOrder).reversed());
                     return list;
                 }
         )));
