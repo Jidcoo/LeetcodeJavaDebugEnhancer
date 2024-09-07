@@ -76,7 +76,12 @@ public final class MultipleInputProvider implements InputProvider {
         if (pos >= providers.size()) {
             return null;
         }
-        return providers.get(pos).provideNextInput();
+        String input = providers.get(pos).provideNextInput();
+        if (isEnd(input)) {
+            pos++;
+            return provideNextInput();
+        }
+        return input;
     }
 
     /**
@@ -93,15 +98,7 @@ public final class MultipleInputProvider implements InputProvider {
         if (pos >= providers.size()) {
             return true;
         }
-        InputProvider curProvider = providers.get(pos);
-        boolean curProviderIsEnd = curProvider.isEnd(input);
-        if (!curProviderIsEnd) {
-            return !closeFlag;
-        }
-        if (++pos == providers.size()) {
-            return true;
-        }
-        return !closeFlag;
+        return providers.get(pos).isEnd(input);
     }
 
     /**

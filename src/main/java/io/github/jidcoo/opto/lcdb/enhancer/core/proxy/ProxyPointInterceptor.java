@@ -51,7 +51,7 @@ public interface ProxyPointInterceptor<PointResult> extends Order {
      * @param leetcodeJavaDebugEnhancer the LeetcodeJavaDebugEnhancer instance.
      * @param parameterView             the proxy point parameter view.
      */
-    void onBefore(LeetcodeJavaDebugEnhancer leetcodeJavaDebugEnhancer, ProxyPointParameterView parameterView);
+    default void onBefore(LeetcodeJavaDebugEnhancer leetcodeJavaDebugEnhancer, ProxyPointParameterView parameterView) {}
 
     /**
      * Intercept and process proxy point result
@@ -61,5 +61,7 @@ public interface ProxyPointInterceptor<PointResult> extends Order {
      * @param pointResult               the proxy point result.
      * @return the processed proxy point result.
      */
-    PointResult onAfter(LeetcodeJavaDebugEnhancer leetcodeJavaDebugEnhancer, PointResult pointResult);
+    default PointResult onAfter(LeetcodeJavaDebugEnhancer leetcodeJavaDebugEnhancer, PointResult pointResult) {
+        return pointResult;
+    }
 }
