@@ -24,9 +24,11 @@ import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeInvokerFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.io.IOFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.parser.InputParserFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.printer.OutputPrinterFactory;
+import io.github.jidcoo.opto.lcdb.enhancer.core.proxy.DebugEnhancerProxy;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
 
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
@@ -90,9 +92,12 @@ public final class LeetcodeJavaDebugEnhancerPipelineProcessor {
     private static Object createBootstrapLeetcodeExecutor(LeetcodeJavaDebugEnhancer enhancer) {
         // At first, if the enhancement point from the enhancer is not null,
         // we will prioritize using it.
-        if (Objects.nonNull(enhancer.getEnhancementPoint())) {
+        final LeetcodeJavaDebugEnhancer __enhancer__ = enhancer;
+        enhancer = DebugEnhancerProxy.awareSource(__enhancer__);
+        Method enhancementPoint;
+        if (Objects.nonNull((enhancementPoint = __enhancer__.getEnhancementPoint()))) {
             return LeetcodeExecutorFactory.getLeetcodeExecutor(enhancer,
-                    LeetcodeInvokerFactory.getLeetcodeInvoker(enhancer.getEnhancementPoint()));
+                    LeetcodeInvokerFactory.getLeetcodeInvoker(enhancementPoint));
         }
 
         // Then, we will try to resolve all first level INNER-CLASS in AT.
