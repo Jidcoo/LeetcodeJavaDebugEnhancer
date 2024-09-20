@@ -42,7 +42,7 @@ public abstract class LeetcodeJavaDebugEnhancer {
     /**
      * LeetcodeJavaDebugEnhancer version.
      */
-    private static final String VERSION = "1.0.1";
+    private static final String VERSION = "1.0.2";
 
     /**
      * <p>If you need to use a method in <tt>AT</tt> as a starting point for
