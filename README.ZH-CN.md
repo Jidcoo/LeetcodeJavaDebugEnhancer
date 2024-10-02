@@ -48,14 +48,14 @@
 <dependency>
     <groupId>io.github.jidcoo</groupId>
     <artifactId>leetcode-java-debug-enhancer</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
 #### **Gradle**
 
 ```gradle
-implementation 'io.github.jidcoo:leetcode-java-debug-enhancer:1.0.1'
+implementation 'io.github.jidcoo:leetcode-java-debug-enhancer:1.0.2'
 ```
 
 #### **Jar**
@@ -63,8 +63,8 @@ implementation 'io.github.jidcoo:leetcode-java-debug-enhancer:1.0.1'
 | 资源         | 索引                                                                                                                                                                  |
 | ------------ |---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 托管仓库     | [点击这里浏览本项目的托管仓库](https://central.sonatype.com/artifact/io.github.jidcoo/leetcode-java-debug-enhancer/)                                                              |
-| 标准-Jar | [点击这里直接下载(标准-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.1/leetcode-java-debug-enhancer-1.0.1.jar)                       |
-| 全量-Jar     | [点击这里直接下载(全量-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.1/leetcode-java-debug-enhancer-1.0.1-jar-with-dependencies.jar) |
+| 标准-Jar | [点击这里直接下载(标准-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.2/leetcode-java-debug-enhancer-1.0.2.jar)                       |
+| 全量-Jar     | [点击这里直接下载(全量-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.2/leetcode-java-debug-enhancer-1.0.2-jar-with-dependencies.jar) |
 
 ### 安装
 
@@ -141,7 +141,7 @@ public class SimpleTest extends LeetcodeJavaDebugEnhancer {
 增强器启动后你将会看到如下输出：
 
 ```
-LeetcodeJavaDebugEnhancer[1.0.1] started.
+LeetcodeJavaDebugEnhancer[1.0.2] started.
 ```
 
 > Case输入规则：一个Case占据一行，下一个Case需要在下一行输入，一个Case输入完成的标志是遇到换行符或者EOF。
@@ -180,7 +180,12 @@ public InputProvider getInputProvider();
 
 #### 描述
 
-**LeetcodeJavaDebugEnhancer**提供了对控制台([ConsoleInputProvider](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/ConsoleInputProvider.java))、文件/流([FileInputProvider](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/FileInputProvider.java))等多样输入源的支持。
+**LeetcodeJavaDebugEnhancer**提供了对
+控制台([ConsoleInputProvider](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/ConsoleInputProvider.java))、
+文件/流([FileInputProvider](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/FileInputProvider.java))、
+字符串([StringInputProvider](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/StringInputProvider.java))、
+串行化多输入([MultipleInputProvider](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/MultipleInputProvider.java))
+等多样输入源的支持。
 
 **LeetcodeJavaDebugEnhancer**使用控制台作为默认的输入源。
 
@@ -248,7 +253,11 @@ public OutputConsumer getOutputConsumer();
 
 #### 描述
 
-**LeetcodeJavaDebugEnhancer**提供了对控制台([ConsoleOutputConsumer](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/ConsoleOutputConsumer.java))、文件/流([FileOutputConsumer](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/FileOutputConsumer.java))等多样输入源的支持。
+**LeetcodeJavaDebugEnhancer**提供了对
+控制台([ConsoleOutputConsumer](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/ConsoleOutputConsumer.java))、
+文件/流([FileOutputConsumer](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/FileOutputConsumer.java))、
+并行化多输出([MultipleOutputConsumer](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/MultipleOutputConsumer.java))
+等多样输入源的支持。
 
 **LeetcodeJavaDebugEnhancer**使用控制台作为默认的输出源。
 
@@ -308,6 +317,128 @@ public class SimpleTest extends LeetcodeJavaDebugEnhancer {
 }
 ```
 
+
+
+### 3、Require注解
+
+#### API
+
+```java
+@Target({TYPE, FIELD, METHOD, PARAMETER})
+@Retention(RUNTIME)
+@Repeatable(Requires.class)
+public @interface Require {
+
+    /**
+     * The requirement string values;
+     *
+     * @return requirement string values.
+     */
+    String[] values() default "";
+
+    /**
+     * The requirement types.
+     *
+     * @return requirement types.
+     */
+    Class<?>[] types() default {};
+}
+```
+
+#### 描述
+
+Require注解用于标记和声明调试增强器运行所需的如输入源、输出源等调试资源。该注解在1.0.2版本开始正式对外开放功能特性，支持在类、字段、方法和形参上使用。
+
+目前(v1.0.2)，你可以：
+- 在调试增强器启动类上使用Require注解声明自定义的输入源和输出源。更进一步地说，如果现在你想要为调试增强器自定义IO源，你不仅可以通过重写`getInputProvider()`
+或`getOutputConsumer()`方法为调试增强器提供自定义的IO源实例，还可以通过便捷的注解的方式为调试增强器自定义IO源。
+
+
+#### 示例
+
+##### 使用Require注解自定义IO源
+
+```java
+//SimpleTest.java
+
+//Customize input provider.
+@Require(values = "case/input1.txt", types = FileInputProvider.class)
+@Require(values = "[0,4,3,0] 0", types = StringInputProvider.class)
+//Customize output consumer.
+@Require(values = "case/output.txt", types = FileOutputConsumer.class)
+public class SimpleTest extends LeetcodeJavaDebugEnhancer {
+
+    class Solution {
+        public int[] twoSum(int[] nums, int target) {
+            int n = nums.length;
+            for (int i = 0; i < n; ++i) {
+                for (int j = i + 1; j < n; ++j) {
+                    if (nums[i] + nums[j] == target) {
+                        return new int[]{i, j};
+                    }
+                }
+            }
+            return new int[0];
+        }
+    }
+}
+```
+
+下面是一个列举了使用Require注解自定义IO源的所有可行用法的示例。
+
+```java
+//SimpleTest.java
+
+//Customize input provider.
+@Require(types = ConsoleInputProvider.class)
+@Require(values = "case/input1.txt", types = FileInputProvider.class)
+@Require(values = {"case/input1.txt", "case/input2.txt"}, types = FileInputProvider.class)
+@Require(values = "[0,4,3,0] 0", types = StringInputProvider.class)
+@Require(values = {"[0,4,3,0] 0", "[3,3] 6"}, types = StringInputProvider.class)
+@Require(values = {
+                "[0,4,3,0] 0",
+                "[3,3] 6",
+                "case/input1.txt"
+        },
+        types = {
+                StringInputProvider.class,
+                StringInputProvider.class,
+                FileInputProvider.class
+})
+@Require(values = {
+                "case/input1.txt",
+                "",
+                "[0,4,3,0] 0"
+        },
+        types = {
+                FileInputProvider.class,
+                ConsoleInputProvider.class,
+                StringInputProvider.class
+})
+@Require(values = {
+                "case/input1.txt",
+                "",
+                "[0,4,3,0] 0",
+                "case/input2.txt",
+                "[3,3] 6",
+        },
+        types = {
+                FileInputProvider.class,
+                ConsoleInputProvider.class,
+                StringInputProvider.class,
+                FileInputProvider.class,
+                StringInputProvider.class
+})
+//Customize output consumer.
+@Require(types = ConsoleOutputConsumer.class)
+@Require(values = "case/output.txt", types = FileOutputConsumer.class)
+@Require(values = {"case/output.txt", "case/output_1.txt"}, types = FileOutputConsumer.class)
+@Require(values = {"case/output.txt", ""}, types = {FileOutputConsumer.class, ConsoleOutputConsumer.class})
+public class SimpleTest extends LeetcodeJavaDebugEnhancer {
+    
+    class Solution {/**ignored**/}
+}
+```
 
 ## 🐛 问题与反馈
 
