@@ -48,14 +48,14 @@
 <dependency>
     <groupId>io.github.jidcoo</groupId>
     <artifactId>leetcode-java-debug-enhancer</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
 #### **Gradle**
 
 ```gradle
-implementation 'io.github.jidcoo:leetcode-java-debug-enhancer:1.0.1'
+implementation 'io.github.jidcoo:leetcode-java-debug-enhancer:1.0.2'
 ```
 
 #### **Jar**
@@ -63,8 +63,8 @@ implementation 'io.github.jidcoo:leetcode-java-debug-enhancer:1.0.1'
 | Resource         | Index                                                                                                                                                                                        |
 | ------------ |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Repository Hosting    | [Click here to browse the repository for this project](https://central.sonatype.com/artifact/io.github.jidcoo/leetcode-java-debug-enhancer/)                                                 |
-| Standard-Jar | [Click here to download directly(Standard-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.1/leetcode-java-debug-enhancer-1.0.1.jar)                   |
-| Full-Jar     | [Click here to download directly(Full-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.1/leetcode-java-debug-enhancer-1.0.1-jar-with-dependencies.jar) |
+| Standard-Jar | [Click here to download directly(Standard-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.2/leetcode-java-debug-enhancer-1.0.2.jar)                   |
+| Full-Jar     | [Click here to download directly(Full-Jar)](https://repo1.maven.org/maven2/io/github/jidcoo/leetcode-java-debug-enhancer/1.0.2/leetcode-java-debug-enhancer-1.0.2-jar-with-dependencies.jar) |
 
 ### Install
 
@@ -141,7 +141,7 @@ Click on the Run or Debug button of SimpleTest to run SimpleTest and start the d
 After the debugging enhancer starts, you will see the following output: 
 
 ```
-LeetcodeJavaDebugEnhancer[1.0.1] started.
+LeetcodeJavaDebugEnhancer[1.0.2] started.
 ```
 
 > Case input rule: One Case occupies one line, and the next Case needs to be input on the next line. The completion flag for a Case is encountering a new-line break or the EOF.
@@ -180,7 +180,12 @@ public InputProvider getInputProvider();
 
 #### Description
 
-**LeetcodeJavaDebugEnhancer** provides support for a variety of input sources such as Console([ConsoleInputProvider](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/ConsoleInputProvider.java)) and File/Stream([FileInputProvider](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/FileInputProvider.java)).
+**LeetcodeJavaDebugEnhancer** provides support for a variety of input sources such as
+Console([ConsoleInputProvider](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/ConsoleInputProvider.java)),
+File/Stream([FileInputProvider](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/FileInputProvider.java)),
+String([StringInputProvider](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/StringInputProvider.java)) and
+SerialMultipleInput([MultipleInputProvider](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/MultipleInputProvider.java))
+.
 
 **LeetcodeJavaDebugEnhancer** uses the console as the default input source.
 
@@ -249,7 +254,11 @@ public OutputConsumer getOutputConsumer();
 
 #### Description
 
-**LeetcodeJavaDebugEnhancer** provides support for a variety of output sources such as Console([ConsoleOutputConsumer](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/ConsoleOutputConsumer.java)) and File/Stream([FileOutputConsumer](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/FileOutputConsumer.java)).
+**LeetcodeJavaDebugEnhancer** provides support for a variety of output sources such as
+Console([ConsoleOutputConsumer](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/ConsoleOutputConsumer.java)),
+File/Stream([FileOutputConsumer](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/FileOutputConsumer.java)) and
+ParallelMultipleOutput([MultipleOutputConsumer](src/main/java/io/github/jidcoo/opto/lcdb/enhancer/core/io/builtin/MultipleOutputConsumer.java))
+.
 
 **LeetcodeJavaDebugEnhancer** uses the console as the default output source.
 
@@ -310,8 +319,126 @@ public class SimpleTest extends LeetcodeJavaDebugEnhancer {
 }
 ```
 
+### 3. Require annotation
+
+#### API
+
+```java
+@Target({TYPE, FIELD, METHOD, PARAMETER})
+@Retention(RUNTIME)
+@Repeatable(Requires.class)
+public @interface Require {
+
+    /**
+     * The requirement string values;
+     *
+     * @return requirement string values.
+     */
+    String[] values() default "";
+
+    /**
+     * The requirement types.
+     *
+     * @return requirement types.
+     */
+    Class<?>[] types() default {};
+}
+```
+
+#### Description
+
+The Require annotation is used to mark and declare debugging resources required for the runtime of the debugging enhancer, such as input sources, output sources, etc. This annotation officially opened its feature to the public starting from version 1.0.2, supporting its use on class, field, method, and parameter.
+
+Currently(v1.0.2), you can:
+- Use the Require annotation on the debugging enhancer startup class to declare custom input and output sources. Furthermore, if you want to customize an IO source for a debugging enhancer now, you can not only provide a custom IO source instance for the debugging enhancer by
+  overwriting the `getInputProvider()` or `getOutputConsumer()` methods, but also customize the IO source for the debugging enhancer through convenient annotations.
 
 
+#### Example
+
+##### Customize IO source using Require annotation
+
+```java
+//SimpleTest.java
+
+//Customize input provider.
+@Require(values = "case/input1.txt", types = FileInputProvider.class)
+@Require(values = "[0,4,3,0] 0", types = StringInputProvider.class)
+//Customize output consumer.
+@Require(values = "case/output.txt", types = FileOutputConsumer.class)
+public class SimpleTest extends LeetcodeJavaDebugEnhancer {
+
+    class Solution {
+        public int[] twoSum(int[] nums, int target) {
+            int n = nums.length;
+            for (int i = 0; i < n; ++i) {
+                for (int j = i + 1; j < n; ++j) {
+                    if (nums[i] + nums[j] == target) {
+                        return new int[]{i, j};
+                    }
+                }
+            }
+            return new int[0];
+        }
+    }
+}
+```
+
+The following is an example that lists all available uses of using Require annotation to customize IO sources.
+
+```java
+//SimpleTest.java
+
+//Customize input provider.
+@Require(types = ConsoleInputProvider.class)
+@Require(values = "case/input1.txt", types = FileInputProvider.class)
+@Require(values = {"case/input1.txt", "case/input2.txt"}, types = FileInputProvider.class)
+@Require(values = "[0,4,3,0] 0", types = StringInputProvider.class)
+@Require(values = {"[0,4,3,0] 0", "[3,3] 6"}, types = StringInputProvider.class)
+@Require(values = {
+                "[0,4,3,0] 0",
+                "[3,3] 6",
+                "case/input1.txt"
+        },
+        types = {
+                StringInputProvider.class,
+                StringInputProvider.class,
+                FileInputProvider.class
+})
+@Require(values = {
+                "case/input1.txt",
+                "",
+                "[0,4,3,0] 0"
+        },
+        types = {
+                FileInputProvider.class,
+                ConsoleInputProvider.class,
+                StringInputProvider.class
+})
+@Require(values = {
+                "case/input1.txt",
+                "",
+                "[0,4,3,0] 0",
+                "case/input2.txt",
+                "[3,3] 6",
+        },
+        types = {
+                FileInputProvider.class,
+                ConsoleInputProvider.class,
+                StringInputProvider.class,
+                FileInputProvider.class,
+                StringInputProvider.class
+})
+//Customize output consumer.
+@Require(types = ConsoleOutputConsumer.class)
+@Require(values = "case/output.txt", types = FileOutputConsumer.class)
+@Require(values = {"case/output.txt", "case/output_1.txt"}, types = FileOutputConsumer.class)
+@Require(values = {"case/output.txt", ""}, types = {FileOutputConsumer.class, ConsoleOutputConsumer.class})
+public class SimpleTest extends LeetcodeJavaDebugEnhancer {
+    
+    class Solution {/**ignored**/}
+}
+```
 
 ## 🐛 Issue & Feedback
 
