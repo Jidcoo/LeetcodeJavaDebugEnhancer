@@ -54,8 +54,7 @@ public final class MultipleOutputConsumer implements OutputConsumer {
     public MultipleOutputConsumer(List<OutputConsumer> outputConsumerList) {
         AssertUtil.nonNull(outputConsumerList, "The outputConsumerList cannot be null.");
         outputConsumerList = outputConsumerList.stream().filter(Objects::nonNull).collect(Collectors.toList());
-        AssertUtil.isTrue(!ContainerCheckUtil.isListEmpty(outputConsumerList), "The outputConsumerList cannot be " +
-                "empty.");
+        AssertUtil.isTrue(!ContainerCheckUtil.isListEmpty(outputConsumerList), "The outputConsumerList cannot be empty.");
         this.consumers = Collections.unmodifiableList(outputConsumerList);
     }
 
