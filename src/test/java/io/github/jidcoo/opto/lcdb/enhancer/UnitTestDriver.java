@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2024-2026 Jidcoo(https://github.com/jidcoo).
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package io.github.jidcoo.opto.lcdb.enhancer;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.OutputConsumer;
@@ -20,6 +36,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * <p>UnitTestDriver is a driver that run a junit-test on this project.
+ * <p>All junit-test classes must extend from this class!!!
+ *
+ * @author Jidcoo
+ * @see UnitTestDriver#registerDriver()
+ * @see UnitTestDriver#registerDriverWithAutoCustomStdIn(String...)
+ * @see UnitTestDriver#expectString(String...)
+ * @see UnitTestDriver#ignoreTestResult()
+ */
 @RunWith(JUnit4.class)
 public abstract class UnitTestDriver extends LeetcodeJavaDebugEnhancer {
 
@@ -79,12 +105,20 @@ public abstract class UnitTestDriver extends LeetcodeJavaDebugEnhancer {
         return new MultipleOutputConsumer(outputConsumers);
     }
 
+    /**
+     * Ignore the test result.
+     */
     protected final void ignoreTestResult() {
         if (!__IS__IGNORED__OUTPUT__) {
             __IS__IGNORED__OUTPUT__ = true;
         }
     }
 
+    /**
+     * Assert that the test result with expected result.
+     *
+     * @param expectedResult the expected results.
+     */
     protected final void expectString(String... expectedResult) {
         if (__IS__IGNORED__OUTPUT__) {
             return;
@@ -99,6 +133,13 @@ public abstract class UnitTestDriver extends LeetcodeJavaDebugEnhancer {
         __TEST_EXPECTED_RESULT__ = buf.toString();
     }
 
+    /**
+     * Register driver to cur junit-test instance.
+     *
+     * @apiNote Before running the test, one of {@link UnitTestDriver#registerDriver()}
+     * or {@link UnitTestDriver#registerDriverWithAutoCustomStdIn(String...)}
+     * must be called to register the driver to current junit-test instance.
+     */
     protected final void registerDriver() {
         if (!__IS__REGISTERED__) {
             System.setProperty("sun.java.command", this.getClass().getName());
@@ -106,6 +147,14 @@ public abstract class UnitTestDriver extends LeetcodeJavaDebugEnhancer {
         }
     }
 
+    /**
+     * Register driver to cur junit-test instance with auto custom
+     * system standard input.
+     *
+     * @apiNote Before running the test, one of {@link UnitTestDriver#registerDriver()}
+     * or {@link UnitTestDriver#registerDriverWithAutoCustomStdIn(String...)}
+     * must be called to register the driver to current junit-test instance.
+     */
     protected final void registerDriverWithAutoCustomStdIn(String... stdIn) {
         Assert.assertNotNull(stdIn);
         if (stdIn.length == 0) {
