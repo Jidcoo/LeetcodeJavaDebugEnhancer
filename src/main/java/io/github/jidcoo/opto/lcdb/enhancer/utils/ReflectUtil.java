@@ -87,7 +87,14 @@ public class ReflectUtil {
     public static boolean isImplementInterface(Class<?> clazz, Class<?> interfaceClass) {
         AssertUtil.nonNull(clazz, "The class cannot be null.");
         AssertUtil.nonNull(interfaceClass, "The interface cannot be null.");
-        return Arrays.stream(clazz.getInterfaces()).anyMatch(clz -> interfaceClass == clz);
+        Class<?> classFinder = clazz;
+        while (Objects.nonNull(classFinder)) {
+            if (Arrays.stream(classFinder.getInterfaces()).anyMatch(clz -> interfaceClass == clz)) {
+                return true;
+            }
+            classFinder = classFinder.getSuperclass();
+        }
+        return false;
     }
 
     /**
