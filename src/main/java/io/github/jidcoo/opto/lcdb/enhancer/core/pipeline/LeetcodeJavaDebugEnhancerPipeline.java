@@ -23,10 +23,12 @@ import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeExecutorProcess
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeInvokerFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.parser.InputParserProcessor;
 import io.github.jidcoo.opto.lcdb.enhancer.core.printer.OutputPrinterProcessor;
+import io.github.jidcoo.opto.lcdb.enhancer.core.proxy.EnhancerProxyFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.BeanUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -203,6 +205,8 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
      * @return the final leetcode executor.
      */
     private Object doEnhanceAfterInputParseProcess(Object bossLeetcodeExecutor) {
+        createLeetcodeInstanceIfNecessary(bossLeetcodeExecutor);
+
         // Aware leetcode invoker from the bossLeetcodeExecutor.
         LeetcodeInvoker leetcodeInvoker = ReflectUtil.getFieldValue("executor", LeetcodeInvoker.class,
                 bossLeetcodeExecutor);
@@ -223,6 +227,59 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
         ReflectUtil.setFieldValue("executor", LeetcodeInvoker.class, null, bossLeetcodeExecutor);
         // Return the final leetcode executor.
         return finalLeetcodeExecutor;
+    }
+
+    /**
+     * Try to create leetcode solution instance by bossLeetcodeExecutor.
+     *
+     * @param bossLeetcodeExecutor
+     */
+    private void createLeetcodeInstanceIfNecessary(Object bossLeetcodeExecutor) {
+        Object instance = ReflectUtil.getFieldValue("instance", Object.class, bossLeetcodeExecutor);
+        if (!(instance instanceof Class<?>)) {
+            return;
+        }
+        Class<?> solutionClass = (Class<?>) instance;
+        if (ReflectUtil.isImplementInterface(solutionClass, LeetcodeJavaDebugEnhancer.class)) {
+            return;
+        }
+        if (Modifier.isAbstract(solutionClass.getModifiers())) {
+            return;
+        }
+        if (!solutionClass.getSimpleName().contains("Solution")) {
+            return;
+        }
+        LeetcodeInvoker leetcodeInvoker = ReflectUtil.getFieldValue("executor", LeetcodeInvoker.class,
+                bossLeetcodeExecutor);
+        if (!leetcodeInvoker.isSuitable(solutionClass)) {
+            return;
+        }
+        Class<?> enclosingClass = solutionClass.getEnclosingClass();
+        if (Objects.isNull(enclosingClass) || Modifier.isStatic(solutionClass.getModifiers())) {
+            ReflectUtil.setFieldValue(
+                    "instance",
+                    Object.class,
+                    ReflectUtil.createInstance(solutionClass),
+                    bossLeetcodeExecutor
+            );
+            return;
+        }
+        if (Objects.nonNull(enclosingClass.getEnclosingClass())) {
+            return;
+        }
+        if (!ReflectUtil.isImplementInterface(enclosingClass, LeetcodeJavaDebugEnhancer.class)) {
+            return;
+        }
+        ReflectUtil.setFieldValue(
+                "instance",
+                Object.class,
+                ReflectUtil.createInstance(
+                        solutionClass,
+                        new Class[]{enclosingClass},
+                        EnhancerProxyFactory.awareSourceEnhancer(getEnhancer())
+                ),
+                bossLeetcodeExecutor
+        );
     }
 
     /**

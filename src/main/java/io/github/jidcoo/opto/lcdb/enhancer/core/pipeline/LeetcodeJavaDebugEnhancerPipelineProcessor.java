@@ -20,16 +20,10 @@ import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
 import io.github.jidcoo.opto.lcdb.enhancer.base.InputProvider;
 import io.github.jidcoo.opto.lcdb.enhancer.base.OutputConsumer;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeExecutorFactory;
-import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeInvokerFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.io.IOFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.parser.InputParserFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.printer.OutputPrinterFactory;
-import io.github.jidcoo.opto.lcdb.enhancer.core.proxy.DebugEnhancerProxy;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
-
-import java.lang.reflect.Method;
-import java.util.Objects;
 
 /**
  * <p>LeetcodeJavaDebugEnhancerPipelineProcessor is a publicly
@@ -60,8 +54,12 @@ public final class LeetcodeJavaDebugEnhancerPipelineProcessor {
     public static void process(LeetcodeJavaDebugEnhancer enhancer) throws Exception, Error {
         // Check NPE.
         AssertUtil.nonNull(enhancer, "The enhancer cannot be null.");
+
+        Class<?> payload = enhancer.getEnhancerPayload();
+        AssertUtil.nonNull(payload, "The enhancer payload cannot be null.");
+
         // Create a LeetcodeExecutor from the enhancer.
-        Object leetcodeExecutor = createBootstrapLeetcodeExecutor(enhancer);
+        Object leetcodeExecutor = LeetcodeExecutorFactory.getLeetcodeExecutor(payload);
         // Create an OutputPrinter from the enhancer.
         Object outputPrinter = OutputPrinterFactory.getOutputPrinter(enhancer);
         // Create a InputParser from the enhancer.
@@ -81,41 +79,5 @@ public final class LeetcodeJavaDebugEnhancerPipelineProcessor {
             pipeline.run();
         }
 
-    }
-
-    /**
-     * Create a bootstrap leetcode executor instance by enhancer.
-     *
-     * @param enhancer the LeetcodeJavaDebugEnhancer instance.
-     * @return the leetcode executor instance.
-     */
-    private static Object createBootstrapLeetcodeExecutor(LeetcodeJavaDebugEnhancer enhancer) {
-        // At first, if the enhancement point from the enhancer is not null,
-        // we will prioritize using it.
-        final LeetcodeJavaDebugEnhancer __enhancer__ = enhancer;
-        enhancer = DebugEnhancerProxy.awareSource(__enhancer__);
-        Method enhancementPoint;
-        if (Objects.nonNull((enhancementPoint = __enhancer__.getEnhancementPoint()))) {
-            return LeetcodeExecutorFactory.getLeetcodeExecutor(enhancer,
-                    LeetcodeInvokerFactory.getLeetcodeInvoker(enhancementPoint));
-        }
-
-        // Then, we will try to resolve all first level INNER-CLASS in AT.
-        Class<?>[] innerClasses = ReflectUtil.resolveInnerClasses(enhancer.getClass());
-        // The innerClasses length must be greater than zero.
-        AssertUtil.isTrue(innerClasses.length > 0, "Cannot resolve any inner class from the AT instance.");
-        // Unfortunately, we are currently unable to handle situations where
-        // there are multiple INNER-CLASS in AT.
-        AssertUtil.isTrue(innerClasses.length < 2, "Multiple inner classes were found in AT instance. There can only be one inner class in AT instance.");
-        // Use this only inner class as an instance of leetcode executor.
-        Class<?> bossInnerClassInstance = innerClasses[0];
-        // If the name of bossInnerClassInstance is "Solution",
-        // then we only need to instantiate the class.
-        if ("Solution".equals(bossInnerClassInstance.getSimpleName())) {
-            return LeetcodeExecutorFactory.getLeetcodeExecutor(ReflectUtil.createInstance(bossInnerClassInstance,
-                    new Class[]{enhancer.getClass()}, enhancer));
-        }
-        // Create a leetcode executor by bossInnerClassInstance and return it.
-        return LeetcodeExecutorFactory.getLeetcodeExecutor(bossInnerClassInstance);
     }
 }

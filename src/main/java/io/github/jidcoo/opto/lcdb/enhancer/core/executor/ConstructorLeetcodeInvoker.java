@@ -51,6 +51,11 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
     private boolean matchingFriendly;
 
     /**
+     * Mark whether the class corresponding to the constructor of this class is an inner class.
+     */
+    private boolean isInnerClassConstructor;
+
+    /**
      * Create a ConstructorLeetcodeInvoker instance.
      *
      * @param constructor the base constructor.
@@ -59,6 +64,7 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
     ConstructorLeetcodeInvoker(Constructor<?> constructor, Integer id) {
         AssertUtil.nonNull(constructor, "The constructor cannot be null.");
         this.constructor = constructor;
+        this.isInnerClassConstructor = constructor.getDeclaringClass().getEnclosingClass() != null;
         // Make accessible.
         this.constructor.setAccessible(true);
         this.id = id;
@@ -84,7 +90,7 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
     @Override
     public int getParameterCount() {
         int parameterCount = this.constructor.getParameterCount();
-        if (parameterCount > 0 && matchingFriendly) {
+        if (parameterCount > 0 && matchingFriendly && isInnerClassConstructor) {
             return parameterCount - 1;
         }
         return parameterCount;
@@ -98,7 +104,7 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
     @Override
     public String getInvokerName() {
         String name = this.constructor.getName();
-        if (name.contains("$") && matchingFriendly) {
+        if (matchingFriendly && isInnerClassConstructor) {
             return name.substring(name.lastIndexOf('$') + 1);
         }
         return name;
@@ -112,7 +118,7 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
     @Override
     public Class<?>[] getParameterTypes() {
         Class<?>[] parameterTypes = this.constructor.getParameterTypes();
-        if (parameterTypes.length > 0 && matchingFriendly) {
+        if (parameterTypes.length > 0 && matchingFriendly && isInnerClassConstructor) {
             return Arrays.stream(parameterTypes).skip(1).toArray(Class[]::new);
         }
         return parameterTypes;
@@ -126,7 +132,7 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
     @Override
     public Parameter[] getParameters() {
         Parameter[] parameters = this.constructor.getParameters();
-        if (parameters.length > 0 && matchingFriendly) {
+        if (parameters.length > 0 && matchingFriendly && isInnerClassConstructor) {
             return Arrays.stream(parameters).skip(1).toArray(Parameter[]::new);
         }
         return parameters;
@@ -154,7 +160,7 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
     @Override
     public Object invoke(Object object, Object... args) throws Throwable {
         Object[] initArgsArray;
-        if (Modifier.isStatic(this.constructor.getDeclaringClass().getModifiers())) {
+        if (!isInnerClassConstructor || Modifier.isStatic(this.constructor.getDeclaringClass().getModifiers())) {
             initArgsArray = new Object[args.length];
             System.arraycopy(args, 0, initArgsArray, 0, args.length);
         } else {
@@ -206,5 +212,17 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
     @Override
     public String toGenericString() {
         return this.constructor.toGenericString();
+    }
+
+    /**
+     * Verify whether this leetcode invoke is suitable for the specified class.
+     *
+     * @param klass the specified class.
+     * @return true if suitable.
+     * @since 1.0.3
+     */
+    @Override
+    public boolean isSuitable(Class<?> klass) {
+        return this.constructor.getDeclaringClass() == klass;
     }
 }

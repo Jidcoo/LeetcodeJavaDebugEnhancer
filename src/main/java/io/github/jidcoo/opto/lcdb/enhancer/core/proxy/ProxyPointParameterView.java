@@ -48,6 +48,8 @@ public final class ProxyPointParameterView {
      */
     private final int size;
 
+    static final Object[] DEFAULT_NO_PARAM = new Object[0];
+
     /**
      * Create a ProxyPointParameterView instance.
      *
@@ -56,7 +58,7 @@ public final class ProxyPointParameterView {
      */
     public ProxyPointParameterView(Class<?>[] types, Object[] params) {
         AssertUtil.nonNull(types, "The param types cannot be null.");
-        AssertUtil.nonNull(types, "The params cannot be null.");
+        if (Objects.isNull(params)) params = DEFAULT_NO_PARAM;
         AssertUtil.isTrue(types.length == params.length, "The length of param types does not match the length of the "
                 + "params.");
         this.types = types;

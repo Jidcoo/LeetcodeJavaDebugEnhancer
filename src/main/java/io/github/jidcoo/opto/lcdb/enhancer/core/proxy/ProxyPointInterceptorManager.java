@@ -30,12 +30,13 @@ import java.util.stream.Collectors;
  * manager.
  *
  * <p>It will scan all possible {@link ProxyPointInterceptor}
- * for the {@link DebugEnhancerProxy} proxy point surround
+ * for the {@link LeetcodeJavaDebugEnhancer} proxy point surround
  * interception processing.
  *
  * @author Jidcoo
  * @see ProxyPointInterceptor
- * @see DebugEnhancerProxy
+ * @see LeetcodeJavaDebugEnhancer
+ * @see EnhancerProxyHandler
  * @since 1.0.2
  */
 final class ProxyPointInterceptorManager {
@@ -52,11 +53,8 @@ final class ProxyPointInterceptorManager {
 
     /**
      * Create a ProxyPointInterceptorManager instance.
-     *
-     * @param allowedProxyPointsSet the all allowed proxy points set.
      */
-    ProxyPointInterceptorManager(Set<String> allowedProxyPointsSet) {
-        AssertUtil.nonNull(allowedProxyPointsSet, "The allowed proxy points set cannot be null.");
+    ProxyPointInterceptorManager() {
         // init all proxy point interceptors.
         proxyPointInterceptorsMap = BeanUtil.collectBeans(ProxyPointInterceptor.class, PROXY_POINT_INTERCEPTOR_SCANNER_BASE_PACKAGE,
                 (Class type) -> {
@@ -69,14 +67,7 @@ final class ProxyPointInterceptorManager {
                     Require requireAnnotation = (Require) type.getAnnotation(Require.class);
                     return requireAnnotation.types().length > 0 && ProxyPointInterceptor.class.equals(requireAnnotation.types()[0]);
                 },
-                (Class<? extends ProxyPointInterceptor> beanType) -> {
-                    ProxyPointInterceptor interceptor = ReflectUtil.createInstance(beanType);
-                    if (allowedProxyPointsSet.contains(interceptor.interceptPoint())) {
-                        return interceptor;
-                    }
-                    EnhancerLogUtil.logW("Invalid interceptor, detected a disallowed intercept-proxy-point: " + interceptor.interceptPoint());
-                    return null;
-                }
+                ReflectUtil::createInstance
         ).stream().filter(Objects::nonNull).collect(
                 Collectors.groupingBy(ProxyPointInterceptor::interceptPoint,
                 Collectors.collectingAndThen(Collectors.toList(),

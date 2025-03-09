@@ -18,9 +18,8 @@ package io.github.jidcoo.opto.lcdb.enhancer.core;
 
 import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
 import io.github.jidcoo.opto.lcdb.enhancer.core.pipeline.LeetcodeJavaDebugEnhancerPipelineProcessor;
-import io.github.jidcoo.opto.lcdb.enhancer.core.proxy.DebugEnhancerProxy;
+import io.github.jidcoo.opto.lcdb.enhancer.core.proxy.EnhancerProxyFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.EnhancerLogUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
 
 /**
  * <p>LeetcodeJavaDebugEnhanceProcessor is a primary enhancer.</p>
@@ -47,8 +46,8 @@ public final class LeetcodeJavaDebugEnhanceProcessor {
      * @param AT the <tt>AT</tt> class.
      */
     public static void process(Class<? extends LeetcodeJavaDebugEnhancer> AT) throws Exception, Error {
-        // Create an AT instance enhancer at first and then wrap it as a proxy(DebugEnhancerProxy since 1.0.2).
-        LeetcodeJavaDebugEnhancer enhancer = new DebugEnhancerProxy(ReflectUtil.createInstance(AT));
+        // Create A LeetcodeJavaDebugEnhancer proxy instance by AT Class(EnhancerProxyFactory since 1.0.3).
+        LeetcodeJavaDebugEnhancer enhancer = EnhancerProxyFactory.createEnhancerProxy(AT);
         // Setup EnhancerLog log level.
         EnhancerLogUtil.setLogLevel(enhancer.getEnhancerLogLevel());
 

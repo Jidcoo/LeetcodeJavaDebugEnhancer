@@ -173,4 +173,16 @@ final class MethodLeetcodeInvoker implements LeetcodeInvoker {
     public String toGenericString() {
         return this.method.toGenericString();
     }
+
+    /**
+     * Verify whether this leetcode invoke is suitable for the specified class.
+     *
+     * @param klass the specified class.
+     * @return true if suitable.
+     * @since 1.0.3
+     */
+    @Override
+    public boolean isSuitable(Class<?> klass) {
+        return this.method.getDeclaringClass() == klass;
+    }
 }

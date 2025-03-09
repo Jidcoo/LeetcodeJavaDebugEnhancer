@@ -20,7 +20,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
 import io.github.jidcoo.opto.lcdb.enhancer.base.EnhancerException;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Requires;
-import io.github.jidcoo.opto.lcdb.enhancer.core.proxy.DebugEnhancerProxy;
+import io.github.jidcoo.opto.lcdb.enhancer.core.proxy.EnhancerProxyFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.EnhancerLogUtil;
@@ -98,7 +98,7 @@ abstract class AbsIORequireSupporter<IO_SOURCE> {
      */
     @SuppressWarnings("all")
     protected List<Require> awareAcceptableIOSourceRequire(LeetcodeJavaDebugEnhancer leetcodeJavaDebugEnhancer) {
-        LeetcodeJavaDebugEnhancer source = DebugEnhancerProxy.awareSource(leetcodeJavaDebugEnhancer);
+        LeetcodeJavaDebugEnhancer source = EnhancerProxyFactory.awareSourceEnhancer(leetcodeJavaDebugEnhancer);
         AssertUtil.nonNull(source, "The leetcodeJavaDebugEnhancer cannot be null.");
         Class<?> sourceKlass = source.getClass();
         Requires requiresAnnotation = sourceKlass.getAnnotation(Requires.class);
@@ -118,7 +118,7 @@ abstract class AbsIORequireSupporter<IO_SOURCE> {
             }
             for (Class<?> type : types) {
                 if (!ACCEPTABLE_IO_SOURCE_TYPES.containsKey(type)) {
-                    EnhancerLogUtil.logW("Unaccepted io source type in IO-Require-Annotation(types are %s, values are" +
+                    EnhancerLogUtil.logW("AbsIORequireSupporter: unaccepted io source type in IO-Require-Annotation(types are %s, values are" +
                                     " %s): %s",
                             Arrays.toString(types), Arrays.toString(require.values()), type.getSimpleName());
                     return false;
@@ -129,9 +129,9 @@ abstract class AbsIORequireSupporter<IO_SOURCE> {
             int typesLength = require.types().length;
             int valuesLength = require.values().length;
             if (typesLength > 1 && typesLength > valuesLength) {
-                EnhancerLogUtil.logW("Invalid types-length(%d) and values-length(%d) in IO-Require-Annotation(types " +
+                EnhancerLogUtil.logW("AbsIORequireSupporter: invalid types-length(%d) and values-length(%d) in IO-Require-Annotation(types " +
                                 "are %s, values are %s): " +
-                                "Only supports single type and multi value or types and values with the same length.",
+                                "only supports single type and multi value or types and values with the same length.",
                         typesLength, valuesLength, Arrays.toString(require.types()), Arrays.toString(require.values()));
                 return false;
             }

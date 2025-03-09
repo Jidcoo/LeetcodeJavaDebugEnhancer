@@ -30,39 +30,19 @@ import java.util.logging.Level;
 /**
  * <p>Let's start our dreams here! [↖（^ω^）↗]</p>
  *
- * <p>LeetcodeJavaDebugEnhancer is a debugging enhanced startup class.</p>
+ * <p>LeetcodeJavaDebugEnhancer is a debugging enhanced startup interface class.</p>
  * <p>A public algorithm class is called <tt>Algorithm-Target(AT)</tt>.</p>
- * <p>Notice: All <tt>AT</tt> that require debugging must extends from this class!!!</p>
+ * <p>Notice: All <tt>AT</tt> that require debugging must implement this interface!!!</p>
  *
  * @author Jidcoo
  * @since 1.0
  */
-public abstract class LeetcodeJavaDebugEnhancer {
+public interface LeetcodeJavaDebugEnhancer {
 
     /**
      * LeetcodeJavaDebugEnhancer version.
      */
-    private static final String VERSION = "1.0.2";
-
-    /**
-     * <p>If you need to use a method in <tt>AT</tt> as a starting point for
-     * debugging enhancements, please provide an instance of that method. And
-     * then the {@link LeetcodeJavaDebugEnhancer} will start from that point.</p>
-     *
-     * <p>If the method returns null, the {@link LeetcodeJavaDebugEnhancer} will look for
-     * the internal class Solution in <tt>AT</tt> and find a suitable startup point
-     * from Solution as a debugging enhancement startup point.</p>
-     *
-     * <p>When the <tt>AT</tt> is a data structure design class, it is
-     * necessary to return a non-null debugging enhancement startup point. Otherwise,
-     * the {@link LeetcodeJavaDebugEnhancer} will not be able to start normally
-     * with enhanced performance</p>
-     *
-     * @return the enhancements point.
-     */
-    public Method getEnhancementPoint() {
-        return null;
-    }
+    String VERSION = "1.0.3";
 
     /**
      * <p>If you need to customize an input provider, please return a valid instance of
@@ -74,7 +54,7 @@ public abstract class LeetcodeJavaDebugEnhancer {
      *
      * @return the input provider.
      */
-    public InputProvider getInputProvider() {
+    default InputProvider getInputProvider() {
         return null;
     }
 
@@ -88,7 +68,7 @@ public abstract class LeetcodeJavaDebugEnhancer {
      *
      * @return the output consumer.
      */
-    public OutputConsumer getOutputConsumer() {
+    default OutputConsumer getOutputConsumer() {
         return null;
     }
 
@@ -100,7 +80,7 @@ public abstract class LeetcodeJavaDebugEnhancer {
      *
      * @return a list of printing strategies
      */
-    public List<BasePrintingStrategy<?>> getOutputPrintStrategies() {
+    default List<BasePrintingStrategy<?>> getOutputPrintStrategies() {
         return null;
     }
 
@@ -117,8 +97,22 @@ public abstract class LeetcodeJavaDebugEnhancer {
      * @see Level#WARNING
      * @see Level#INFO
      */
-    public Level getEnhancerLogLevel() {
+    default Level getEnhancerLogLevel() {
         return Level.OFF;
+    }
+
+    /**
+     * Return the custom enhancer payload.
+     *
+     * <p>For example, if you want to debug an outer algorithm solution
+     * instead of an inner algorithm solution, you can use this api to
+     * specify the outer algorithm solution class.
+     *
+     * @return the Enhancer payload class.
+     * @since 1.0.3
+     */
+    default Class<?> getEnhancerPayload() {
+        return null;
     }
 
     /**
@@ -126,17 +120,16 @@ public abstract class LeetcodeJavaDebugEnhancer {
      *
      * @return the LeetcodeJavaDebugEnhancer version.
      */
-    public final String getEnhancerVersion() {
+    static String getEnhancerVersion() {
         return VERSION;
     }
 
     /**
-     * LeetcodeJavaDebugEnhancer starting main point.
+     * LeetcodeJavaDebugEnhancer running point.
      *
-     * @param args start args.
+     * @param __AT__ the AT name.
      */
-    public static void main(String[] args) {
-        String __AT__ = System.getProperty("sun.java.command");
+    static void run(String __AT__) {
         System.out.println("LeetcodeJavaDebugEnhancer[" + VERSION + "] started.");
         if (!"io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer".equals(__AT__)) {
             try {

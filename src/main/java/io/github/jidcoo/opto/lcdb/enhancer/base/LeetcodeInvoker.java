@@ -118,4 +118,13 @@ public interface LeetcodeInvoker {
      * include type parameters
      */
     String toGenericString();
+
+    /**
+     * Verify whether this leetcode invoke is suitable for the specified class.
+     *
+     * @param klass the specified class.
+     * @return true if suitable.
+     * @since 1.0.3
+     */
+    boolean isSuitable(Class<?> klass);
 }
