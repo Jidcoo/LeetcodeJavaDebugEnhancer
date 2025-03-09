@@ -129,7 +129,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer</mainClass>
+                            <mainClass>io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancerQuickStarter</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

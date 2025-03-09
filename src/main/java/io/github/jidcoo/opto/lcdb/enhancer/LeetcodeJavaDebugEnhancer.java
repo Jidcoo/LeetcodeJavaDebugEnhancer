@@ -136,7 +136,7 @@ public interface LeetcodeJavaDebugEnhancer {
                 // Let's do a great work here now.
                 LeetcodeJavaDebugEnhanceProcessor.process((Class<? extends LeetcodeJavaDebugEnhancer>) Class.forName(__AT__));
             } catch (Exception | Error err) {
-                EnhancerLogUtil.logE("LeetcodeJavaDebugEnhancer[%s] runtime error: %s", VERSION, err.getMessage());
+                EnhancerLogUtil.logE("LeetcodeJavaDebugEnhancer[%s] runtime error: %s: %s", VERSION, err.getClass().getName(), err.getMessage());
                 throw new EnhancerException("LeetcodeJavaDebugEnhancer runtime error: " + err.getMessage(), err);
             }
         } else {
