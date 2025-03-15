@@ -16,15 +16,10 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
-import io.github.jidcoo.opto.lcdb.enhancer.base.Order;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.PackageUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -77,7 +72,7 @@ final class InputParser {
             }
         }
         // Sort the inputParserNodes by Order.
-        inputParserNodes.sort(Comparator.comparingInt(Order::getOrder).reversed());
+        OrderUtil.descSort(inputParserNodes);
         // Create an InputParserChain by inputParserNodes.
         parserChain = new InputParserChain(inputParserNodes);
     }

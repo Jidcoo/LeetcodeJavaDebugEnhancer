@@ -20,7 +20,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.base.BasePrintingStrategy;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Strategizable;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.GsonUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.base.Order;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.OrderUtil;
 
 import javax.lang.model.type.NullType;
 import java.util.*;
@@ -72,15 +72,13 @@ final class OutputPrinter extends BasePrintingStrategy<Object> {
         printingStrategyList.add(this);
         // Filter out all null object.
         printingStrategyList = printingStrategyList.stream().filter(Objects::nonNull).collect(Collectors.toList());
-        // Define the PrintingStrategy Comparator.
-        Comparator<Order> printingStrategyComparator = Comparator.comparingInt(Order::getOrder).reversed();
         // Wrap the printingStrategyMap build process as a BiConsumer.
         BiConsumer<Class<?>, BasePrintingStrategy<?>> mapBuilder = (Class<?> clazz,
                                                                     BasePrintingStrategy<?> printingStrategy) -> {
             AssertUtil.nonNull(clazz, "The accepted type of the " + printingStrategy + " cannot be null.");
             // Get the strategySet by clazz.
             Set<BasePrintingStrategy<?>> strategySet = printingStrategyMap.computeIfAbsent(clazz,
-                    key -> new TreeSet<>(printingStrategyComparator));
+                    key -> new TreeSet<>(OrderUtil.descComparator()));
             // Add the printingStrategy to the set.
             strategySet.add(printingStrategy);
         };

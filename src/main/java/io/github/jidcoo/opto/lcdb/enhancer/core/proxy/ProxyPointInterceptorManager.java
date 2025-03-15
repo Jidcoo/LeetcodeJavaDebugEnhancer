@@ -17,7 +17,6 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.proxy;
 
 import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
-import io.github.jidcoo.opto.lcdb.enhancer.base.Order;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.*;
 
@@ -72,7 +71,7 @@ final class ProxyPointInterceptorManager {
                 Collectors.groupingBy(ProxyPointInterceptor::interceptPoint,
                 Collectors.collectingAndThen(Collectors.toList(),
                 list -> {
-                    list.sort(Comparator.comparingInt(Order::getOrder).reversed());
+                    OrderUtil.descSort(list);
                     return list;
                 }
         )));

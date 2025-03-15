@@ -17,13 +17,9 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.BaseParameterAcceptStrategy;
-import io.github.jidcoo.opto.lcdb.enhancer.base.Order;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Strategizable;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.BeanUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.*;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
@@ -55,11 +51,6 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
      * Builtin parameter acceptance strategy map.
      */
     private Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> builtinAcceptStrategyMap;
-
-    /**
-     * BaseParameterAcceptStrategy comparator.
-     */
-    private final Comparator<Order> strategyComparator = Comparator.comparingInt(Order::getOrder).reversed();
 
     /**
      * Built-in  parameter acceptance strategy set package location.
@@ -98,7 +89,7 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
         AssertUtil.nonNull(type, "The type of the " + strategy + " cannot be null.");
         // Get the strategySet by clazz.
         Set<BaseParameterAcceptStrategy<?>> strategySet = strategyMap.computeIfAbsent(type,
-                key -> new TreeSet<>(strategyComparator));
+                key -> new TreeSet<>(OrderUtil.descComparator()));
         // Add the strategy to the set.
         strategySet.add(strategy);
     }

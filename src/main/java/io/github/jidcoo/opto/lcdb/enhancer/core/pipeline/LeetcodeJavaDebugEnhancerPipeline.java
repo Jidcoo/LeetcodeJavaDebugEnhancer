@@ -26,6 +26,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.core.printer.OutputPrinterProcessor;
 import io.github.jidcoo.opto.lcdb.enhancer.core.proxy.EnhancerProxyFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.BeanUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.OrderUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
 
 import java.lang.reflect.Method;
@@ -125,7 +126,9 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
                 klass -> klass.isAnnotationPresent(Require.class) && ReflectUtil.isExtendsClass(klass,
                         PipelineRunner.class) && !Modifier.isAbstract(klass.getModifiers()),
                 klass -> ReflectUtil.createInstance(klass))
-                .stream().filter(Objects::nonNull).sorted(Comparator.comparingInt(Order::getOrder).reversed())
+                .stream()
+                .filter(Objects::nonNull)
+                .sorted(OrderUtil.descComparator())
                 .collect(Collectors.toList());
         // Dispatch each builtinPipelineRunner into the pipelineRunnerMap.
         for (PipelineRunner builtinPipelineRunner : builtinPipelineRunners) {
