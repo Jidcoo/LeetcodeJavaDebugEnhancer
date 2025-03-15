@@ -52,4 +52,21 @@ public final class LeetcodeExecutorFactory {
         }
         return executor;
     }
+
+    /**
+     * Product a LeetcodeExecutor instance by copying the original
+     * <tt>LeetcodeExecutor</tt> instance.
+     *
+     * @param instance the original LeetcodeExecutor instance.
+     * @return the LeetcodeExecutor instance.
+     * @since 1.0.3
+     */
+    public static LeetcodeExecutor copyByLeetcodeExecutor(Object instance) {
+        AssertUtil.nonNull(instance, "The instance cannot be null.");
+        AssertUtil.isTrue(instance instanceof LeetcodeExecutor, "The instance is not a LeetcodeExecutor instance.");
+        LeetcodeExecutor curInstance = (LeetcodeExecutor) instance;
+        LeetcodeExecutor newInstance = new LeetcodeExecutor(curInstance.getInstance(), curInstance.getExecutor());
+        newInstance.getCandidateInvokers().addAll(curInstance.getCandidateInvokers());
+        return newInstance;
+    }
 }
