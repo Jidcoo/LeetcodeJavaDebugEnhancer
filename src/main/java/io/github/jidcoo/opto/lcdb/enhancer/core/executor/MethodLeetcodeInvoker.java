@@ -44,17 +44,41 @@ final class MethodLeetcodeInvoker implements LeetcodeInvoker {
     private final Integer id;
 
     /**
+     * The invoker order;
+     *
+     * @since 1.0.3
+     */
+    private final int order;
+
+    /**
      * Create a MethodLeetcodeInvoker instance.
      *
      * @param method the base method.
      * @param id     the invoker id.
      */
     MethodLeetcodeInvoker(Method method, Integer id) {
-        AssertUtil.nonNull(method, "The method cannot be null.");
         this.method = method;
         // Make accessible.
         this.method.setAccessible(true);
         this.id = id;
+        this.order = id;
+    }
+
+    /**
+     * Create a MethodLeetcodeInvoker instance by custom order.
+     *
+     * @param method the base method.
+     * @param id     the invoker id.
+     * @param order  the invoker order.
+     * @see io.github.jidcoo.opto.lcdb.enhancer.base.Order
+     * @since 1.0.3
+     */
+    MethodLeetcodeInvoker(Method method, Integer id, Integer order) {
+        this.method = method;
+        // Make accessible.
+        this.method.setAccessible(true);
+        this.id = id;
+        this.order = order;
     }
 
     /**
@@ -184,5 +208,16 @@ final class MethodLeetcodeInvoker implements LeetcodeInvoker {
     @Override
     public boolean isSuitable(Class<?> klass) {
         return this.method.getDeclaringClass() == klass;
+    }
+
+    /**
+     * Get the order of the object.
+     *
+     * @return the int order of the object.
+     * @since 1.0.3
+     */
+    @Override
+    public int getOrder() {
+        return this.order;
     }
 }

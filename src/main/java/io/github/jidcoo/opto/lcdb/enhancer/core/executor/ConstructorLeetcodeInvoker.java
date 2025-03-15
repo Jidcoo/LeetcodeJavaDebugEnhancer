@@ -46,6 +46,13 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
     private final Integer id;
 
     /**
+     * The invoker order;
+     *
+     * @since 1.0.3
+     */
+    private final int order;
+
+    /**
      * Friendly matching mode flag.
      */
     private boolean matchingFriendly;
@@ -62,12 +69,32 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
      * @param id          the invoker id.
      */
     ConstructorLeetcodeInvoker(Constructor<?> constructor, Integer id) {
-        AssertUtil.nonNull(constructor, "The constructor cannot be null.");
         this.constructor = constructor;
         this.isInnerClassConstructor = constructor.getDeclaringClass().getEnclosingClass() != null;
         // Make accessible.
         this.constructor.setAccessible(true);
         this.id = id;
+        this.order = id;
+        // Friendly-Matching-Mode is closed by default.
+        this.matchingFriendly = false;
+    }
+
+    /**
+     * Create a ConstructorLeetcodeInvoker instance by custom order.
+     *
+     * @param constructor the base constructor.
+     * @param id          the invoker id.
+     * @param order       the invoker order.
+     * @see io.github.jidcoo.opto.lcdb.enhancer.base.Order
+     * @since 1.0.3
+     */
+    ConstructorLeetcodeInvoker(Constructor<?> constructor, Integer id, Integer order) {
+        this.constructor = constructor;
+        this.isInnerClassConstructor = constructor.getDeclaringClass().getEnclosingClass() != null;
+        // Make accessible.
+        this.constructor.setAccessible(true);
+        this.id = id;
+        this.order = order;
         // Friendly-Matching-Mode is closed by default.
         this.matchingFriendly = false;
     }
@@ -224,5 +251,16 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
     @Override
     public boolean isSuitable(Class<?> klass) {
         return this.constructor.getDeclaringClass() == klass;
+    }
+
+    /**
+     * Get the order of the object.
+     *
+     * @return the int order of the object.
+     * @since 1.0.3
+     */
+    @Override
+    public int getOrder() {
+        return this.order;
     }
 }

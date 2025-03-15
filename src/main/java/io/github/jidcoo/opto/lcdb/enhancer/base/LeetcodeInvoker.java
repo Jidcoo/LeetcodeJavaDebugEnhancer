@@ -31,7 +31,7 @@ import java.lang.reflect.Parameter;
  * @author Jidcoo
  * @since 1.0.1
  */
-public interface LeetcodeInvoker {
+public interface LeetcodeInvoker extends Order {
 
     /**
      * Get id of this invoker.

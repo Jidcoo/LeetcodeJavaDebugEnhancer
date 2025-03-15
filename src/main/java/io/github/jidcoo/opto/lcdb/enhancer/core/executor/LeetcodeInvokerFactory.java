@@ -17,6 +17,7 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.executor;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -45,8 +46,23 @@ public final class LeetcodeInvokerFactory {
      * @return the LeetcodeInvoker instance.
      */
     public static LeetcodeInvoker getLeetcodeInvoker(Method method) {
-        // We don't need to perform non-null check here.
+        AssertUtil.nonNull(method, "The method cannot be null.");
         return new MethodLeetcodeInvoker(method, INVOKER_ID_GENERATOR.getAndIncrement());
+    }
+
+    /**
+     * Product a LeetcodeInvoker instance by
+     * {@link Method} instance and custom invoker order.
+     *
+     * @param method the method instance.
+     * @param order  the invoker order.
+     * @return the LeetcodeInvoker instance.
+     * @since 1.0.3
+     */
+    public static LeetcodeInvoker getLeetcodeInvoker(Method method, Integer order) {
+        AssertUtil.nonNull(method, "The method cannot be null.");
+        AssertUtil.nonNull(order, "The order cannot be null.");
+        return new MethodLeetcodeInvoker(method, INVOKER_ID_GENERATOR.getAndIncrement(), order);
     }
 
     /**
@@ -57,7 +73,22 @@ public final class LeetcodeInvokerFactory {
      * @return the LeetcodeInvoker instance.
      */
     public static LeetcodeInvoker getLeetcodeInvoker(Constructor<?> constructor) {
-        // We don't need to perform non-null check here.
+        AssertUtil.nonNull(constructor, "The constructor cannot be null.");
         return new ConstructorLeetcodeInvoker(constructor, INVOKER_ID_GENERATOR.getAndIncrement());
+    }
+
+    /**
+     * Product a LeetcodeInvoker instance by
+     * {@link Constructor} instance and custom invoker order.
+     *
+     * @param constructor the constructor instance.
+     * @param order       the invoker order.
+     * @return the LeetcodeInvoker instance.
+     * @since 1.0.3
+     */
+    public static LeetcodeInvoker getLeetcodeInvoker(Constructor<?> constructor, Integer order) {
+        AssertUtil.nonNull(constructor, "The constructor cannot be null.");
+        AssertUtil.nonNull(order, "The order cannot be null.");
+        return new ConstructorLeetcodeInvoker(constructor, INVOKER_ID_GENERATOR.getAndIncrement(), order);
     }
 }
