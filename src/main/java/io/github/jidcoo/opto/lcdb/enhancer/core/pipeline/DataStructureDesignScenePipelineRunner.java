@@ -59,12 +59,12 @@ final class DataStructureDesignScenePipelineRunner extends PipelineRunner {
         AssertUtil.nonNull(dataStructureKlass, "The data structure class instance cannot be null.");
         // Collect all constructors and method from dataStructureKlass.
         List<LeetcodeInvoker> constructorInvokers = Arrays.stream(dataStructureKlass.getDeclaredConstructors())
-                .map(LeetcodeInvokerFactory::getLeetcodeInvoker)
+                .map(constructor -> LeetcodeInvokerFactory.getLeetcodeInvoker(constructor, Integer.MAX_VALUE))
                  // Enable Friendly-Matching-Mode to ConstructorLeetcodeInvoker instance.
                 .peek(leetcodeInvoker -> ReflectUtil.setFieldValue("matchingFriendly", boolean.class, Boolean.TRUE, leetcodeInvoker))
                 .collect(Collectors.toList());
         List<LeetcodeInvoker> methodInvokers = Arrays.stream(dataStructureKlass.getDeclaredMethods())
-                .map(LeetcodeInvokerFactory::getLeetcodeInvoker)
+                .map(method -> LeetcodeInvokerFactory.getLeetcodeInvoker(method, Integer.MAX_VALUE))
                 .collect(Collectors.toList());
         // Map invokerName -> List<LeetcodeInvoker>
         Map<String, List<LeetcodeInvoker>> invokersMap = Stream.concat(constructorInvokers.stream(),

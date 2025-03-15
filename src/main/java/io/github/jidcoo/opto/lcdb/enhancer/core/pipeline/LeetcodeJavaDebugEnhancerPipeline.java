@@ -139,7 +139,7 @@ final class LeetcodeJavaDebugEnhancerPipeline extends PipelineRunner {
                     continue;
                 }
                 // Create a LeetcodeInvoker instance by the candidateMethod.
-                LeetcodeInvoker leetcodeInvoker = LeetcodeInvokerFactory.getLeetcodeInvoker(candidateMethod);
+                LeetcodeInvoker leetcodeInvoker = LeetcodeInvokerFactory.getLeetcodeInvoker(candidateMethod, Integer.MIN_VALUE);
                 // Add leetcodeInvoker to pipelineRunnerInvokers list.
                 pipelineRunnerInvokers.add(leetcodeInvoker);
                 // Map leetcodeInvoker's id -> pipelineRunner owner.

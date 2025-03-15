@@ -22,6 +22,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeInvokerFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.EnhancerLogUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.GsonUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.OrderUtil;
 
 import java.io.*;
 import java.lang.reflect.Modifier;
@@ -260,6 +261,7 @@ final class IRMatchInputParserNode extends InputParserNode {
             // Add public leetcode invokers list to leetcodeInvokers.
             leetcodeInvokers.addAll(publicLeetcodeInvokers);
         }
+        OrderUtil.descSort(leetcodeInvokers);
         return leetcodeInvokers;
     }
 }
