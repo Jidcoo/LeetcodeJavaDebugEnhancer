@@ -16,6 +16,7 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.base;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Set;
 
@@ -57,7 +58,7 @@ public abstract class BasePrintingStrategy<Output> implements Strategizable<Outp
      * @return the accepted output.
      */
     @Override
-    public final String accept(Object classType, Object object,
+    public final String accept(Type classType, Object object,
                                Map<Class<?>, Set<BasePrintingStrategy<?>>> strategiesMap) throws Throwable {
         // Do real call the printOutput() method.
         return printOutput((Output) object, strategiesMap);

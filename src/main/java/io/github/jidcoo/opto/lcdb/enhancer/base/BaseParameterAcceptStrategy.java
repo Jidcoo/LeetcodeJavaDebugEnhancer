@@ -16,6 +16,7 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.base;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Set;
 
@@ -52,7 +53,7 @@ public abstract class BaseParameterAcceptStrategy<Parameter> implements Strategi
      *                      </p>
      * @return the accepted parameter.
      */
-    protected abstract Parameter acceptParameter(Object object, java.lang.reflect.Parameter type,
+    protected abstract Parameter acceptParameter(Object object, Type type,
                                                  Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap) throws Throwable;
 
     /**
@@ -64,9 +65,9 @@ public abstract class BaseParameterAcceptStrategy<Parameter> implements Strategi
      * @return the accepted output.
      */
     @Override
-    public final Parameter accept(Object classType, Object object,
+    public final Parameter accept(Type classType, Object object,
                                   Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap) throws Throwable {
         // Do real call the acceptParameter() method.
-        return acceptParameter(object, (java.lang.reflect.Parameter) classType, strategiesMap);
+        return acceptParameter(object, classType, strategiesMap);
     }
 }

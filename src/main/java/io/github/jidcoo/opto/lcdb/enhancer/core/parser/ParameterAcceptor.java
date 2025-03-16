@@ -23,6 +23,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.utils.*;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -112,8 +113,8 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
             for (BaseParameterAcceptStrategy<?> acceptStrategy : strategySet) {
                 try {
                     // Try to accept the parameter and return the accepted result.
-                    return ParameterAcceptResult.accept(acceptStrategy.accept(invokerParameterType, object,
-                            builtinAcceptStrategyMap));
+                    return ParameterAcceptResult.accept(acceptStrategy.accept(invokerParameterType.getParameterizedType(),
+                            object, builtinAcceptStrategyMap));
                 } catch (Throwable e) {
                     // Push the throwable with the object tracer into stack.
                     tracerStack.push(new ParameterAcceptStrategyTracer(acceptStrategy.getClass().getName(), e));
@@ -142,7 +143,7 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
      * @return the accepted parameter.
      */
     @Override
-    protected Object acceptParameter(Object object, Parameter type,
+    protected Object acceptParameter(Object object, Type type,
                                      Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap) throws Throwable {
         // This method is not supported in ParameterAcceptor.
         throw new RuntimeException("Unsupported!");

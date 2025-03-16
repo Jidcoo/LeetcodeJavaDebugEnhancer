@@ -20,6 +20,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
 
 import javax.lang.model.type.NullType;
+import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -113,7 +114,7 @@ public interface Strategizable<AcceptableType, Output, Strategy> extends Order {
      * @param strategiesMap the strategies map that can be used during the acceptance process.
      * @return the accepted output.
      */
-    default Output accept(Object classType, Object object, Map<Class<?>, Set<Strategy>> strategiesMap) throws Throwable {
+    default Output accept(Type classType, Object object, Map<Class<?>, Set<Strategy>> strategiesMap) throws Throwable {
         // By default, a runtime exception is thrown here.
         throw new RuntimeException("Stub!");
     }
