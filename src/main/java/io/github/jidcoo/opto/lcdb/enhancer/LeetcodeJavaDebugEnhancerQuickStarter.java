@@ -40,9 +40,6 @@ public abstract class LeetcodeJavaDebugEnhancerQuickStarter implements LeetcodeJ
     }
 
     private static String obtainATFromStartupArguments(String[] args) {
-        if (args.length == 0) {
-            return null;
-        }
         for (String arg : args) {
             if (!StringUtil.isBlank(arg)) {
                 return arg;

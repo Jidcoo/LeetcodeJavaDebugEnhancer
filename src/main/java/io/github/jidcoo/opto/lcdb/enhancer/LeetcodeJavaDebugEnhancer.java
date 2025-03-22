@@ -19,9 +19,11 @@ package io.github.jidcoo.opto.lcdb.enhancer;
 import io.github.jidcoo.opto.lcdb.enhancer.base.BasePrintingStrategy;
 import io.github.jidcoo.opto.lcdb.enhancer.base.EnhancerException;
 import io.github.jidcoo.opto.lcdb.enhancer.core.LeetcodeJavaDebugEnhanceProcessor;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.EnhancerLogUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.base.InputProvider;
 import io.github.jidcoo.opto.lcdb.enhancer.base.OutputConsumer;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -128,12 +130,18 @@ public interface LeetcodeJavaDebugEnhancer {
      *
      * @param __AT__ the AT name.
      */
+    @SuppressWarnings("unchecked")
     static void run(String __AT__) {
         System.out.println("LeetcodeJavaDebugEnhancer[" + VERSION + "] started.");
         if (!"io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer".equals(__AT__)) {
             try {
+                Class<?> atClass = Class.forName(__AT__);
+                AssertUtil.isTrue(
+                        ReflectUtil.isImplementInterface(atClass, LeetcodeJavaDebugEnhancer.class),
+                        "The class is not an AT class."
+                );
                 // Let's do a great work here now.
-                LeetcodeJavaDebugEnhanceProcessor.process((Class<? extends LeetcodeJavaDebugEnhancer>) Class.forName(__AT__));
+                LeetcodeJavaDebugEnhanceProcessor.process((Class<? extends LeetcodeJavaDebugEnhancer>) atClass);
             } catch (Exception | Error err) {
                 EnhancerLogUtil.logE("LeetcodeJavaDebugEnhancer[%s] runtime error: %s: %s", VERSION, err.getClass().getName(), err.getMessage());
                 throw new EnhancerException("LeetcodeJavaDebugEnhancer runtime error: " + err.getMessage(), err);
