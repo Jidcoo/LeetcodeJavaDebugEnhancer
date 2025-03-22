@@ -16,12 +16,14 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.pipeline;
 
+import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
 import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeExecutorFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeExecutorProcessor;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeInvokerFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.parser.InputParserProcessor;
+import io.github.jidcoo.opto.lcdb.enhancer.core.proxy.EnhancerProxyFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
@@ -109,5 +111,11 @@ final class DataStructureDesignScenePipelineRunner extends PipelineRunner {
     @Override
     public int getOrder() {
         return 0;
+    }
+
+    @Override
+    protected LeetcodeJavaDebugEnhancer getEnhancer() {
+        // Get the source instance.
+        return EnhancerProxyFactory.awareSourceEnhancer(super.getEnhancer());
     }
 }

@@ -63,7 +63,7 @@ public class EnhancerProxyFactory {
         }
         InvocationHandler invocationHandler = Proxy.getInvocationHandler(enhancer);
         if (invocationHandler instanceof EnhancerProxyHandler) {
-            return ((EnhancerProxyHandler) invocationHandler).getTarget();
+            return awareSourceEnhancer(((EnhancerProxyHandler) invocationHandler).getTarget());
         }
         // enhancer is a proxy instance but the invocationHandler is not an EnhancerProxyHandler instance.
         return null;
