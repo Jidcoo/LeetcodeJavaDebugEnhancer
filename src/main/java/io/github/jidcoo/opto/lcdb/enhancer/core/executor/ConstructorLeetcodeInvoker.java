@@ -131,8 +131,8 @@ final class ConstructorLeetcodeInvoker implements LeetcodeInvoker {
     @Override
     public String getInvokerName() {
         String name = this.constructor.getName();
-        if (matchingFriendly && isInnerClassConstructor) {
-            return name.substring(name.lastIndexOf('$') + 1);
+        if (matchingFriendly) {
+            return name.substring(name.lastIndexOf(isInnerClassConstructor ? '$' : '.') + 1);
         }
         return name;
     }
