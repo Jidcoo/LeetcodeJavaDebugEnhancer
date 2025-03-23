@@ -20,21 +20,12 @@ import io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancer;
 import io.github.jidcoo.opto.lcdb.enhancer.UnitTestDriver;
 import org.junit.Before;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-
 /**
  * Tests for {@link LeetcodeJavaDebugEnhancer#getEnhancerPayload()}
  *
  * @author Jidcoo
  */
 public class TestSet6_TestCase05 extends UnitTestDriver {
-
-    @Override
-    public Level getEnhancerLogLevel() {
-        return Level.INFO;
-    }
 
     @Before
     public void onBefore() {

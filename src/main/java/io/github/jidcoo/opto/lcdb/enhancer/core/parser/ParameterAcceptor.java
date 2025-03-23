@@ -37,7 +37,8 @@ import java.util.stream.Collectors;
  * <p>ParameterAcceptor performs appropriate acceptance
  * of input objects based on built-in parameter
  * acceptance strategies and external acceptance
- * strategies by {@link #accept(Parameter, Object)}.
+ * strategies by {@link #accept(Parameter, Object)}
+ * or {@link #accept(Map, Parameter, Object)}.
  * </p>
  *
  * @author Jidcoo
@@ -51,7 +52,7 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
     /**
      * Builtin parameter acceptance strategy map.
      */
-    private Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> builtinAcceptStrategyMap;
+    private final Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> builtinAcceptStrategyMap;
 
     /**
      * Built-in  parameter acceptance strategy set package location.
@@ -78,24 +79,6 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
     }
 
     /**
-     * Wrap the strategy add function.
-     *
-     * @param type        the accepted class type.
-     * @param strategy    the acceptance strategy.
-     * @param strategyMap the acceptance strategy map.
-     */
-    private void addParameterAcceptStrategy(Class<?> type, BaseParameterAcceptStrategy<?> strategy, Map<Class<?>,
-            Set<BaseParameterAcceptStrategy<?>>> strategyMap) {
-        AssertUtil.nonNull(strategy, "The parameter acceptance strategy cannot be null.");
-        AssertUtil.nonNull(type, "The type of the " + strategy + " cannot be null.");
-        // Get the strategySet by clazz.
-        Set<BaseParameterAcceptStrategy<?>> strategySet = strategyMap.computeIfAbsent(type,
-                key -> new TreeSet<>(OrderUtil.descComparator()));
-        // Add the strategy to the set.
-        strategySet.add(strategy);
-    }
-
-    /**
      * Accept an object with the parameter type.
      *
      * @param invokerParameterType the leetcode invoker parameter type.
@@ -103,30 +86,25 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
      * @return the parameter acceptance result.
      */
     public ParameterAcceptResult accept(Parameter invokerParameterType, Object object) {
-        // Create a tracer stack for tracking the acceptance process.
-        Stack<ParameterAcceptStrategyTracer> tracerStack = new Stack<>();
+        return parameterAccepting(this.builtinAcceptStrategyMap, invokerParameterType, object);
+    }
 
-        try {
-            // Find the strategy set for the parameter acceptance.
-            Set<BaseParameterAcceptStrategy<?>> strategySet = findStrategySet(invokerParameterType.getType(),
-                    builtinAcceptStrategyMap);
-            for (BaseParameterAcceptStrategy<?> acceptStrategy : strategySet) {
-                try {
-                    // Try to accept the parameter and return the accepted result.
-                    return ParameterAcceptResult.accept(acceptStrategy.accept(invokerParameterType.getParameterizedType(),
-                            object, builtinAcceptStrategyMap));
-                } catch (Throwable e) {
-                    // Push the throwable with the object tracer into stack.
-                    tracerStack.push(new ParameterAcceptStrategyTracer(acceptStrategy.getClass().getName(), e));
-                }
-            }
-        } catch (Throwable throwable) {
-            // Push the throwable with the object tracer into stack.
-            tracerStack.push(new ParameterAcceptStrategyTracer(null, throwable));
+    /**
+     * Accept an object with custom parameter accepting strategies
+     * and parameter type.
+     *
+     * @param strategies           the custom parameter accepting strategies.
+     * @param invokerParameterType the leetcode invoker parameter type.
+     * @param object               the input object for accepting.
+     * @return the parameter acceptance result.
+     * @since 1.0.3
+     */
+    public ParameterAcceptResult accept(Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategies,
+                                        Parameter invokerParameterType, Object object) {
+        if (Objects.isNull(strategies)) {
+            return accept(invokerParameterType, object);
         }
-
-        // Return the rejected result.
-        return ParameterAcceptResult.reject(object, tracerStack);
+        return parameterAccepting(strategies, invokerParameterType, object);
     }
 
     /**
@@ -169,5 +147,74 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
     public Class<?> getAcceptableType() {
         // This method is not supported in ParameterAcceptor.
         throw new RuntimeException("Unsupported!");
+    }
+
+    /**
+     * Return a combination strategy set containing built-in strategies and custom strategies.
+     *
+     * @param  strategies the custom strategies.
+     * @return null if the custom strategies list is empty,
+     *         else a combination parameter accepting strategy set.
+     * @since 1.0.3
+     */
+    Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> combineCustomStrategies(List<BaseParameterAcceptStrategy<?>> strategies) {
+        if (ContainerCheckUtil.isListEmpty(strategies)) {
+            return null;
+        }
+        Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> combinedCustomStrategiesMap = new HashMap<>();
+        // Build map by origin builtinAcceptStrategyMap.
+        this.builtinAcceptStrategyMap.forEach((key, val) -> {
+            val.forEach(strategy -> addParameterAcceptStrategy(key, strategy, combinedCustomStrategiesMap));
+        });
+        // Combine the custom strategies.
+        strategies.forEach(strategy -> addParameterAcceptStrategy(strategy.getAcceptableType(), strategy,
+                combinedCustomStrategiesMap));
+        return combinedCustomStrategiesMap;
+    }
+
+    /**
+     * Wrap the strategy add function.
+     *
+     * @param type        the accepted class type.
+     * @param strategy    the acceptance strategy.
+     * @param strategyMap the acceptance strategy map.
+     */
+    private void addParameterAcceptStrategy(Class<?> type, BaseParameterAcceptStrategy<?> strategy, Map<Class<?>,
+            Set<BaseParameterAcceptStrategy<?>>> strategyMap) {
+        AssertUtil.nonNull(strategy, "The parameter acceptance strategy cannot be null.");
+        AssertUtil.nonNull(type, "The type of the " + strategy + " cannot be null.");
+        // Get the strategySet by clazz.
+        Set<BaseParameterAcceptStrategy<?>> strategySet = strategyMap.computeIfAbsent(type,
+                key -> new TreeSet<>(OrderUtil.descComparator()));
+        // Add the strategy to the set.
+        strategySet.add(strategy);
+    }
+
+    private ParameterAcceptResult parameterAccepting(Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategies,
+                                                     Parameter invokerParameterType, Object object) {
+        // Create a tracer stack for tracking the acceptance process.
+        Stack<ParameterAcceptStrategyTracer> tracerStack = new Stack<>();
+
+        try {
+            // Find the strategy set for the parameter acceptance.
+            Set<BaseParameterAcceptStrategy<?>> strategySet = findStrategySet(invokerParameterType.getType(),
+                    strategies);
+            for (BaseParameterAcceptStrategy<?> acceptStrategy : strategySet) {
+                try {
+                    // Try to accept the parameter and return the accepted result.
+                    return ParameterAcceptResult.accept(acceptStrategy.accept(invokerParameterType.getParameterizedType(),
+                            object, strategies));
+                } catch (Throwable e) {
+                    // Push the throwable with the object tracer into stack.
+                    tracerStack.push(new ParameterAcceptStrategyTracer(acceptStrategy.getClass().getName(), e));
+                }
+            }
+        } catch (Throwable throwable) {
+            // Push the throwable with the object tracer into stack.
+            tracerStack.push(new ParameterAcceptStrategyTracer(null, throwable));
+        }
+
+        // Return the rejected result.
+        return ParameterAcceptResult.reject(object, tracerStack);
     }
 }

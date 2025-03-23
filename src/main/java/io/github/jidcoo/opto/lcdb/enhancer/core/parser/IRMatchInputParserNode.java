@@ -16,6 +16,7 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
+import io.github.jidcoo.opto.lcdb.enhancer.base.BaseParameterAcceptStrategy;
 import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeInvokerFactory;
@@ -86,11 +87,16 @@ final class IRMatchInputParserNode extends InputParserNode {
         // Define the boss input.
         List<Object> bossInput = new ArrayList<>();
         // Peek last input.
-        List<Object> input = (List<Object>) context.peekInput();
+        List<Object> input = context.peekInput();
         // Fetch all possible leetcode invokers.
         List<LeetcodeInvoker> leetcodeInvokers = fetchLeetcodeInvokers(context, input.size());
         // Create an invoker-matching tracer map to record the invoker matching detail.
         Map<LeetcodeInvoker, Map<Integer, Stack<ParameterAcceptStrategyTracer>>> matchTracer = new HashMap<>();
+
+        // Try to combine custom strategies if the availableParameterAcceptStrategies are not empty(sine 1.0.3).
+        Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> curParameterAcceptingStrategies =
+                parameterAcceptor.combineCustomStrategies(context.getAvailableParameterAcceptStrategies());
+
         if (!ContainerCheckUtil.isListEmpty(leetcodeInvokers)) {
             // Try to match all possible leetcode invokers.
             for (LeetcodeInvoker leetcodeInvoker : leetcodeInvokers) {
@@ -108,7 +114,7 @@ final class IRMatchInputParserNode extends InputParserNode {
                     // Copy the input parameter deeply.
                     Object copiedObject = deepCopy(input.get(i));
                     // Try to accept the input parameter.
-                    ParameterAcceptResult result = parameterAcceptor.accept(parameterType, copiedObject);
+                    ParameterAcceptResult result = parameterAcceptor.accept(curParameterAcceptingStrategies, parameterType, copiedObject);
                     // Add cur rejected result tracer to enable cur matching tracer if result is not accepted.
                     if (!result.isAccepted()) {
                         invokerMatchTracerMap.put(i, result.getTracer());
@@ -137,7 +143,7 @@ final class IRMatchInputParserNode extends InputParserNode {
         // Log parameter accepting tracer detail after IR-Matching if the bossInvoker is null.
         logDetailAfterIRMatching(bossInvoker, leetcodeInvokers, input, matchTracer);
         context.setTargetInvoker(bossInvoker);
-        return (bossInput.stream().toArray(Object[]::new));
+        return bossInput.toArray();
     }
 
     /**

@@ -99,6 +99,7 @@ final class InputParserContext {
      * @param input the input.
      * @return the input.
      */
+    @SuppressWarnings("unchecked")
     <T> T pushInput(T input) {
         return (T) this.inputStack.push(input);
     }
@@ -111,9 +112,9 @@ final class InputParserContext {
      * @return the input at the top of the input stack from this context.
      * @throws EmptyStackException if the input stack from this context is empty.
      */
-
-    Object peekInput() {
-        return this.inputStack.peek();
+    @SuppressWarnings("unchecked")
+    <T> T peekInput() {
+        return (T) this.inputStack.peek();
     }
 
     /**
@@ -123,8 +124,9 @@ final class InputParserContext {
      * @return the input at the top of the input stack from this context.
      * @throws EmptyStackException if the input stack from this context is empty.
      */
-    Object popInput() {
-        return this.inputStack.pop();
+    @SuppressWarnings("unchecked")
+    <T> T popInput() {
+        return (T) this.inputStack.pop();
     }
 
     /**
