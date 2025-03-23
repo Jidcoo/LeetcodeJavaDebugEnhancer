@@ -20,7 +20,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  ci:
 
     runs-on: ubuntu-latest
 
