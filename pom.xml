@@ -136,7 +136,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>io.github.jidcoo.opto.lcdb.enhancer.LeetcodeJavaDebugEnhancerQuickStarter</mainClass>
+                            <mainClass>io.github.jidcoo.opto.lcdb.enhancer.LJDEStarter</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

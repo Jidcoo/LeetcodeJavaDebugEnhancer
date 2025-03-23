@@ -20,12 +20,12 @@ import io.github.jidcoo.opto.lcdb.enhancer.base.EnhancerException;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.StringUtil;
 
 /**
- * LeetcodeJavaDebugEnhancer quick starter.
+ * LeetcodeJavaDebugEnhancer starter.
  *
  * @author Jidcoo
  * @since 1.0.3
  */
-public abstract class LeetcodeJavaDebugEnhancerQuickStarter implements LeetcodeJavaDebugEnhancer {
+public abstract class LJDEStarter implements LeetcodeJavaDebugEnhancer {
 
     public static void main(String[] args) {
         String AT = obtainATFromStartupArguments(args);
@@ -33,8 +33,8 @@ public abstract class LeetcodeJavaDebugEnhancerQuickStarter implements LeetcodeJ
             // Depend on java runtime feature.
             AT = System.getProperty("sun.java.command");
         }
-        if (LeetcodeJavaDebugEnhancerQuickStarter.class.getName().equals(AT)) {
-            throw new EnhancerException("Cannot enhance from the abstract LeetcodeJavaDebugEnhancerQuickStarter.");
+        if (LJDEStarter.class.getName().equals(AT)) {
+            throw new EnhancerException("Cannot enhance from the abstract LJDEStarter.");
         }
         LeetcodeJavaDebugEnhancer.run(AT);
     }

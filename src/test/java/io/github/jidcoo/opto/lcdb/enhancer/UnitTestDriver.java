@@ -47,7 +47,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @see UnitTestDriver#ignoreTestResult()
  */
 @RunWith(JUnit4.class)
-public abstract class UnitTestDriver extends LeetcodeJavaDebugEnhancerQuickStarter {
+public abstract class UnitTestDriver extends LJDEStarter {
 
     private static final UnitTestOutputCollector __GLOBAL__OC__ = new UnitTestOutputCollector();
 
@@ -87,7 +87,7 @@ public abstract class UnitTestDriver extends LeetcodeJavaDebugEnhancerQuickStart
     @Test
     public final void __PROCESS_TEST_ON_DRIVER__() {
         Assert.assertTrue(__IS__REGISTERED__);
-        LeetcodeJavaDebugEnhancerQuickStarter.main(new String[]{this.getClass().getName()});
+        LJDEStarter.main(new String[]{this.getClass().getName()});
         if (__IS__IGNORED__OUTPUT__) {
             return;
         }
