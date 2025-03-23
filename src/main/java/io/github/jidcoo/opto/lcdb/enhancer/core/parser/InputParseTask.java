@@ -49,7 +49,7 @@ final class InputParseTask {
      *
      * @since 1.0.1
      */
-    private List<LeetcodeInvoker> candidateInvokers;
+    private final List<LeetcodeInvoker> candidateInvokers;
 
     /**
      * The input used for debug.
