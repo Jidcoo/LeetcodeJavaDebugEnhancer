@@ -16,6 +16,7 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
+import io.github.jidcoo.opto.lcdb.enhancer.base.BaseParameterAcceptStrategy;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.*;
 
@@ -47,7 +48,14 @@ final class InputParser {
     /**
      * The InputParserChain in this parser.
      */
-    private InputParserChain parserChain;
+    private final InputParserChain parserChain;
+
+    /**
+     * The available custom parameter accepting strategies.
+     *
+     * @since 1.0.3
+     */
+    private List<BaseParameterAcceptStrategy<?>> availableParameterAcceptStrategies;
 
     /**
      * Create an InputParser instance.
@@ -78,6 +86,17 @@ final class InputParser {
     }
 
     /**
+     * Create an InputParser instance with custom parameter accepting strategies.
+     *
+     * @param availableParameterAcceptStrategies the custom parameter accepting strategies.
+     * @since 1.0.3
+     */
+    InputParser(List<BaseParameterAcceptStrategy<?>> availableParameterAcceptStrategies) {
+        this();
+        this.availableParameterAcceptStrategies = availableParameterAcceptStrategies;
+    }
+
+    /**
      * Parse an input from an InputParseTask instance.
      *
      * @param inputParseTask the InputParseTask instance.
@@ -103,7 +122,11 @@ final class InputParser {
         AssertUtil.nonNull(inputParseTask, "The inputParseTask cannot be null");
         AssertUtil.nonNull(inputParseTask.getTargetInstance(), "The target cannot be null");
         AssertUtil.nonNull(inputParseTask.getInput(), "The input cannot be null");
-        return new InputParserContext(inputParseTask.getTargetInstance(), inputParseTask.getInput(),
-                inputParseTask.getCandidateInvokers());
+        return new InputParserContext(
+                inputParseTask.getTargetInstance(),
+                inputParseTask.getInput(),
+                inputParseTask.getCandidateInvokers(),
+                availableParameterAcceptStrategies
+        );
     }
 }

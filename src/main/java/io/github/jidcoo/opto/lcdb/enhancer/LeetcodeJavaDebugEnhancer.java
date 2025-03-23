@@ -16,13 +16,10 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer;
 
-import io.github.jidcoo.opto.lcdb.enhancer.base.BasePrintingStrategy;
-import io.github.jidcoo.opto.lcdb.enhancer.base.EnhancerException;
+import io.github.jidcoo.opto.lcdb.enhancer.base.*;
 import io.github.jidcoo.opto.lcdb.enhancer.core.LeetcodeJavaDebugEnhanceProcessor;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.EnhancerLogUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.base.InputProvider;
-import io.github.jidcoo.opto.lcdb.enhancer.base.OutputConsumer;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
 
 import java.util.List;
@@ -113,6 +110,18 @@ public interface LeetcodeJavaDebugEnhancer {
      * @since 1.0.3
      */
     default Class<?> getEnhancerPayload() {
+        return null;
+    }
+
+    /**
+     * <p>If you need to customize the accepting of the input parameter, please return
+     * a list of parameter accepting strategies, and the {@link LeetcodeJavaDebugEnhancer} will
+     * try to find the appropriate strategy from this list to accept the input parameter.
+     *
+     * @return a list of parameter accepting strategies
+     * @since 1.0.3
+     */
+    default List<BaseParameterAcceptStrategy<?>> getParameterAcceptStrategies() {
         return null;
     }
 

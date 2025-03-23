@@ -38,6 +38,6 @@ public final class InputParserFactory {
      */
     public static InputParser getInputParser(LeetcodeJavaDebugEnhancer enhancer) {
         AssertUtil.nonNull(enhancer, "The enhancer cannot be null.");
-        return new InputParser();
+        return new InputParser(enhancer.getParameterAcceptStrategies());
     }
 }

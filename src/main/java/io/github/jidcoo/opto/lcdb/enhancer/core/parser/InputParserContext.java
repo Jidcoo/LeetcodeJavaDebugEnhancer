@@ -16,6 +16,7 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
+import io.github.jidcoo.opto.lcdb.enhancer.base.BaseParameterAcceptStrategy;
 import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
 
 import java.util.EmptyStackException;
@@ -50,7 +51,14 @@ final class InputParserContext {
      *
      * @since 1.0.1
      */
-    private List<LeetcodeInvoker> candidateInvokers;
+    private final List<LeetcodeInvoker> candidateInvokers;
+
+    /**
+     * The available custom parameter accepting strategies.
+     *
+     * @since 1.0.3
+     */
+    private final List<BaseParameterAcceptStrategy<?>> availableParameterAcceptStrategies;
 
     /**
      * The input stack used for debug.
@@ -60,18 +68,20 @@ final class InputParserContext {
     /**
      * Create a InputParserContext instance.
      *
-     * @param targetInstance    the target instance used for debug.
-     * @param input             the input used for debug.
-     * @param candidateInvokers the candidate leetcode invokers list for input
-     *                          parsing.
-     * @since 1.0.1
+     * @param targetInstance            the target instance used for debug.
+     * @param input                     the input used for debug.
+     * @param candidateInvokers         the candidate leetcode invokers list for input parsing.
+     * @param parameterAcceptStrategies the available custom parameter accepting strategies.
+     * @since 1.0.3
      */
-    InputParserContext(Object targetInstance, Object input, List<LeetcodeInvoker> candidateInvokers) {
+    InputParserContext(Object targetInstance, Object input, List<LeetcodeInvoker> candidateInvokers,
+                       List<BaseParameterAcceptStrategy<?>> parameterAcceptStrategies) {
         this.targetInstance = targetInstance;
         this.inputStack = new Stack<>();
         // Add the first input to the inputStack
         this.inputStack.push(input);
         this.candidateInvokers = candidateInvokers;
+        this.availableParameterAcceptStrategies = parameterAcceptStrategies;
     }
 
     /**
@@ -154,5 +164,15 @@ final class InputParserContext {
      */
     List<LeetcodeInvoker> getCandidateInvokers() {
         return candidateInvokers;
+    }
+
+    /**
+     * Get the available parameter accept strategies for input parsing.
+     *
+     * @return the available parameter accept strategies.
+     * @since 1.0.3
+     */
+    List<BaseParameterAcceptStrategy<?>> getAvailableParameterAcceptStrategies() {
+        return availableParameterAcceptStrategies;
     }
 }
