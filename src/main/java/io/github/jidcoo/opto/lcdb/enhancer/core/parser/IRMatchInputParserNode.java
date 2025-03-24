@@ -114,7 +114,11 @@ final class IRMatchInputParserNode extends InputParserNode {
                     // Copy the input parameter deeply.
                     Object copiedObject = deepCopy(input.get(i));
                     // Try to accept the input parameter.
-                    ParameterAcceptResult result = parameterAcceptor.accept(curParameterAcceptingStrategies, parameterType, copiedObject);
+                    ParameterAcceptResult result = parameterAcceptor.accept(
+                            curParameterAcceptingStrategies,
+                            parameterType,
+                            copiedObject
+                    );
                     // Add cur rejected result tracer to enable cur matching tracer if result is not accepted.
                     if (!result.isAccepted()) {
                         invokerMatchTracerMap.put(i, result.getTracer());
