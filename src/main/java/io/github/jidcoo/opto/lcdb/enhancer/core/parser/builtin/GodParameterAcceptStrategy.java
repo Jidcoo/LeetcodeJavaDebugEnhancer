@@ -63,7 +63,7 @@ public final class GodParameterAcceptStrategy extends BaseParameterAcceptStrateg
      */
     @Override
     protected Object acceptParameter(Object object, Type type,
-                                     Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap) throws Throwable {
+                                     Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap) {
         // This can handle most situations!!!
         // How magical!!!
         // How beautiful the world is!!!

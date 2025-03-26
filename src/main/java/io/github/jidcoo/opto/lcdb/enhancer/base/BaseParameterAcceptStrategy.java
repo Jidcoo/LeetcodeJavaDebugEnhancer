@@ -16,9 +16,14 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.base;
 
+import io.github.jidcoo.opto.lcdb.enhancer.core.parser.ParameterAcceptResult;
+import io.github.jidcoo.opto.lcdb.enhancer.core.parser.ParameterAcceptStrategyTracer;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.TypeUtil;
+
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 /**
  * <p>BaseParameterAcceptStrategy is an abstract class
@@ -54,7 +59,46 @@ public abstract class BaseParameterAcceptStrategy<Parameter> implements Strategi
      * @return the accepted parameter.
      */
     protected abstract Parameter acceptParameter(Object object, Type type,
-                                                 Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap) throws Throwable;
+                                                 Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap);
+
+    /**
+     * Common accepting parameter function.
+     *
+     * @param strategies    the strategy set for parameter accepting.
+     * @param parameterType the parameter type.
+     * @param object        the parameter object.
+     * @return {@link ParameterAcceptResult}
+     * @since 1.0.3
+     */
+    protected ParameterAcceptResult commonAcceptingFunction(Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategies,
+                                                            Type parameterType,
+                                                            Object object) {
+        // Create a tracer stack for tracking the acceptance process.
+        Stack<ParameterAcceptStrategyTracer> tracerStack = new Stack<>();
+
+        try {
+            // Find the strategy set for the parameter acceptance.
+            Set<BaseParameterAcceptStrategy<?>> strategySet = findStrategySet(
+                    TypeUtil.obtainRawTypeOfType(parameterType),
+                    strategies
+            );
+            for (BaseParameterAcceptStrategy<?> acceptStrategy : strategySet) {
+                try {
+                    // Try to accept the parameter and return the accepted result.
+                    return ParameterAcceptResult.accept(acceptStrategy.accept(parameterType, object, strategies));
+                } catch (Throwable e) {
+                    // Push the throwable with the object tracer into stack.
+                    tracerStack.push(new ParameterAcceptStrategyTracer(acceptStrategy.getClass().getName(), e));
+                }
+            }
+        } catch (Throwable throwable) {
+            // Push the throwable with the object tracer into stack.
+            tracerStack.push(new ParameterAcceptStrategyTracer(null, throwable));
+        }
+
+        // Return the rejected result.
+        return ParameterAcceptResult.reject(object, tracerStack);
+    }
 
     /**
      * Accept the object by the class type.

@@ -22,7 +22,6 @@ import io.github.jidcoo.opto.lcdb.enhancer.base.Strategizable;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.*;
 
 import java.lang.reflect.Modifier;
-import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,10 +34,8 @@ import java.util.stream.Collectors;
  * </p>
  *
  * <p>ParameterAcceptor performs appropriate acceptance
- * of input objects based on built-in parameter
- * acceptance strategies and external acceptance
- * strategies by {@link #accept(Parameter, Object)}
- * or {@link #accept(Map, Parameter, Object)}.
+ * of input objects based on built-in or external parameter
+ * acceptance strategies by {@link #acceptParameter(Object, Type, Map)}
  * </p>
  *
  * @author Jidcoo
@@ -47,7 +44,7 @@ import java.util.stream.Collectors;
  * @see IRMatchInputParserNode
  * @since 1.0
  */
-final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
+final class ParameterAcceptor extends BaseParameterAcceptStrategy<ParameterAcceptResult> {
 
     /**
      * Builtin parameter acceptance strategy map.
@@ -62,6 +59,7 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
     /**
      * Create a ParameterAcceptor instance.
      */
+    @SuppressWarnings("all")
     ParameterAcceptor() {
         this.builtinAcceptStrategyMap = new HashMap<>();
         // Collect all builtin parameter acceptance strategies.
@@ -79,35 +77,6 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
     }
 
     /**
-     * Accept an object with the parameter type.
-     *
-     * @param invokerParameterType the leetcode invoker parameter type.
-     * @param object               the input object for accepting.
-     * @return the parameter acceptance result.
-     */
-    public ParameterAcceptResult accept(Parameter invokerParameterType, Object object) {
-        return parameterAccepting(this.builtinAcceptStrategyMap, invokerParameterType, object);
-    }
-
-    /**
-     * Accept an object with custom parameter accepting strategies
-     * and parameter type.
-     *
-     * @param strategies           the custom parameter accepting strategies.
-     * @param invokerParameterType the leetcode invoker parameter type.
-     * @param object               the input object for accepting.
-     * @return the parameter acceptance result.
-     * @since 1.0.3
-     */
-    public ParameterAcceptResult accept(Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategies,
-                                        Parameter invokerParameterType, Object object) {
-        if (Objects.isNull(strategies)) {
-            return accept(invokerParameterType, object);
-        }
-        return parameterAccepting(strategies, invokerParameterType, object);
-    }
-
-    /**
      * Accept the object.
      *
      * @param object        the object.
@@ -121,10 +90,13 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
      * @return the accepted parameter.
      */
     @Override
-    protected Object acceptParameter(Object object, Type type,
-                                     Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap) throws Throwable {
-        // This method is not supported in ParameterAcceptor.
-        throw new RuntimeException("Unsupported!");
+    protected ParameterAcceptResult acceptParameter(Object object, Type type,
+                                                    Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap) {
+        if (Objects.isNull(strategiesMap)) {
+            // Use built-in parameter accepting strategies.
+            strategiesMap = this.builtinAcceptStrategyMap;
+        }
+        return commonAcceptingFunction(strategiesMap, type, object);
     }
 
     /**
@@ -134,8 +106,7 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
      */
     @Override
     public int getOrder() {
-        // This method is not supported in ParameterAcceptor.
-        throw new RuntimeException("Unsupported!");
+        return Integer.MAX_VALUE;
     }
 
     /**
@@ -144,9 +115,8 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
      * @return the acceptable type.
      */
     @Override
-    public Class<?> getAcceptableType() {
-        // This method is not supported in ParameterAcceptor.
-        throw new RuntimeException("Unsupported!");
+    public Class<ParameterAcceptResult> getAcceptableType() {
+        return ParameterAcceptResult.class;
     }
 
     /**
@@ -188,33 +158,5 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<Object> {
                 key -> new TreeSet<>(OrderUtil.descComparator()));
         // Add the strategy to the set.
         strategySet.add(strategy);
-    }
-
-    private ParameterAcceptResult parameterAccepting(Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategies,
-                                                     Parameter invokerParameterType, Object object) {
-        // Create a tracer stack for tracking the acceptance process.
-        Stack<ParameterAcceptStrategyTracer> tracerStack = new Stack<>();
-
-        try {
-            // Find the strategy set for the parameter acceptance.
-            Set<BaseParameterAcceptStrategy<?>> strategySet = findStrategySet(invokerParameterType.getType(),
-                    strategies);
-            for (BaseParameterAcceptStrategy<?> acceptStrategy : strategySet) {
-                try {
-                    // Try to accept the parameter and return the accepted result.
-                    return ParameterAcceptResult.accept(acceptStrategy.accept(invokerParameterType.getParameterizedType(),
-                            object, strategies));
-                } catch (Throwable e) {
-                    // Push the throwable with the object tracer into stack.
-                    tracerStack.push(new ParameterAcceptStrategyTracer(acceptStrategy.getClass().getName(), e));
-                }
-            }
-        } catch (Throwable throwable) {
-            // Push the throwable with the object tracer into stack.
-            tracerStack.push(new ParameterAcceptStrategyTracer(null, throwable));
-        }
-
-        // Return the rejected result.
-        return ParameterAcceptResult.reject(object, tracerStack);
     }
 }

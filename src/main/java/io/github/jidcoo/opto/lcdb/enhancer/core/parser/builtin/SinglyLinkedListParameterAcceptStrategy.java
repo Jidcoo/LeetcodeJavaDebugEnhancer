@@ -56,7 +56,7 @@ public final class SinglyLinkedListParameterAcceptStrategy extends BaseParameter
      */
     @Override
     protected ListNode acceptParameter(Object object, Type type,
-                                       Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap) throws Throwable {
+                                       Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap) {
         AssertUtil.nonNull(object, "The object cannot be null.");
         AssertUtil.isTrue((object instanceof List), "The object is not a List.");
         List<Integer> originIntegerList = ((List<Integer>) object);

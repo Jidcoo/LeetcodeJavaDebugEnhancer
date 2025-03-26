@@ -36,7 +36,7 @@ import java.io.StringWriter;
  * @author Jidcoo
  * @since 1.0
  */
-final class ParameterAcceptStrategyTracer extends EnhancerException {
+public final class ParameterAcceptStrategyTracer extends EnhancerException {
 
     /**
      * The ParameterAcceptStrategy name for throws.
@@ -56,7 +56,7 @@ final class ParameterAcceptStrategyTracer extends EnhancerException {
      *                                permitted, and indicates that the cause is nonexistent or
      *                                unknown.)
      */
-    ParameterAcceptStrategyTracer(String parameterAcceptStrategy, Throwable cause) {
+    public ParameterAcceptStrategyTracer(String parameterAcceptStrategy, Throwable cause) {
         super(cause);
         this.parameterAcceptStrategy = parameterAcceptStrategy;
     }

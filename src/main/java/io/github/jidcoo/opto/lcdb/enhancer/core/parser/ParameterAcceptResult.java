@@ -41,7 +41,7 @@ import java.util.Stack;
  * @see ParameterAcceptor
  * @since 1.0
  */
-final class ParameterAcceptResult {
+public final class ParameterAcceptResult {
 
     /**
      * Parameter accept result code.
@@ -121,7 +121,7 @@ final class ParameterAcceptResult {
      * @param object the accepted object.
      * @return the accepted result.
      */
-    static ParameterAcceptResult accept(Object object) {
+    public static ParameterAcceptResult accept(Object object) {
         return new ParameterAcceptResult(object, Code.PASS, null);
     }
 
@@ -132,7 +132,7 @@ final class ParameterAcceptResult {
      * @param tracerStack the parameter object acceptance exception tracker stack.
      * @return the rejected result.
      */
-    static ParameterAcceptResult reject(Object object, Stack<ParameterAcceptStrategyTracer> tracerStack) {
+    public static ParameterAcceptResult reject(Object object, Stack<ParameterAcceptStrategyTracer> tracerStack) {
         return new ParameterAcceptResult(object, Code.REJECT, tracerStack);
     }
 }
