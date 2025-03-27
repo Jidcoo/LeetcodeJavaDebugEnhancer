@@ -93,8 +93,9 @@ public final class ParameterAcceptResult {
      *
      * @return the accepted object.
      */
-    public Object getObject() {
-        return object;
+    @SuppressWarnings("unchecked")
+    public <T> T getObject() {
+        return (T) object;
     }
 
     /**
@@ -113,6 +114,29 @@ public final class ParameterAcceptResult {
      */
     public Stack<ParameterAcceptStrategyTracer> getTracer() {
         return tracer;
+    }
+
+    /**
+     * Result to string.
+     *
+     * @return result string.
+     */
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder("ParameterAcceptResult: ");
+        if (isAccepted()) {
+            stringBuilder.append("parameter has been accepted, accepted object: ");
+            stringBuilder.append(object);
+        } else {
+            stringBuilder.append("parameter cannot be accepted, parameter: ");
+            stringBuilder.append(object);
+            stringBuilder.append(", accepting tracer stack: ");
+            for (int i = tracer.size() - 1; i >= 0; i--) {
+                stringBuilder.append("\n");
+                stringBuilder.append(tracer.elementAt(i).toString());
+            }
+        }
+        return stringBuilder.toString();
     }
 
     /**
