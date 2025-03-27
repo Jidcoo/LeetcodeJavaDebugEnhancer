@@ -16,10 +16,12 @@
 
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser.builtin;
 
+import com.google.gson.reflect.TypeToken;
 import io.github.jidcoo.opto.lcdb.enhancer.base.BaseParameterAcceptStrategy;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Strategizable;
 import io.github.jidcoo.opto.lcdb.enhancer.base.struct.TreeNode;
+import io.github.jidcoo.opto.lcdb.enhancer.core.parser.ParameterAcceptResult;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 
 import java.lang.reflect.Type;
@@ -58,8 +60,15 @@ public final class BinaryTreeParameterAcceptStrategy extends BaseParameterAccept
     protected TreeNode acceptParameter(Object object, Type type,
                                        Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> strategiesMap) {
         AssertUtil.nonNull(object, "The object cannot be null.");
-        AssertUtil.isTrue((object instanceof List), "The object is not a List.");
-        List<Integer> originIntegerList = ((List<Integer>) object);
+        ParameterAcceptResult acceptResult = commonAcceptingFunction(
+                strategiesMap,
+                TypeToken.getParameterized(List.class, Integer.class).getType(),
+                object
+        );
+        if (!acceptResult.isAccepted()) {
+            throw new RuntimeException("BinaryTreeParameterAcceptStrategy: Cannot accept object as a List<Integer> object: " + acceptResult);
+        }
+        List<Integer> originIntegerList = acceptResult.getObject();
         if (originIntegerList.isEmpty()) {
             return null;
         }
@@ -70,7 +79,7 @@ public final class BinaryTreeParameterAcceptStrategy extends BaseParameterAccept
             return new TreeNode(val);
         };
         List<TreeNode> treeNodeList = originIntegerList.stream()
-                .map(val -> treeNodeCreator.apply(val))
+                .map(treeNodeCreator)
                 .collect(Collectors.toList());
         Queue<TreeNode> nodeQueue = new ArrayDeque<>();
         int treeNodeIdx = 0;
