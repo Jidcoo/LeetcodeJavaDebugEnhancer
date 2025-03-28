@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
  * @see EnhancerProxyHandler
  * @since 1.0.2
  */
+@SuppressWarnings(value = {"rawtypes", "unchecked"})
 final class ProxyPointInterceptorManager {
 
     /**
@@ -85,7 +86,6 @@ final class ProxyPointInterceptorManager {
      * @param pointName     the proxy point name.
      * @param parameterView the proxy point parameter view.
      */
-    @SuppressWarnings("unchecked")
     public void doInterceptOnBefore(LeetcodeJavaDebugEnhancer leetcodeJavaDebugEnhancer,
                                     String pointName, ProxyPointParameterView parameterView) {
         AssertUtil.isTrue(!StringUtil.isBlank(pointName), "The proxy point name cannot be blank.");
