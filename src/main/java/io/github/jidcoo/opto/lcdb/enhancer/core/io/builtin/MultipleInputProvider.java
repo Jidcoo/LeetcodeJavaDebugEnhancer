@@ -18,7 +18,7 @@ package io.github.jidcoo.opto.lcdb.enhancer.core.io.builtin;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.InputProvider;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerUtil;
 
 import java.io.Closeable;
 import java.util.Collections;
@@ -59,7 +59,7 @@ public final class MultipleInputProvider implements InputProvider {
     public MultipleInputProvider(List<InputProvider> inputProviderList) {
         AssertUtil.nonNull(inputProviderList, "The inputProviderList cannot be null.");
         inputProviderList = inputProviderList.stream().filter(Objects::nonNull).collect(Collectors.toList());
-        AssertUtil.isTrue(!ContainerCheckUtil.isListEmpty(inputProviderList), "The inputProviderList cannot be empty.");
+        AssertUtil.isTrue(ContainerUtil.isNotEmpty(inputProviderList), "The inputProviderList cannot be empty.");
         this.providers = Collections.unmodifiableList(inputProviderList);
     }
 

@@ -21,7 +21,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.base.BasePrintingStrategy;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.BeanUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
 
 import java.lang.reflect.Modifier;
@@ -61,7 +61,7 @@ public final class OutputPrinterFactory {
                 (Class<? extends BasePrintingStrategy> beanType) -> ReflectUtil.createInstance(beanType))
                 .stream().filter(Objects::nonNull).collect(Collectors.toList());
         // Add all enhancer's printStrategies to the list.
-        if (!ContainerCheckUtil.isListEmpty(enhancer.getOutputPrintStrategies())) {
+        if (ContainerUtil.isNotEmpty(enhancer.getOutputPrintStrategies())) {
             builtinOutputPrintStrategies.addAll(enhancer.getOutputPrintStrategies());
         }
         return new OutputPrinter(builtinOutputPrintStrategies);

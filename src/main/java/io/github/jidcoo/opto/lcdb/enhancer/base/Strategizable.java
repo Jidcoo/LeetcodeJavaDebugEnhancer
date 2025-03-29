@@ -17,7 +17,7 @@
 package io.github.jidcoo.opto.lcdb.enhancer.base;
 
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerUtil;
 
 import javax.lang.model.type.NullType;
 import java.lang.reflect.Type;
@@ -101,7 +101,7 @@ public interface Strategizable<AcceptableType, Output, Strategy> extends Order {
     default Set<Strategy> findStrategySet(Object object, final Map<Class<?>, Set<Strategy>> strategiesMap) {
         Set<Strategy> strategySet = strategiesMap.getOrDefault(getObjectType(object),
                 strategiesMap.getOrDefault(Void.class, null));
-        AssertUtil.isTrue(!ContainerCheckUtil.isSetEmpty(strategySet), "Cannot find any appropriate accepted " +
+        AssertUtil.isTrue(ContainerUtil.isNotEmpty(strategySet), "Cannot find any appropriate accepted " +
                 "strategy" + " set for the object: " + object);
         return strategySet;
     }

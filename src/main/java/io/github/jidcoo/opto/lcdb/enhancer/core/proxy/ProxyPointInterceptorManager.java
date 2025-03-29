@@ -91,7 +91,7 @@ final class ProxyPointInterceptorManager {
         AssertUtil.isTrue(!StringUtil.isBlank(pointName), "The proxy point name cannot be blank.");
         AssertUtil.nonNull(parameterView, "The proxy point parameter view cannot be null.");
         List<ProxyPointInterceptor> interceptors = proxyPointInterceptorsMap.getOrDefault(pointName, null);
-        if (ContainerCheckUtil.isListEmpty(interceptors)) {
+        if (ContainerUtil.isEmpty(interceptors)) {
             return;
         }
         for (ProxyPointInterceptor interceptor : interceptors) {
@@ -113,7 +113,7 @@ final class ProxyPointInterceptorManager {
                                      String pointName, Object o) {
         AssertUtil.isTrue(!StringUtil.isBlank(pointName), "The proxy point name cannot be blank.");
         List<ProxyPointInterceptor> interceptors = proxyPointInterceptorsMap.getOrDefault(pointName, null);
-        if (!ContainerCheckUtil.isListEmpty(interceptors)) {
+        if (ContainerUtil.isNotEmpty(interceptors)) {
             for (ProxyPointInterceptor interceptor : interceptors) {
                 o = interceptor.onAfter(leetcodeJavaDebugEnhancer, o);
             }

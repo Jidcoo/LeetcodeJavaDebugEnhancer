@@ -25,7 +25,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.core.io.builtin.FileOutputConsumer;
 import io.github.jidcoo.opto.lcdb.enhancer.core.io.builtin.MultipleOutputConsumer;
 import io.github.jidcoo.opto.lcdb.enhancer.core.proxy.ProxyPointInterceptor;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.StringUtil;
 
 import java.io.FileNotFoundException;
@@ -97,7 +97,7 @@ final class OutputConsumerRequireInterceptor extends AbsIORequireSupporter<Outpu
     @SuppressWarnings("all")
     public OutputConsumer onAfter(LeetcodeJavaDebugEnhancer leetcodeJavaDebugEnhancer, OutputConsumer outputConsumer) {
         List<OutputConsumer> outputConsumerList = awareIOSources(leetcodeJavaDebugEnhancer);
-        if (!ContainerCheckUtil.isListEmpty(outputConsumerList)) {
+        if (ContainerUtil.isNotEmpty(outputConsumerList)) {
             if (Objects.nonNull(outputConsumer)) {
                 outputConsumerList.add(outputConsumer);
             }

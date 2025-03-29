@@ -68,7 +68,7 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<ParameterAccep
                 (Class type) -> type.isAnnotationPresent(Require.class) && ReflectUtil.isExtendsClass(type,
                         BaseParameterAcceptStrategy.class) && !Modifier.isAbstract(type.getModifiers()), (Class<?
                         extends BaseParameterAcceptStrategy> beanType) -> ReflectUtil.createInstance(beanType)).stream().filter(Objects::nonNull).collect(Collectors.toList());
-        if (!ContainerCheckUtil.isListEmpty(strategies)) {
+        if (ContainerUtil.isNotEmpty(strategies)) {
             // Add all strategies to the builtinAcceptStrategyMap.
             for (BaseParameterAcceptStrategy<?> strategy : strategies) {
                 addParameterAcceptStrategy(strategy.getAcceptableType(), strategy, builtinAcceptStrategyMap);
@@ -128,7 +128,7 @@ final class ParameterAcceptor extends BaseParameterAcceptStrategy<ParameterAccep
      * @since 1.0.3
      */
     Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> combineCustomStrategies(List<BaseParameterAcceptStrategy<?>> strategies) {
-        if (ContainerCheckUtil.isListEmpty(strategies)) {
+        if (ContainerUtil.isEmpty(strategies)) {
             return null;
         }
         Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> combinedCustomStrategiesMap = new HashMap<>();

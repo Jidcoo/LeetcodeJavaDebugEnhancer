@@ -64,7 +64,7 @@ final class InputParser {
         List<InputParserNode> inputParserNodes = new ArrayList<>();
         // Get all class in the INPUT_PARSER_NODE_PACKAGE.
         List<Class<?>> classesByPackage = PackageUtil.getClassesByPackage(INPUT_PARSER_NODE_PACKAGE);
-        if (!ContainerCheckUtil.isListEmpty(classesByPackage)) {
+        if (ContainerUtil.isNotEmpty(classesByPackage)) {
             for (Class<?> clazz : classesByPackage) {
                 if (ReflectUtil.isExtendsClass(clazz, InputParserNode.class)) {
                     // Instantiate only nodes that contain the @Require annotation.

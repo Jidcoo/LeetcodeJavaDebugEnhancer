@@ -22,12 +22,12 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * A common java data container check util.
+ * A common java data container util.
  *
  * @author Jidcoo
  * @since 1.0
  */
-public class ContainerCheckUtil {
+public class ContainerUtil {
 
     /**
      * Check if the map is empty.
@@ -35,8 +35,19 @@ public class ContainerCheckUtil {
      * @param map the map.
      * @return true if the map is null or empty.
      */
-    public static boolean isMapEmpty(Map map) {
+    public static boolean isEmpty(Map<?, ?> map) {
         return Objects.isNull(map) || map.isEmpty();
+    }
+
+    /**
+     * Check if the map is not empty.
+     *
+     * @param map the map.
+     * @return true if the map is not null and not empty.
+     * @since 1.0.3
+     */
+    public static boolean isNotEmpty(Map<?, ?> map) {
+        return !isEmpty(map);
     }
 
     /**
@@ -45,8 +56,19 @@ public class ContainerCheckUtil {
      * @param set the set.
      * @return true if the set is null or empty.
      */
-    public static boolean isSetEmpty(Set set) {
+    public static boolean isEmpty(Set<?> set) {
         return Objects.isNull(set) || set.isEmpty();
+    }
+
+    /**
+     * Check if the set is not empty.
+     *
+     * @param set the set.
+     * @return true if the set is not null and not empty.
+     * @since 1.0.3
+     */
+    public static boolean isNotEmpty(Set<?> set) {
+        return !isEmpty(set);
     }
 
     /**
@@ -55,7 +77,18 @@ public class ContainerCheckUtil {
      * @param list the list.
      * @return true if the list is null or empty.
      */
-    public static boolean isListEmpty(List list) {
+    public static boolean isEmpty(List<?> list) {
         return Objects.isNull(list) || list.isEmpty();
+    }
+
+    /**
+     * Check if the list is not empty.
+     *
+     * @param list the list.
+     * @return true if the list is not null and not empty.
+     * @since 1.0.3
+     */
+    public static boolean isNotEmpty(List<?> list) {
+        return !isEmpty(list);
     }
 }

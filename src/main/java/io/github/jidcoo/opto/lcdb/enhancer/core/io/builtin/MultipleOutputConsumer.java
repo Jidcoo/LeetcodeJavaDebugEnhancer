@@ -18,7 +18,7 @@ package io.github.jidcoo.opto.lcdb.enhancer.core.io.builtin;
 
 import io.github.jidcoo.opto.lcdb.enhancer.base.OutputConsumer;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerUtil;
 
 import java.io.Closeable;
 import java.util.Collections;
@@ -54,7 +54,7 @@ public final class MultipleOutputConsumer implements OutputConsumer {
     public MultipleOutputConsumer(List<OutputConsumer> outputConsumerList) {
         AssertUtil.nonNull(outputConsumerList, "The outputConsumerList cannot be null.");
         outputConsumerList = outputConsumerList.stream().filter(Objects::nonNull).collect(Collectors.toList());
-        AssertUtil.isTrue(!ContainerCheckUtil.isListEmpty(outputConsumerList), "The outputConsumerList cannot be empty.");
+        AssertUtil.isTrue(ContainerUtil.isNotEmpty(outputConsumerList), "The outputConsumerList cannot be empty.");
         this.consumers = Collections.unmodifiableList(outputConsumerList);
     }
 

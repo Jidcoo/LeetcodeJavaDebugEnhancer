@@ -22,7 +22,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Requires;
 import io.github.jidcoo.opto.lcdb.enhancer.core.proxy.EnhancerProxyFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.EnhancerLogUtil;
 
 import java.util.*;
@@ -149,7 +149,7 @@ abstract class AbsIORequireSupporter<IO_SOURCE> {
     protected final List<IO_SOURCE> awareIOSources(LeetcodeJavaDebugEnhancer leetcodeJavaDebugEnhancer) {
         List<Require> requireList = awareAcceptableIOSourceRequire(leetcodeJavaDebugEnhancer);
         List<IO_SOURCE> ioSourceList = new ArrayList<>();
-        if (!ContainerCheckUtil.isListEmpty(requireList)) {
+        if (ContainerUtil.isNotEmpty(requireList)) {
             for (Require require : requireList) {
                 Class<?>[] types = require.types();
                 String[] values = require.values();
@@ -168,7 +168,7 @@ abstract class AbsIORequireSupporter<IO_SOURCE> {
                         return generateIOSource(source, ioSourceType);
                     }).filter(Objects::nonNull).collect(Collectors.toList());
                 }
-                if (!ContainerCheckUtil.isListEmpty(curSources)) {
+                if (ContainerUtil.isNotEmpty(curSources)) {
                     ioSourceList.addAll(curSources);
                 }
             }

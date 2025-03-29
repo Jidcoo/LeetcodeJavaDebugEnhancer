@@ -17,7 +17,7 @@
 package io.github.jidcoo.opto.lcdb.enhancer.core.parser;
 
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerUtil;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ class InputParserChain extends InputParserNode {
      * @param nodes the InputParserNode list.
      */
     InputParserChain(List<InputParserNode> nodes) {
-        AssertUtil.isTrue(!ContainerCheckUtil.isListEmpty(nodes), "The InputParserNode list cannot be empty.");
+        AssertUtil.isTrue(ContainerUtil.isNotEmpty(nodes), "The InputParserNode list cannot be empty.");
         this.nodes = nodes;
     }
 

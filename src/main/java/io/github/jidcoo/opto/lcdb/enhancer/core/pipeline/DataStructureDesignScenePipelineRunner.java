@@ -25,7 +25,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeInvokerFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.core.parser.InputParserProcessor;
 import io.github.jidcoo.opto.lcdb.enhancer.core.proxy.EnhancerProxyFactory;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.ReflectUtil;
 
 import java.util.*;
@@ -52,8 +52,8 @@ final class DataStructureDesignScenePipelineRunner extends PipelineRunner {
      */
     @Require
     List<Object> processOnDataStructureDesignScene(List<String> operations, List<List<Object>> data) {
-        AssertUtil.isTrue(!ContainerCheckUtil.isListEmpty(operations), "The operation list cannot be empty.");
-        AssertUtil.isTrue(!ContainerCheckUtil.isListEmpty(data), "The data list cannot be empty.");
+        AssertUtil.isTrue(ContainerUtil.isNotEmpty(operations), "The operation list cannot be empty.");
+        AssertUtil.isTrue(ContainerUtil.isNotEmpty(data), "The data list cannot be empty.");
         AssertUtil.isTrue(operations.size() == data.size(), "The size of lists operation and data is not equal.");
         // Aware inner-class from leetcode executor.
         Class<?> dataStructureKlass = (Class<?>) ReflectUtil.getFieldValue("instance", Object.class,
@@ -80,7 +80,7 @@ final class DataStructureDesignScenePipelineRunner extends PipelineRunner {
             List<Object> input = data.get(idx);
             // Get candidate leetcode invokers by cur operation.
             List<LeetcodeInvoker> leetcodeInvokers = invokersMap.get(operation);
-            AssertUtil.isTrue(!ContainerCheckUtil.isListEmpty(leetcodeInvokers),
+            AssertUtil.isTrue(ContainerUtil.isNotEmpty(leetcodeInvokers),
                     "Cannot find any candidate leetcode invoker by operation: " + operation);
             // Create a LeetcodeExecutor instance.
             Object leetcodeExecutor = LeetcodeExecutorFactory.getLeetcodeExecutor(idx == 0 ? getEnhancer()

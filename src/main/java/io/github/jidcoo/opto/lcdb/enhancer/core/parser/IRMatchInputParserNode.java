@@ -20,7 +20,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.base.BaseParameterAcceptStrategy;
 import io.github.jidcoo.opto.lcdb.enhancer.base.LeetcodeInvoker;
 import io.github.jidcoo.opto.lcdb.enhancer.base.Require;
 import io.github.jidcoo.opto.lcdb.enhancer.core.executor.LeetcodeInvokerFactory;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.EnhancerLogUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.GsonUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.OrderUtil;
@@ -97,7 +97,7 @@ final class IRMatchInputParserNode extends InputParserNode {
         Map<Class<?>, Set<BaseParameterAcceptStrategy<?>>> curParameterAcceptingStrategies =
                 parameterAcceptor.combineCustomStrategies(context.getAvailableParameterAcceptStrategies());
 
-        if (!ContainerCheckUtil.isListEmpty(leetcodeInvokers)) {
+        if (ContainerUtil.isNotEmpty(leetcodeInvokers)) {
             // Try to match all possible leetcode invokers.
             for (LeetcodeInvoker leetcodeInvoker : leetcodeInvokers) {
                 // Filter out leetcodeInvoker with different numbers of parameters than the input parameters.
@@ -163,7 +163,7 @@ final class IRMatchInputParserNode extends InputParserNode {
                                           List<Object> input, Map<LeetcodeInvoker, Map<Integer,
             Stack<ParameterAcceptStrategyTracer>>> matchTracer) {
         if (Objects.isNull(bossInvoker)) {
-            if (ContainerCheckUtil.isListEmpty(invokers)) {
+            if (ContainerUtil.isEmpty(invokers)) {
                 throw new RuntimeException("Cannot find any possible leetcode invoker. Because the candidate leetcode invoker list is empty.");
             }
             StringBuilder logBuffer = new StringBuilder();
@@ -253,7 +253,7 @@ final class IRMatchInputParserNode extends InputParserNode {
         // Here are the new features for version 1.0.0 and later.
         List<LeetcodeInvoker> leetcodeInvokers = new ArrayList<>();
         // At first, we fetch the candidate invokers list from the context.
-        if (!ContainerCheckUtil.isListEmpty(context.getCandidateInvokers())) {
+        if (ContainerUtil.isNotEmpty(context.getCandidateInvokers())) {
             leetcodeInvokers.addAll(context.getCandidateInvokers());
         }
         // Then, aware target class from context's target instance.

@@ -47,7 +47,7 @@ public class BeanUtil {
         AssertUtil.nonNull(classFilter, "The class filter cannot be null.");
         AssertUtil.nonNull(beanCreator, "The bean creator cannot be null.");
         List<Class<?>> classesByPackage = PackageUtil.getClassesByPackage(packageName);
-        if (!ContainerCheckUtil.isListEmpty(classesByPackage)) {
+        if (ContainerUtil.isNotEmpty(classesByPackage)) {
             return classesByPackage.stream().filter(klass -> classFilter.apply(klass)).map(klass -> beanCreator.apply((Class<? extends T>) klass)).collect(Collectors.toList());
         }
         return new ArrayList<>();

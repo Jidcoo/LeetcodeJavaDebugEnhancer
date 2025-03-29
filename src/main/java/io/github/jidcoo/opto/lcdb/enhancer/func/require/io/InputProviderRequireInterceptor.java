@@ -26,7 +26,7 @@ import io.github.jidcoo.opto.lcdb.enhancer.core.io.builtin.MultipleInputProvider
 import io.github.jidcoo.opto.lcdb.enhancer.core.io.builtin.StringInputProvider;
 import io.github.jidcoo.opto.lcdb.enhancer.core.proxy.ProxyPointInterceptor;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.AssertUtil;
-import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerCheckUtil;
+import io.github.jidcoo.opto.lcdb.enhancer.utils.ContainerUtil;
 import io.github.jidcoo.opto.lcdb.enhancer.utils.StringUtil;
 
 import java.io.FileNotFoundException;
@@ -98,7 +98,7 @@ final class InputProviderRequireInterceptor extends AbsIORequireSupporter<InputP
     @SuppressWarnings("all")
     public InputProvider onAfter(LeetcodeJavaDebugEnhancer leetcodeJavaDebugEnhancer, InputProvider inputProvider) {
         List<InputProvider> inputProviderList = awareIOSources(leetcodeJavaDebugEnhancer);
-        if (!ContainerCheckUtil.isListEmpty(inputProviderList)) {
+        if (ContainerUtil.isNotEmpty(inputProviderList)) {
             if (Objects.nonNull(inputProvider)) {
                 inputProviderList.add(inputProvider);
             }
